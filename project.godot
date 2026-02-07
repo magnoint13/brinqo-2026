@@ -1,0 +1,32 @@
+; Engine configuration file.
+
+config_version=5
+
+[application]
+
+config/name="Quantum Collapse"
+config/features=PackedStringArray("4.6", "Forward Plus")
+config/icon="res://icon.svg"
+run/main_scene="res://scenes/main.tscn"
+
+[display]
+
+window/size/viewport_width=800
+window/size/viewport_height=600
+window/stretch/mode="canvas_items"
+
+[input]
+
+ui_left={"deadzone":0.5,"events":[]}
+ui_right={"deadzone":0.5,"events":[]}
+ui_up={"deadzone":0.5,"events":[]}
+ui_down={"deadzone":0.5,"events":[]}
+
+[physics]
+
+3d/physics_engine="Jolt Physics"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

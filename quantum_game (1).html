@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Collapse Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #0a0a1a;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #4a4a6a;
+            background: #1a1a2e;
+            box-shadow: 0 0 20px rgba(100, 100, 255, 0.3);
+        }
+        
+        #ui {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        #timer {
+            font-size: 24px;
+            color: #ff6b6b;
+            margin: 10px 0;
+        }
+        
+        #status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 30px;
+        }
+        
+        .win {
+            background: #51cf66;
+            color: #000;
+        }
+        
+        .lose {
+            background: #ff6b6b;
+            color: #fff;
+        }
+        
+        .neutral {
+            background: #4a4a6a;
+            color: #fff;
+        }
+        
+        #instructions {
+            margin-top: 20px;
+            max-width: 600px;
+            line-height: 1.6;
+            color: #aaa;
+        }
+        
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #4a4a6a;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button:hover {
+            background: #5a5a7a;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <div id="ui">
+        <div id="timer">Next collapse in: --</div>
+        <div id="status"></div>
+        <div>
+            <button id="restartBtn">Restart Game</button>
+        </div>
+        <div id="instructions">
+            <strong>Controls:</strong> Arrow keys or WASD to move<br>
+            <strong>Objective:</strong> Navigate your quantum particles to the GREEN zone before collapse!<br>
+            Avoid being in RED zones when the wavefunction collapses.<br>
+            If you collapse in a neutral area, you get another chance with new particles.
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const timerDisplay = document.getElementById('timer');
+        const statusDisplay = document.getElementById('status');
+        const restartBtn = document.getElementById('restartBtn');
+        
+        // Game state
+        let balls = [];
+        let redZones = [];
+        let greenZone = null;
+        let walls = [];
+        let collapseTimer = 0;
+        let nextCollapseTime = 0;
+        let gameOver = false;
+        let gameWon = false;
+        let collapsedBall = null;
+        let respawning = false;
+        let respawnProgress = 0;
+        let collapseParticles = [];
+        let isCollapsing = false;
+        let collapseAnimationProgress = 0;
+        
+        // Constants
+        const BALL_RADIUS = 8;
+        const BALL_SPEED = 3;
+        const NUM_BALLS = 3;
+        const RESPAWN_DURATION = 1.5; // seconds
+        const COLLAPSE_ANIMATION_DURATION = 1.0; // seconds
+        
+        // Spawn positions (one for each ball)
+        const spawnPositions = [
+            { x: 100, y: 200 },
+            { x: 100, y: 300 },
+            { x: 100, y: 400 }
+        ];
+        
+        // Input handling
+        const keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+        
+        restartBtn.addEventListener('click', initGame);
+        
+        // Initialize game
+        function initGame() {
+            balls = [];
+            redZones = [];
+            collapsedBall = null;
+            gameOver = false;
+            gameWon = false;
+            respawning = false;
+            respawnProgress = 0;
+            statusDisplay.textContent = '';
+            statusDisplay.className = '';
+            
+            // Spawn initial balls at separate positions
+            spawnBalls();
+            
+            // Create zones
+            createZones();
+            
+            // Set initial collapse timer
+            resetCollapseTimer();
+        }
+        
+        function spawnBalls() {
+            // Spawn each ball at its designated spawn position
+            balls = spawnPositions.map(pos => ({
+                x: pos.x,
+                y: pos.y,
+                vx: 0,
+                vy: 0,
+                alpha: 1.0 // for transparency during respawn
+            }));
+        }
+        
+        function createZones() {
+            // Create red danger zones
+            redZones = [
+                { x: 200, y: 100, width: 150, height: 100 },
+                { x: 400, y: 350, width: 120, height: 150 },
+                { x: 550, y: 50, width: 180, height: 120 },
+                { x: 250, y: 400, width: 140, height: 120 }
+            ];
+            
+            // Create green safe zone
+            greenZone = { x: 650, y: 250, width: 100, height: 100 };
+            
+            // Create walls (obstacles)
+            walls = [
+                { x: 300, y: 150, width: 20, height: 200 },
+                { x: 500, y: 250, width: 20, height: 180 }
+            ];
+        }
+        
+        function resetCollapseTimer() {
+            nextCollapseTime = 7 + Math.random() * 8; // 7-15 seconds
+            collapseTimer = 0;
+        }
+        
+        function update(deltaTime) {
+            if (gameOver || gameWon) {
+                // Still update collapse particles for visual effect
+                updateCollapseParticles(deltaTime);
+                return;
+            }
+            
+            // Update collapse particles
+            updateCollapseParticles(deltaTime);
+            
+            // Handle collapse animation
+            if (isCollapsing) {
+                collapseAnimationProgress += deltaTime;
+                if (collapseAnimationProgress >= COLLAPSE_ANIMATION_DURATION) {
+                    isCollapsing = false;
+                    collapseAnimationProgress = 0;
+                }
+                return; // Don't allow movement during collapse animation
+            }
+            
+            // Handle respawning animation
+            if (respawning) {
+                respawnProgress += deltaTime;
+                const alpha = Math.min(1.0, respawnProgress / RESPAWN_DURATION);
+                
+                // Only fade in balls that aren't marked as survived
+                balls.forEach(ball => {
+                    if (!ball.survived) {
+                        ball.alpha = alpha;
+                    }
+                });
+                
+                if (respawnProgress >= RESPAWN_DURATION) {
+                    respawning = false;
+                    respawnProgress = 0;
+                    // Clear survived markers after respawn is complete
+                    balls.forEach(ball => {
+                        delete ball.survived;
+                    });
+                }
+                return; // Don't allow movement during respawn
+            }
+            
+            // Update collapse timer
+            collapseTimer += deltaTime;
+            const timeLeft = Math.max(0, nextCollapseTime - collapseTimer);
+            timerDisplay.textContent = `Next collapse in: ${timeLeft.toFixed(1)}s`;
+            
+            // Check for collapse
+            if (collapseTimer >= nextCollapseTime) {
+                performCollapse();
+                return;
+            }
+            
+            // Handle input and move balls
+            let dx = 0;
+            let dy = 0;
+            
+            if (keys['ArrowLeft'] || keys['a'] || keys['A']) dx = -BALL_SPEED;
+            if (keys['ArrowRight'] || keys['d'] || keys['D']) dx = BALL_SPEED;
+            if (keys['ArrowUp'] || keys['w'] || keys['W']) dy = -BALL_SPEED;
+            if (keys['ArrowDown'] || keys['s'] || keys['S']) dy = BALL_SPEED;
+            
+            // Move all balls individually (they can separate due to walls)
+            balls.forEach(ball => {
+                let newX = ball.x + dx;
+                let newY = ball.y + dy;
+                
+                // Keep balls in bounds
+                newX = Math.max(BALL_RADIUS, Math.min(canvas.width - BALL_RADIUS, newX));
+                newY = Math.max(BALL_RADIUS, Math.min(canvas.height - BALL_RADIUS, newY));
+                
+                // Check wall collisions
+                let collided = false;
+                for (let wall of walls) {
+                    if (checkCircleRectCollision(newX, newY, BALL_RADIUS, wall)) {
+                        collided = true;
+                        break;
+                    }
+                }
+                
+                // Only move if no collision
+                if (!collided) {
+                    ball.x = newX;
+                    ball.y = newY;
+                }
+            });
+        }
+        
+        function checkCircleRectCollision(cx, cy, radius, rect) {
+            // Find the closest point on the rectangle to the circle
+            let closestX = Math.max(rect.x, Math.min(cx, rect.x + rect.width));
+            let closestY = Math.max(rect.y, Math.min(cy, rect.y + rect.height));
+            
+            // Calculate distance between circle center and closest point
+            let distX = cx - closestX;
+            let distY = cy - closestY;
+            let distanceSquared = distX * distX + distY * distY;
+            
+            return distanceSquared < (radius * radius);
+        }
+        
+        function createCollapseEffect(chosenBall, otherBalls, isWin, isLose) {
+            collapseParticles = [];
+            
+            // Particles from disappearing balls converging to chosen ball
+            otherBalls.forEach(ball => {
+                const numParticles = 20;
+                for (let i = 0; i < numParticles; i++) {
+                    const angle = (Math.PI * 2 * i) / numParticles + Math.random() * 0.3;
+                    const speed = 50 + Math.random() * 100;
+                    collapseParticles.push({
+                        x: ball.x,
+                        y: ball.y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        targetX: chosenBall.x,
+                        targetY: chosenBall.y,
+                        life: 1.0,
+                        maxLife: 1.0,
+                        size: 2 + Math.random() * 3,
+                        converging: true
+                    });
+                }
+            });
+            
+            // Explosion particles from chosen ball
+            if (isWin || isLose) {
+                const numExplosionParticles = 50;
+                const color = isWin ? 'green' : 'red';
+                for (let i = 0; i < numExplosionParticles; i++) {
+                    const angle = (Math.PI * 2 * i) / numExplosionParticles + Math.random() * 0.2;
+                    const speed = 100 + Math.random() * 150;
+                    collapseParticles.push({
+                        x: chosenBall.x,
+                        y: chosenBall.y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        life: 1.0,
+                        maxLife: 1.0,
+                        size: 2 + Math.random() * 4,
+                        color: color,
+                        converging: false
+                    });
+                }
+            }
+            
+            // Shockwave ring
+            collapseParticles.push({
+                x: chosenBall.x,
+                y: chosenBall.y,
+                radius: 0,
+                maxRadius: 100,
+                life: 1.0,
+                maxLife: 0.6,
+                isShockwave: true,
+                color: isWin ? '#33ff33' : isLose ? '#ff3333' : '#6495ff'
+            });
+        }
+        
+        function updateCollapseParticles(deltaTime) {
+            for (let i = collapseParticles.length - 1; i >= 0; i--) {
+                const p = collapseParticles[i];
+                p.life -= deltaTime / p.maxLife;
+                
+                if (p.isShockwave) {
+                    // Expand shockwave
+                    p.radius = p.maxRadius * (1 - p.life);
+                } else if (p.converging) {
+                    // Move towards target with acceleration
+                    const dx = p.targetX - p.x;
+                    const dy = p.targetY - p.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist > 5) {
+                        const pullStrength = 200 * (1 - p.life);
+                        p.vx += (dx / dist) * pullStrength * deltaTime;
+                        p.vy += (dy / dist) * pullStrength * deltaTime;
+                    }
+                    
+                    p.x += p.vx * deltaTime;
+                    p.y += p.vy * deltaTime;
+                } else {
+                    // Explosion particles
+                    p.x += p.vx * deltaTime;
+                    p.y += p.vy * deltaTime;
+                    p.vx *= 0.95; // Slow down
+                    p.vy *= 0.95;
+                }
+                
+                if (p.life <= 0) {
+                    collapseParticles.splice(i, 1);
+                }
+            }
+        }
+        
+        function drawCollapseParticles() {
+            collapseParticles.forEach(p => {
+                if (p.isShockwave) {
+                    // Draw shockwave ring
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 3;
+                    ctx.globalAlpha = p.life * 0.8;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // Inner glow (only draw if radius is large enough)
+                    if (p.radius > 5) {
+                        ctx.lineWidth = 1;
+                        ctx.globalAlpha = p.life * 0.4;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius - 5, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                    ctx.globalAlpha = 1.0;
+                } else {
+                    // Draw particle
+                    const color = p.color === 'green' ? [50, 255, 50] : 
+                                  p.color === 'red' ? [255, 50, 50] : 
+                                  [100, 150, 255];
+                    
+                    const particleSize = p.size * p.life;
+                    if (particleSize > 0) {
+                        ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${p.life})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, particleSize, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // Glow
+                        ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${p.life * 0.3})`;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, particleSize * 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            });
+        }
+        
+        function performCollapse() {
+            // Choose ONE random ball to keep
+            const chosenIndex = Math.floor(Math.random() * balls.length);
+            const chosenBall = balls[chosenIndex];
+            const otherBalls = balls.filter((_, i) => i !== chosenIndex);
+            collapsedBall = { x: chosenBall.x, y: chosenBall.y };
+            
+            // Check what zone the collapsed ball is in
+            let inGreenZone = isInZone(collapsedBall, greenZone);
+            let inRedZone = redZones.some(zone => isInZone(collapsedBall, zone));
+            
+            // Start collapse animation
+            isCollapsing = true;
+            collapseAnimationProgress = 0;
+            
+            // Create visual effects
+            createCollapseEffect(chosenBall, otherBalls, inGreenZone, inRedZone);
+            
+            // Wait for animation to play before evaluating result
+            setTimeout(() => {
+                if (inGreenZone) {
+                    // Win!
+                    gameWon = true;
+                    balls = [chosenBall]; // Keep only the chosen ball
+                    statusDisplay.textContent = '🎉 QUANTUM STATE STABILIZED IN GREEN ZONE! YOU WIN! 🎉';
+                    statusDisplay.className = 'win';
+                    timerDisplay.textContent = 'Victory!';
+                } else if (inRedZone) {
+                    // Lose!
+                    gameOver = true;
+                    balls = [chosenBall]; // Keep only the chosen ball
+                    statusDisplay.textContent = '💀 COLLAPSED IN DANGER ZONE! GAME OVER! 💀';
+                    statusDisplay.className = 'lose';
+                    timerDisplay.textContent = 'Collapsed!';
+                } else {
+                    // Neutral - KEEP the collapsed ball and spawn new ones alongside it
+                    const survivedBall = {
+                        x: chosenBall.x,
+                        y: chosenBall.y,
+                        vx: 0,
+                        vy: 0,
+                        alpha: 1.0,
+                        survived: true // Mark as survived particle
+                    };
+                    
+                    // Replace balls array with just the survived one temporarily
+                    balls = [survivedBall];
+                    
+                    // Start respawning process
+                    setTimeout(() => {
+                        // Spawn only 2 new balls (since 1 survived, total should be 3)
+                        // Pick 2 random spawn positions
+                        const availableSpawns = [...spawnPositions];
+                        const spawn1 = availableSpawns.splice(Math.floor(Math.random() * availableSpawns.length), 1)[0];
+                        const spawn2 = availableSpawns.splice(Math.floor(Math.random() * availableSpawns.length), 1)[0];
+                        
+                        const newBalls = [
+                            {
+                                x: spawn1.x,
+                                y: spawn1.y,
+                                vx: 0,
+                                vy: 0,
+                                alpha: 0.0
+                            },
+                            {
+                                x: spawn2.x,
+                                y: spawn2.y,
+                                vx: 0,
+                                vy: 0,
+                                alpha: 0.0
+                            }
+                        ];
+                        
+                        // Combine survived ball with new balls (total = 3)
+                        balls = [survivedBall, ...newBalls];
+                        
+                        // Start fade-in animation
+                        respawning = true;
+                        respawnProgress = 0;
+                    }, 500); // Brief pause before respawn
+                    
+                    resetCollapseTimer();
+                    statusDisplay.textContent = '⚛️ Collapsed in neutral zone - particle survived! Respawning others...';
+                    statusDisplay.className = 'neutral';
+                    
+                    // Clear status after a moment
+                    setTimeout(() => {
+                        if (!gameOver && !gameWon) {
+                            statusDisplay.textContent = '';
+                        }
+                    }, 2500);
+                }
+            }, COLLAPSE_ANIMATION_DURATION * 1000);
+            
+            // Make non-chosen balls fade out during animation
+            otherBalls.forEach(ball => {
+                ball.fading = true;
+            });
+        }
+        
+        function isInZone(point, zone) {
+            return point.x >= zone.x && 
+                   point.x <= zone.x + zone.width &&
+                   point.y >= zone.y && 
+                   point.y <= zone.y + zone.height;
+        }
+        
+        function draw() {
+            // Clear canvas
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Screen shake during collapse
+            if (isCollapsing) {
+                const shakeIntensity = 5 * (1 - collapseAnimationProgress / COLLAPSE_ANIMATION_DURATION);
+                const shakeX = (Math.random() - 0.5) * shakeIntensity;
+                const shakeY = (Math.random() - 0.5) * shakeIntensity;
+                ctx.save();
+                ctx.translate(shakeX, shakeY);
+            }
+            
+            // Draw spawn positions
+            spawnPositions.forEach(pos => {
+                ctx.fillStyle = '#4a4a6a';
+                ctx.fillRect(pos.x - 15, pos.y - 15, 30, 30);
+                ctx.strokeStyle = '#6a6a8a';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(pos.x - 15, pos.y - 15, 30, 30);
+            });
+            
+            // Draw red zones
+            redZones.forEach(zone => {
+                ctx.fillStyle = 'rgba(255, 50, 50, 0.3)';
+                ctx.fillRect(zone.x, zone.y, zone.width, zone.height);
+                ctx.strokeStyle = '#ff3333';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(zone.x, zone.y, zone.width, zone.height);
+            });
+            
+            // Draw green zone
+            ctx.fillStyle = 'rgba(50, 255, 50, 0.3)';
+            ctx.fillRect(greenZone.x, greenZone.y, greenZone.width, greenZone.height);
+            ctx.strokeStyle = '#33ff33';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(greenZone.x, greenZone.y, greenZone.width, greenZone.height);
+            
+            // Draw walls
+            walls.forEach(wall => {
+                ctx.fillStyle = '#8a8a9a';
+                ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+                ctx.strokeStyle = '#aaaaaa';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+                
+                // Add some texture to walls
+                ctx.strokeStyle = '#6a6a7a';
+                ctx.lineWidth = 1;
+                for (let i = 10; i < wall.height; i += 20) {
+                    ctx.beginPath();
+                    ctx.moveTo(wall.x, wall.y + i);
+                    ctx.lineTo(wall.x + wall.width, wall.y + i);
+                    ctx.stroke();
+                }
+            });
+            
+            // Draw balls (quantum particles)
+            if (!gameOver && !gameWon) {
+                balls.forEach((ball, index) => {
+                    let alpha = ball.alpha || 1.0;
+                    const isSurvived = ball.survived || false;
+                    
+                    // Fade out non-chosen balls during collapse
+                    if (isCollapsing && ball.fading) {
+                        alpha *= (1 - collapseAnimationProgress / COLLAPSE_ANIMATION_DURATION);
+                    }
+                    
+                    // Pulse effect for chosen ball during collapse
+                    if (isCollapsing && !ball.fading) {
+                        const pulse = 1 + Math.sin(collapseAnimationProgress * 10) * 0.3;
+                        alpha *= pulse;
+                    }
+                    
+                    // Use different color for survived particles
+                    const baseColor = isSurvived ? [255, 215, 0] : [100, 150, 255]; // Gold vs Blue
+                    
+                    // Glow effect
+                    const gradient = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, BALL_RADIUS * 2);
+                    gradient.addColorStop(0, `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${0.8 * alpha})`);
+                    gradient.addColorStop(1, 'rgba(100, 150, 255, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, BALL_RADIUS * 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Core
+                    ctx.fillStyle = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Outline
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                    ctx.lineWidth = isSurvived ? 2 : 1;
+                    ctx.stroke();
+                });
+                
+                // Draw connections between balls
+                if (balls.length > 1 && !isCollapsing) {
+                    const alpha = Math.min(...balls.map(b => b.alpha || 1.0));
+                    ctx.strokeStyle = `rgba(100, 150, 255, ${0.2 * alpha})`;
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i < balls.length; i++) {
+                        for (let j = i + 1; j < balls.length; j++) {
+                            ctx.beginPath();
+                            ctx.moveTo(balls[i].x, balls[i].y);
+                            ctx.lineTo(balls[j].x, balls[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // Draw collapse particle effects
+            drawCollapseParticles();
+            
+            // Restore canvas after screen shake
+            if (isCollapsing) {
+                ctx.restore();
+            }
+            
+            // Draw collapsed ball if game is over
+            if ((gameOver || gameWon) && collapsedBall) {
+                const color = gameWon ? '#33ff33' : '#ff3333';
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(collapsedBall.x, collapsedBall.y, BALL_RADIUS * 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+        }
+        
+        // Game loop
+        let lastTime = 0;
+        function gameLoop(timestamp) {
+            const deltaTime = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+            
+            if (deltaTime < 0.1) { // Prevent huge jumps
+                update(deltaTime);
+            }
+            draw();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Start game
+        initGame();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
