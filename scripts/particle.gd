@@ -8,7 +8,12 @@ const RADIUS: float = 8.0
 func setup(is_new: bool = true):
 	is_survived = not is_new
 	fade_alpha = 0.0 if is_new else 1.0
+	velocity = Vector2.ZERO
 	queue_redraw()
+
+func _ready():
+	# Initialize physics after node is in tree
+	move_and_slide()
 
 func set_survived(value: bool):
 	is_survived = value
