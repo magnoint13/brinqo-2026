@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://vfxmanager001"]
+
+[ext_resource type="Script" path="res://scripts/VFXManager.gd" id="1_vfxmanager"]
+
+[sub_resource type="Environment" id="Environment_vfx"]
+background_mode = 3
+ambient_light_source = 2
+glow_enabled = true
+glow_normalized = false
+glow_intensity = 0.8
+glow_strength = 1.0
+glow_bloom = 0.2
+glow_blend_mode = 1
+
+[node name="VFXManager" type="WorldEnvironment"]
+environment = SubResource("Environment_vfx")
+script = ExtResource("1_vfxmanager")

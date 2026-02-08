@@ -1,12 +1,71 @@
-[gd_scene load_steps=3 format=3 uid="uid://particle001"]
+[gd_scene format=3 uid="uid://particle001"]
 
-[ext_resource type="Script" path="res://scripts/particle.gd" id="1_particle"]
+[ext_resource type="Script" uid="uid://c8jkv17tnw8dl" path="res://scripts/particle.gd" id="1_particle"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
 radius = 8.0
 
-[node name="Particle" type="CharacterBody2D"]
+[sub_resource type="Gradient" id="Gradient_glow"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.4869565, 0.49565217)
+fill_to = Vector2(0.6, 0.3)
+metadata/_snap_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_trail"]
+colors = PackedColorArray(0.4, 0.6, 1, 0.5, 0.4, 0.6, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_trail"]
+gradient = SubResource("Gradient_trail")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_trail"]
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+damping_min = 5.0
+damping_max = 8.0
+scale_min = 0.5
+scale_max = 0.8
+color = Color(0.4, 0.6, 1, 0.4)
+
+[sub_resource type="Gradient" id="Gradient_aura"]
+colors = PackedColorArray(1, 0.84, 0, 0.6, 1, 0.84, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_aura"]
+gradient = SubResource("Gradient_aura")
+width = 128
+height = 128
+fill = 1
+
+[node name="Particle" type="CharacterBody2D" unique_id=968643451]
 script = ExtResource("1_particle")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2141312755]
 shape = SubResource("CircleShape2D_1")
+
+[node name="GlowLight" type="PointLight2D" parent="." unique_id=1095724612]
+energy = 0.24
+texture = SubResource("GradientTexture2D_glow")
+texture_scale = 0.5
+
+[node name="TrailParticles" type="GPUParticles2D" parent="." unique_id=914957407]
+texture = SubResource("GradientTexture2D_trail")
+lifetime = 0.3
+process_material = SubResource("ParticleProcessMaterial_trail")
+
+[node name="SurvivorAura" type="PointLight2D" parent="." unique_id=336827723]
+visible = false
+color = Color(1, 0.84, 0, 1)
+energy = 1.2
+texture = SubResource("GradientTexture2D_aura")
+texture_scale = 3.0

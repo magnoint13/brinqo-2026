@@ -1,10 +1,12 @@
-[gd_scene load_steps=9 format=3 uid="uid://level02"]
+[gd_scene format=3 uid="uid://level02"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="Script" path="res://scripts/zone.gd" id="3_zone"]
-[ext_resource type="Script" path="res://scripts/wall.gd" id="4_wall"]
+[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://d3p4jcv0fd6g1" path="res://scripts/zone.gd" id="3_zone"]
+[ext_resource type="Script" uid="uid://b4lrkxcavq8pv" path="res://scripts/wall.gd" id="4_wall"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
+[ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
+[ext_resource type="PackedScene" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
 
 [sub_resource type="RectangleShape2D" id="wall_shape_1"]
 size = Vector2(20, 150)
@@ -15,44 +17,43 @@ size = Vector2(20, 150)
 [sub_resource type="RectangleShape2D" id="wall_shape_3"]
 size = Vector2(150, 20)
 
-[node name="Level02" type="Node2D"]
+[node name="Level02" type="Node2D" unique_id=1320033331]
 script = ExtResource("1_main")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="VFXManager" parent="." unique_id=2095329045 instance=ExtResource("6_vfxmanager")]
+
+[node name="Background" type="ColorRect" parent="." unique_id=1926469991]
 offset_right = 800.0
 offset_bottom = 600.0
 color = Color(0.1, 0.1, 0.18, 1)
 
-[node name="Zones" type="Node2D" parent="."]
+[node name="Zones" type="Node2D" parent="." unique_id=1600826316]
 
-[node name="RedZone1" type="ColorRect" parent="Zones"]
-offset_left = 300.0
-offset_top = 150.0
-offset_right = 450.0
-offset_bottom = 250.0
+[node name="RedZone1" type="ColorRect" parent="Zones" unique_id=1384892362]
+offset_left = 272.0
+offset_top = 153.0
+offset_right = 422.0
+offset_bottom = 253.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
-zone_type = 0
 
-[node name="RedZone2" type="ColorRect" parent="Zones"]
+[node name="RedZone2" type="ColorRect" parent="Zones" unique_id=72641563]
 offset_left = 500.0
 offset_top = 400.0
 offset_right = 620.0
 offset_bottom = 550.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
-zone_type = 0
 
-[node name="RedZone3" type="ColorRect" parent="Zones"]
+[node name="RedZone3" type="ColorRect" parent="Zones" unique_id=765140178]
 offset_left = 200.0
 offset_top = 450.0
 offset_right = 350.0
 offset_bottom = 550.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
-zone_type = 0
 
-[node name="GreenZone" type="ColorRect" parent="Zones"]
+[node name="GreenZone" type="ColorRect" parent="Zones" unique_id=200464441]
 offset_left = 680.0
 offset_top = 200.0
 offset_right = 780.0
@@ -61,60 +62,69 @@ color = Color(0.2, 1, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 1
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=1023383110]
 
-[node name="Wall1" type="StaticBody2D" parent="Walls"]
+[node name="Wall1" type="StaticBody2D" parent="Walls" unique_id=401785888]
 position = Vector2(200, 200)
 script = ExtResource("4_wall")
-width = 20.0
 height = 150.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall1" unique_id=883042114]
 shape = SubResource("wall_shape_1")
 
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall1"]
-polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
+[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall1" unique_id=972498077]
 color = Color(0.54, 0.54, 0.6, 1)
+polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
 
-[node name="Wall2" type="StaticBody2D" parent="Walls"]
+[node name="Wall2" type="StaticBody2D" parent="Walls" unique_id=1036985450]
 position = Vector2(400, 350)
 script = ExtResource("4_wall")
-width = 20.0
 height = 150.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall2" unique_id=1621947073]
 shape = SubResource("wall_shape_2")
 
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall2"]
-polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
+[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall2" unique_id=116347139]
 color = Color(0.54, 0.54, 0.6, 1)
+polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
 
-[node name="Wall3" type="StaticBody2D" parent="Walls"]
+[node name="Wall3" type="StaticBody2D" parent="Walls" unique_id=192365227]
 position = Vector2(550, 100)
 script = ExtResource("4_wall")
 width = 150.0
 height = 20.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall3" unique_id=1507076918]
 shape = SubResource("wall_shape_3")
 
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall3"]
-polygon = PackedVector2Array(-75, -10, 75, -10, 75, 10, -75, 10)
+[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall3" unique_id=2014816628]
 color = Color(0.54, 0.54, 0.6, 1)
+polygon = PackedVector2Array(-75, -10, 75, -10, 75, 10, -75, 10)
 
-[node name="Particles" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1134859917]
+
+[node name="SpawnPoint1" parent="SpawnPoints" unique_id=227405728 instance=ExtResource("7_spawnpoint")]
+position = Vector2(100, 150)
+
+[node name="SpawnPoint2" parent="SpawnPoints" unique_id=917060052 instance=ExtResource("7_spawnpoint")]
+position = Vector2(100, 300)
+
+[node name="SpawnPoint3" parent="SpawnPoints" unique_id=1611019128 instance=ExtResource("7_spawnpoint")]
+position = Vector2(100, 450)
+
+[node name="Particles" type="Node2D" parent="." unique_id=76469400]
 script = ExtResource("2_container")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1528306480]
 anchor_mode = 0
 
-[node name="HUD" parent="." instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=845210615 instance=ExtResource("5_hud")]
 
-[node name="CollapseTimer" type="Timer" parent="."]
+[node name="CollapseTimer" type="Timer" parent="." unique_id=1757261072]
 one_shot = true
 
-[node name="RespawnTimer" type="Timer" parent="."]
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1805198679]
 one_shot = true
 
-[node name="AnimationTimer" type="Timer" parent="."]
+[node name="AnimationTimer" type="Timer" parent="." unique_id=315470792]
 one_shot = true
