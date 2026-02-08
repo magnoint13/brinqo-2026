@@ -2,6 +2,7 @@ extends Node2D
 
 var particles: Array = []
 var particle_scene = preload("res://scenes/particle.tscn")
+var connection_lines: Line2D
 
 # Fallback spawn positions if no SpawnPoint nodes are found
 const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
@@ -11,7 +12,20 @@ const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 ]
 
 func _ready():
+	create_connection_lines()
 	spawn_initial_particles()
+
+func _process(delta):
+	# Update lines every frame to ensure they're visible
+	update_connection_lines()
+
+func create_connection_lines():
+	connection_lines = Line2D.new()
+	connection_lines.width = 2.0
+	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)  # Softer blue, subtle
+	connection_lines.antialiased = true
+	connection_lines.z_index = 5  # Draw on top but not extreme
+	add_child(connection_lines)
 
 func get_spawn_positions() -> Array[Vector2]:
 	# Look for SpawnPoint nodes in the parent (level) scene
@@ -106,6 +120,41 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 			var slide = collision.get_remainder().slide(collision.get_normal())
 			p.move_and_collide(slide)
 		
-		# Keep in bounds
-		p.position.x = clamp(p.position.x, 8, 792)
-		p.position.y = clamp(p.position.y, 8, 592)
+		# Wrap around screen edges
+		if p.position.x < 0:
+			p.position.x = 800
+		elif p.position.x > 800:
+			p.position.x = 0
+		
+		if p.position.y < 0:
+			p.position.y = 600
+		elif p.position.y > 600:
+			p.position.y = 0
+	
+	# Update connection lines between particles
+	update_connection_lines()
+
+func update_connection_lines():
+	if connection_lines == null:
+		return
+	
+	# Filter out invalid particles
+	var valid_particles = []
+	for p in particles:
+		if is_instance_valid(p) and p.fade_alpha > 0.1:
+			valid_particles.append(p)
+	
+	if valid_particles.size() < 2:
+		connection_lines.points = []
+		return
+	
+	# Build points array
+	var points = []
+	for i in range(valid_particles.size()):
+		for j in range(i + 1, valid_particles.size()):
+			var p1 = valid_particles[i]
+			var p2 = valid_particles[j]
+			points.append(p1.position)
+			points.append(p2.position)
+	
+	connection_lines.points = points
