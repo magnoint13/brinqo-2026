@@ -116,9 +116,18 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 		
 		# Handle collision response
 		if collision:
-			# Slide along the wall
-			var slide = collision.get_remainder().slide(collision.get_normal())
-			p.move_and_collide(slide)
+			var collider = collision.get_collider()
+			
+			# Check if we collided with another particle
+			if collider is CharacterBody2D and collider != p:
+				# Bounce off other particle
+				var bounce_dir = (p.position - collider.position).normalized()
+				p.velocity = bounce_dir * speed * 0.5
+				p.move_and_collide(p.velocity)
+			else:
+				# Slide along walls
+				var slide = collision.get_remainder().slide(collision.get_normal())
+				p.move_and_collide(slide)
 		
 		# Wrap around screen edges
 		if p.position.x < 0:

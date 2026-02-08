@@ -12,8 +12,9 @@ const RESPAWN_DURATION = 1.5
 @onready var respawn_timer = $RespawnTimer
 @onready var animation_timer = $AnimationTimer
 @onready var camera = $Camera2D
-@onready var walls = $TileMapLayer
-@onready var zones_container = $Zones
+@onready var walls = $Walls/TileMapLayer
+@onready var red_zones = $RedZone/TileMapLayer
+@onready var green_zones = $GreenZone/TileMapLayer
 @onready var hud = $HUD
 
 var game_over = false
@@ -29,8 +30,6 @@ func _ready():
 	collapse_timer.timeout.connect(_on_collapse_timeout)
 	respawn_timer.timeout.connect(_on_respawn_timeout)
 	animation_timer.timeout.connect(_on_animation_timeout)
-	
-	create_zones()
 	
 	start_collapse_timer()
 	hud.show_progress_bar()
@@ -175,25 +174,19 @@ func _on_respawn_timeout():
 		hud.clear_status()
 
 func check_zone(pos: Vector2) -> String:
-	for child in zones_container.get_children():
-		if child is Zone:
-			var zone_rect = Rect2(child.position, child.size)
-			if zone_rect.has_point(pos):
-				if child.zone_type == Zone.ZoneType.GREEN:
-					return "green"
-				elif child.zone_type == Zone.ZoneType.RED:
-					return "red"
+	# Check green zones first (win condition)
+	if green_zones:
+		var green_cell = green_zones.local_to_map(pos)
+		if green_zones.get_cell_source_id(green_cell) != -1:
+			return "green"
+	
+	# Check red zones (lose condition)
+	if red_zones:
+		var red_cell = red_zones.local_to_map(pos)
+		if red_zones.get_cell_source_id(red_cell) != -1:
+			return "red"
 	
 	return "neutral"
-
-func create_zones():
-	if not has_node("Zones"):
-		zones_container = Node2D.new()
-		zones_container.name = "Zones"
-		add_child(zones_container)
-		move_child(zones_container, 1)
-	else:
-		zones_container = $Zones
 
 func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	var border = Node2D.new()

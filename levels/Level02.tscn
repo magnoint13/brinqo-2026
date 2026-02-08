@@ -1,87 +1,63 @@
 [gd_scene format=3 uid="uid://level02"]
 
-[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="Script" uid="uid://d3p4jcv0fd6g1" path="res://scripts/zone.gd" id="3_zone"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
-[ext_resource type="TileSet" uid="uid://wall_tiles" path="res://resources/wall_tiles.tres" id="8_tileset"]
+[ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
+[ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="9_red_tileset"]
+[ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="10_green_tileset"]
 
-[node name="Level02" type="Node2D" unique_id=1320033331]
+[node name="Level02" type="Node2D"]
 script = ExtResource("1_main")
 
-[node name="VFXManager" parent="." unique_id=2095329045 instance=ExtResource("6_vfxmanager")]
+[node name="VFXManager" parent="." instance=ExtResource("6_vfxmanager")]
 
-[node name="Background" type="ColorRect" parent="." unique_id=1926469991]
+[node name="Background" type="ColorRect" parent="."]
 offset_right = 800.0
 offset_bottom = 600.0
 color = Color(0.1, 0.1, 0.18, 1)
 
-[node name="Zones" type="Node2D" parent="." unique_id=1600826316]
+[node name="Walls" type="Node2D" parent="."]
 
-[node name="RedZone1" type="ColorRect" parent="Zones" unique_id=1384892362]
-offset_left = 272.0
-offset_top = 153.0
-offset_right = 422.0
-offset_bottom = 253.0
-color = Color(1, 0.2, 0.2, 0.4)
-script = ExtResource("3_zone")
+[node name="TileMapLayer" type="TileMapLayer" parent="Walls"]
+tile_set = ExtResource("8_wall_tileset")
 
-[node name="RedZone2" type="ColorRect" parent="Zones" unique_id=72641563]
-offset_left = 500.0
-offset_top = 400.0
-offset_right = 620.0
-offset_bottom = 550.0
-color = Color(1, 0.2, 0.2, 0.4)
-script = ExtResource("3_zone")
+[node name="RedZone" type="Node2D" parent="."]
 
-[node name="RedZone3" type="ColorRect" parent="Zones" unique_id=765140178]
-offset_left = 200.0
-offset_top = 450.0
-offset_right = 350.0
-offset_bottom = 550.0
-color = Color(1, 0.2, 0.2, 0.4)
-script = ExtResource("3_zone")
+[node name="TileMapLayer" type="TileMapLayer" parent="RedZone"]
+tile_set = ExtResource("9_red_tileset")
 
-[node name="GreenZone" type="ColorRect" parent="Zones" unique_id=200464441]
-offset_left = 680.0
-offset_top = 200.0
-offset_right = 780.0
-offset_bottom = 300.0
-color = Color(0.2, 1, 0.2, 0.4)
-script = ExtResource("3_zone")
-zone_type = 1
+[node name="GreenZone" type="Node2D" parent="."]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1023383110]
-tile_set = ExtResource("8_tileset")
-use_parent_coordinates = true
-tile_map_data = PackedInt32Array()
+[node name="TileMapLayer" type="TileMapLayer" parent="GreenZone"]
+tile_set = ExtResource("10_green_tileset")
 
-[node name="SpawnPoints" type="Node2D" parent="." unique_id=1134859917]
+[node name="SpawnPoints" type="Node2D" parent="."]
 
-[node name="SpawnPoint1" parent="SpawnPoints" unique_id=227405728 instance=ExtResource("7_spawnpoint")]
-position = Vector2(100, 150)
+[node name="SpawnPoint1" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
+position = Vector2(100, 200)
 
-[node name="SpawnPoint2" parent="SpawnPoints" unique_id=917060052 instance=ExtResource("7_spawnpoint")]
+[node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 300)
 
-[node name="SpawnPoint3" parent="SpawnPoints" unique_id=1611019128 instance=ExtResource("7_spawnpoint")]
-position = Vector2(100, 450)
+[node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
+position = Vector2(100, 400)
 
-[node name="Particles" type="Node2D" parent="." unique_id=76469400]
+[node name="Particles" type="Node2D" parent="."]
 script = ExtResource("2_container")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1528306480]
+[node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="HUD" parent="." unique_id=845210615 instance=ExtResource("5_hud")]
+[node name="HUD" parent="." instance=ExtResource("5_hud")]
 
-[node name="CollapseTimer" type="Timer" parent="." unique_id=1757261072]
+[node name="CollapseTimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="RespawnTimer" type="Timer" parent="." unique_id=1805198679]
+[node name="RespawnTimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="AnimationTimer" type="Timer" parent="." unique_id=315470792]
+[node name="AnimationTimer" type="Timer" parent="."]
 one_shot = true
