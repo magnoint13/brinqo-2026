@@ -12,7 +12,7 @@ const RESPAWN_DURATION = 1.5
 @onready var respawn_timer = $RespawnTimer
 @onready var animation_timer = $AnimationTimer
 @onready var camera = $Camera2D
-@onready var walls = $Walls
+@onready var walls = $TileMapLayer
 @onready var zones_container = $Zones
 @onready var hud = $HUD
 

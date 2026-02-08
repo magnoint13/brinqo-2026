@@ -3,19 +3,10 @@
 [ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Script" uid="uid://d3p4jcv0fd6g1" path="res://scripts/zone.gd" id="3_zone"]
-[ext_resource type="Script" uid="uid://b4lrkxcavq8pv" path="res://scripts/wall.gd" id="4_wall"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
-
-[sub_resource type="RectangleShape2D" id="wall_shape_1"]
-size = Vector2(20, 150)
-
-[sub_resource type="RectangleShape2D" id="wall_shape_2"]
-size = Vector2(20, 150)
-
-[sub_resource type="RectangleShape2D" id="wall_shape_3"]
-size = Vector2(150, 20)
+[ext_resource type="TileSet" uid="uid://wall_tiles" path="res://resources/wall_tiles.tres" id="8_tileset"]
 
 [node name="Level02" type="Node2D" unique_id=1320033331]
 script = ExtResource("1_main")
@@ -62,44 +53,10 @@ color = Color(0.2, 1, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 1
 
-[node name="Walls" type="Node2D" parent="." unique_id=1023383110]
-
-[node name="Wall1" type="StaticBody2D" parent="Walls" unique_id=401785888]
-position = Vector2(200, 200)
-script = ExtResource("4_wall")
-height = 150.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall1" unique_id=883042114]
-shape = SubResource("wall_shape_1")
-
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall1" unique_id=972498077]
-color = Color(0.54, 0.54, 0.6, 1)
-polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
-
-[node name="Wall2" type="StaticBody2D" parent="Walls" unique_id=1036985450]
-position = Vector2(400, 350)
-script = ExtResource("4_wall")
-height = 150.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall2" unique_id=1621947073]
-shape = SubResource("wall_shape_2")
-
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall2" unique_id=116347139]
-color = Color(0.54, 0.54, 0.6, 1)
-polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
-
-[node name="Wall3" type="StaticBody2D" parent="Walls" unique_id=192365227]
-position = Vector2(550, 100)
-script = ExtResource("4_wall")
-width = 150.0
-height = 20.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall3" unique_id=1507076918]
-shape = SubResource("wall_shape_3")
-
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall3" unique_id=2014816628]
-color = Color(0.54, 0.54, 0.6, 1)
-polygon = PackedVector2Array(-75, -10, 75, -10, 75, 10, -75, 10)
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1023383110]
+tile_set = ExtResource("8_tileset")
+use_parent_coordinates = true
+tile_map_data = PackedInt32Array()
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=1134859917]
 

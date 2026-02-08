@@ -3,13 +3,10 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Script" path="res://scripts/zone.gd" id="3_zone"]
-[ext_resource type="Script" path="res://scripts/wall.gd" id="4_wall"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://vfxmanager001" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" uid="uid://spawnpoint001" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
-
-[sub_resource type="RectangleShape2D" id="wall_shape_1"]
-size = Vector2(20, 200)
+[ext_resource type="TileSet" uid="uid://wall_tiles" path="res://resources/wall_tiles.tres" id="8_tileset"]
 
 [node name="Level03" type="Node2D"]
 script = ExtResource("1_main")
@@ -59,20 +56,10 @@ color = Color(0.2, 1, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 1
 
-[node name="Walls" type="Node2D" parent="."]
-
-[node name="Wall1" type="StaticBody2D" parent="Walls"]
-position = Vector2(350, 150)
-script = ExtResource("4_wall")
-width = 20.0
-height = 200.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall1"]
-shape = SubResource("wall_shape_1")
-
-[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall1"]
-polygon = PackedVector2Array(-10, -100, 10, -100, 10, 100, -10, 100)
-color = Color(0.54, 0.54, 0.6, 1)
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_set = ExtResource("8_tileset")
+use_parent_coordinates = true
+tile_map_data = PackedInt32Array()
 
 [node name="SpawnPoints" type="Node2D" parent="."]
 
