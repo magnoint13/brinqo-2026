@@ -1,17 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://main001"]
+[gd_scene load_steps=9 format=3 uid="uid://level02"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Script" path="res://scripts/zone.gd" id="3_zone"]
 [ext_resource type="Script" path="res://scripts/wall.gd" id="4_wall"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 
 [sub_resource type="RectangleShape2D" id="wall_shape_1"]
-size = Vector2(20, 200)
+size = Vector2(20, 150)
 
 [sub_resource type="RectangleShape2D" id="wall_shape_2"]
-size = Vector2(20, 180)
+size = Vector2(20, 150)
 
-[node name="Main" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="wall_shape_3"]
+size = Vector2(150, 20)
+
+[node name="Level02" type="Node2D"]
 script = ExtResource("1_main")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -22,46 +26,37 @@ color = Color(0.1, 0.1, 0.18, 1)
 [node name="Zones" type="Node2D" parent="."]
 
 [node name="RedZone1" type="ColorRect" parent="Zones"]
-offset_left = 200.0
-offset_top = 100.0
-offset_right = 350.0
-offset_bottom = 200.0
+offset_left = 300.0
+offset_top = 150.0
+offset_right = 450.0
+offset_bottom = 250.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 0
 
 [node name="RedZone2" type="ColorRect" parent="Zones"]
-offset_left = 400.0
-offset_top = 350.0
-offset_right = 520.0
-offset_bottom = 500.0
+offset_left = 500.0
+offset_top = 400.0
+offset_right = 620.0
+offset_bottom = 550.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 0
 
 [node name="RedZone3" type="ColorRect" parent="Zones"]
-offset_left = 550.0
-offset_top = 50.0
-offset_right = 730.0
-offset_bottom = 170.0
-color = Color(1, 0.2, 0.2, 0.4)
-script = ExtResource("3_zone")
-zone_type = 0
-
-[node name="RedZone4" type="ColorRect" parent="Zones"]
-offset_left = 250.0
-offset_top = 400.0
-offset_right = 390.0
-offset_bottom = 520.0
+offset_left = 200.0
+offset_top = 450.0
+offset_right = 350.0
+offset_bottom = 550.0
 color = Color(1, 0.2, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 0
 
 [node name="GreenZone" type="ColorRect" parent="Zones"]
-offset_left = 650.0
-offset_top = 250.0
-offset_right = 750.0
-offset_bottom = 350.0
+offset_left = 680.0
+offset_top = 200.0
+offset_right = 780.0
+offset_bottom = 300.0
 color = Color(0.2, 1, 0.2, 0.4)
 script = ExtResource("3_zone")
 zone_type = 1
@@ -69,29 +64,42 @@ zone_type = 1
 [node name="Walls" type="Node2D" parent="."]
 
 [node name="Wall1" type="StaticBody2D" parent="Walls"]
-position = Vector2(310, 250)
+position = Vector2(200, 200)
 script = ExtResource("4_wall")
 width = 20.0
-height = 200.0
+height = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall1"]
 shape = SubResource("wall_shape_1")
 
 [node name="Polygon2D" type="Polygon2D" parent="Walls/Wall1"]
-polygon = PackedVector2Array(-10, -100, 10, -100, 10, 100, -10, 100)
+polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
 color = Color(0.54, 0.54, 0.6, 1)
 
 [node name="Wall2" type="StaticBody2D" parent="Walls"]
-position = Vector2(510, 340)
+position = Vector2(400, 350)
 script = ExtResource("4_wall")
 width = 20.0
-height = 180.0
+height = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall2"]
 shape = SubResource("wall_shape_2")
 
 [node name="Polygon2D" type="Polygon2D" parent="Walls/Wall2"]
-polygon = PackedVector2Array(-10, -90, 10, -90, 10, 90, -10, 90)
+polygon = PackedVector2Array(-10, -75, 10, -75, 10, 75, -10, 75)
+color = Color(0.54, 0.54, 0.6, 1)
+
+[node name="Wall3" type="StaticBody2D" parent="Walls"]
+position = Vector2(550, 100)
+script = ExtResource("4_wall")
+width = 150.0
+height = 20.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/Wall3"]
+shape = SubResource("wall_shape_3")
+
+[node name="Polygon2D" type="Polygon2D" parent="Walls/Wall3"]
+polygon = PackedVector2Array(-75, -10, 75, -10, 75, 10, -75, 10)
 color = Color(0.54, 0.54, 0.6, 1)
 
 [node name="Particles" type="Node2D" parent="."]
@@ -100,56 +108,7 @@ script = ExtResource("2_container")
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="UI" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="TimerLabel" type="Label" parent="CanvasLayer/UI"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -100.0
-offset_top = 20.0
-offset_right = 100.0
-offset_bottom = 60.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 0.42, 0.42, 1)
-theme_override_font_sizes/font_size = 24
-text = "Next collapse: --"
-horizontal_alignment = 1
-
-[node name="StatusLabel" type="Label" parent="CanvasLayer/UI"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -200.0
-offset_top = 500.0
-offset_right = 200.0
-offset_bottom = 540.0
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 18
-text = ""
-horizontal_alignment = 1
-
-[node name="RestartButton" type="Button" parent="CanvasLayer/UI"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -120.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 60.0
-grow_horizontal = 0
-text = "Restart"
+[node name="HUD" parent="." instance=ExtResource("5_hud")]
 
 [node name="CollapseTimer" type="Timer" parent="."]
 one_shot = true

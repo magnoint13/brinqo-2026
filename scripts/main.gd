@@ -8,14 +8,13 @@ const COLLAPSE_ANIM_DURATION = 1.0
 const RESPAWN_DURATION = 1.5
 
 @onready var particles_node = $Particles
-@onready var timer_label = $CanvasLayer/UI/TimerLabel
-@onready var status_label = $CanvasLayer/UI/StatusLabel
-@onready var restart_button = $CanvasLayer/UI/RestartButton
 @onready var collapse_timer = $CollapseTimer
 @onready var respawn_timer = $RespawnTimer
 @onready var animation_timer = $AnimationTimer
 @onready var camera = $Camera2D
-@onready var walls = $Walls/Walls
+@onready var walls = $Walls
+@onready var zones_container = $Zones
+@onready var hud = $HUD
 
 var game_over = false
 var game_won = false
@@ -23,18 +22,14 @@ var is_collapsing = false
 var is_respawning = false
 var selected_particle = null
 var collapse_particles = []
-var zones_container: Node2D
 
 func _ready():
 	randomize()
-	restart_button.pressed.connect(_on_restart_pressed)
 	collapse_timer.timeout.connect(_on_collapse_timeout)
 	respawn_timer.timeout.connect(_on_respawn_timeout)
 	animation_timer.timeout.connect(_on_animation_timeout)
 	
-	# Create zones FIRST (before walls so they render behind)
 	create_zones()
-	create_walls()
 	
 	start_collapse_timer()
 
@@ -43,10 +38,7 @@ func _process(delta):
 		update_particles_visual(delta)
 		return
 	
-	if is_collapsing or is_respawning:
-		update_particles_visual(delta)
-		return
-	
+	update_particles_visual(delta)
 	handle_input(delta)
 	update_timer_display()
 
@@ -68,7 +60,14 @@ func handle_input(delta: float):
 
 func update_timer_display():
 	var time_left = max(0, collapse_timer.time_left)
-	timer_label.text = "Next collapse: %.1fs" % time_left
+	if game_won:
+		hud.set_timer_text("VICTORY!")
+	elif game_over:
+		hud.set_timer_text("GAME OVER")
+	elif is_respawning:
+		hud.set_timer_text("NEUTRAL COLLAPSE")
+	else:
+		hud.set_timer_text("Next collapse: %.1fs" % time_left)
 
 func start_collapse_timer():
 	var random_time = randf_range(COLLAPSE_MIN_TIME, COLLAPSE_MAX_TIME)
@@ -99,23 +98,18 @@ func _on_animation_timeout():
 	
 	if zone_result == "green":
 		game_won = true
-		status_label.text = "QUANTUM STATE STABILIZED! YOU WIN!"
-		status_label.add_theme_color_override("font_color", Color(0.31, 1, 0.4))
-		timer_label.text = "VICTORY!"
+		hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
 		create_explosion(selected_particle.position, Color.GREEN)
+		GameManager.complete_current_level()
 	elif zone_result == "red":
 		game_over = true
-		status_label.text = "COLLAPSED IN DANGER ZONE! GAME OVER!"
-		status_label.add_theme_color_override("font_color", Color(1, 0.2, 0.2))
-		timer_label.text = "GAME OVER"
+		hud.set_status_text("COLLAPSED IN DANGER ZONE! GAME OVER!", Color(1, 0.2, 0.2))
 		create_explosion(selected_particle.position, Color.RED)
 	else:
 		handle_neutral_collapse(selected_particle)
 
 func handle_neutral_collapse(survived):
-	status_label.text = "Particle survived! Respawning..."
-	status_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
-	timer_label.text = "NEUTRAL COLLAPSE"
+	hud.set_status_text("Particle survived! Respawning...", Color(0.7, 0.7, 0.7))
 	
 	survived.set_survived(true)
 	particles_node.clear_non_survived()
@@ -134,69 +128,31 @@ func _on_respawn_timeout():
 		var tween = create_tween()
 		tween.tween_callback(survived.set_survived.bind(false)).set_delay(1.5)
 	
-	await get_tree().create_timer(2.0).timeout
+	# Clear status message quickly since player can keep moving
+	await get_tree().create_timer(1.0).timeout
 	if not game_over and not game_won:
-		status_label.text = ""
+		hud.clear_status()
 
 func check_zone(pos: Vector2) -> String:
-	var green_zone = Rect2(650, 250, 100, 100)
-	if green_zone.has_point(pos):
-		return "green"
-	
-	var red_zones = [
-		Rect2(200, 100, 150, 100),
-		Rect2(400, 350, 120, 150),
-		Rect2(550, 50, 180, 120),
-		Rect2(250, 400, 140, 120)
-	]
-	
-	for zone in red_zones:
-		if zone.has_point(pos):
-			return "red"
+	for child in zones_container.get_children():
+		if child is Zone:
+			var zone_rect = Rect2(child.position, child.size)
+			if zone_rect.has_point(pos):
+				if child.zone_type == Zone.ZoneType.GREEN:
+					return "green"
+				elif child.zone_type == Zone.ZoneType.RED:
+					return "red"
 	
 	return "neutral"
 
 func create_zones():
-	zones_container = Node2D.new()
-	zones_container.name = "Zones"
-	add_child(zones_container)
-	# Move zones to be drawn AFTER background (index 1) but before other elements
-	move_child(zones_container, 1)
-	
-	# Green zone - filled
-	var green = ColorRect.new()
-	green.position = Vector2(650, 250)
-	green.size = Vector2(100, 100)
-	green.color = Color(0.2, 1.0, 0.2, 0.4)
-	zones_container.add_child(green)
-	
-	# Green zone - border (using a panel or multiple lines)
-	var green_border = create_border(Vector2(650, 250), Vector2(100, 100), Color(0.2, 1.0, 0.2))
-	zones_container.add_child(green_border)
-	
-	# Red zones
-	var red_positions = [
-		Vector2(200, 100),
-		Vector2(400, 350),
-		Vector2(550, 50),
-		Vector2(250, 400)
-	]
-	var red_sizes = [
-		Vector2(150, 100),
-		Vector2(120, 150),
-		Vector2(180, 120),
-		Vector2(140, 120)
-	]
-	
-	for i in range(red_positions.size()):
-		var red = ColorRect.new()
-		red.position = red_positions[i]
-		red.size = red_sizes[i]
-		red.color = Color(1.0, 0.2, 0.2, 0.4)
-		zones_container.add_child(red)
-		
-		var red_border = create_border(red_positions[i], red_sizes[i], Color(1.0, 0.2, 0.2))
-		zones_container.add_child(red_border)
+	if not has_node("Zones"):
+		zones_container = Node2D.new()
+		zones_container.name = "Zones"
+		add_child(zones_container)
+		move_child(zones_container, 1)
+	else:
+		zones_container = $Zones
 
 func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	var border = Node2D.new()
@@ -236,42 +192,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	
 	return border
 
-func create_walls():
-	var wall_positions = [
-		Rect2(300, 150, 20, 200),
-		Rect2(500, 250, 20, 180)
-	]
-	
-	for wp in wall_positions:
-		var wall = StaticBody2D.new()
-		var shape = RectangleShape2D.new()
-		shape.size = Vector2(wp.size.x, wp.size.y)
-		
-		var col = CollisionShape2D.new()
-		col.shape = shape
-		col.position = wp.get_center()
-		
-		wall.add_child(col)
-		walls.add_child(wall)
-		
-		var vis = _create_wall_visual(wp)
-		walls.add_child(vis)
-
-func _create_wall_visual(rect: Rect2) -> Node2D:
-	var node = Node2D.new()
-	node.position = rect.get_center()
-	
-	var poly = Polygon2D.new()
-	poly.polygon = PackedVector2Array([
-		Vector2(-rect.size.x/2, -rect.size.y/2),
-		Vector2(rect.size.x/2, -rect.size.y/2),
-		Vector2(rect.size.x/2, rect.size.y/2),
-		Vector2(-rect.size.x/2, rect.size.y/2)
-	])
-	poly.color = Color(0.54, 0.54, 0.6)
-	node.add_child(poly)
-	
-	return node
 
 func create_collapse_effect(_particle):
 	pass
@@ -324,13 +244,13 @@ func update_particles_visual(delta):
 	
 	collapse_particles = collapse_particles.filter(func(x): return is_instance_valid(x))
 
-func _on_restart_pressed():
+func restart_level():
 	game_over = false
 	game_won = false
 	is_collapsing = false
 	is_respawning = false
 	selected_particle = null
-	status_label.text = ""
-	timer_label.text = "Next collapse: --"
+	hud.clear_status()
+	hud.set_timer_text("Next collapse: --")
 	particles_node.reset()
 	start_collapse_timer()

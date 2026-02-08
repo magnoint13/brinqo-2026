@@ -32,9 +32,9 @@ func respawn_two_particles(_exclude_position: Vector2):
 		add_child(p)
 		particles.append(p)
 		
-		# Create fade-in tween
+		# Create fade-in tween (quick fade in)
 		var tween = create_tween()
-		tween.tween_method(p.set_fade, 0.0, 1.0, 1.5)
+		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
 
 func get_survived_particle() -> Node2D:
 	for p in particles:
