@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://vfxdissolve001"]
+
+[ext_resource type="Script" path="res://scripts/VFXEmitter.gd" id="1_vfxemitter"]
+
+[sub_resource type="Gradient" id="Gradient_fade"]
+colors = PackedColorArray(0.7, 0.7, 0.8, 0.6, 0.7, 0.7, 0.8, 0)
+offsets = PackedFloat32Array(0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_fade"]
+gradient = SubResource("Gradient_fade")
+fill = 1
+width = 20
+height = 20
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_dissolve"]
+emission_shape = 1
+emission_sphere_radius = 8.0
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+gravity = Vector3(0, -20, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 30.0
+damping_min = 5.0
+damping_max = 10.0
+scale_min = 0.3
+scale_max = 0.5
+color = Color(0.7, 0.7, 0.8, 0.6)
+
+[node name="DissolveVFX" type="Node2D"]
+script = ExtResource("1_vfxemitter")
+
+[node name="Dust" type="GPUParticles2D" parent="."]
+amount = 8
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.9
+fixed_fps = 30
+texture = SubResource("GradientTexture2D_fade")
+process_material = SubResource("ParticleProcessMaterial_dissolve")

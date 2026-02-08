@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://u3gn5bpf6xho"]
+
+[ext_resource type="Script" uid="uid://dbypp8l2ohiot" path="res://scripts/VFXEmitter.gd" id="1_vfxemitter"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ring"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 0)
+spread = 0.0
+initial_velocity_min = 50.0
+initial_velocity_max = 80.0
+radial_velocity_min = 30.0
+radial_velocity_max = 50.0
+gravity = Vector3(0, 0, 0)
+damping_min = 10.0
+damping_max = 15.0
+scale_min = 0.4
+scale_max = 0.6
+color = Color(1, 0.84, 0, 0.8)
+
+[sub_resource type="Gradient" id="Gradient_ring"]
+colors = PackedColorArray(1, 0.84, 0, 0.8, 1, 0.84, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ring"]
+gradient = SubResource("Gradient_ring")
+fill = 1
+
+[node name="StabilizeVFX" type="Node2D" unique_id=246347216]
+script = ExtResource("1_vfxemitter")
+
+[node name="Ring" type="GPUParticles2D" parent="." unique_id=1876083047]
+emitting = false
+amount = 12
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_ring")
+
+[node name="Flash" type="PointLight2D" parent="." unique_id=1092946947]
+color = Color(1, 0.84, 0, 1)
+energy = 2.0
+texture = SubResource("GradientTexture2D_ring")
+texture_scale = 0.8

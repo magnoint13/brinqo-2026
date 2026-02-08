@@ -21,9 +21,7 @@ var game_won = false
 var is_collapsing = false
 var is_respawning = false
 var selected_particle = null
-var collapse_particles = []
 
-var collapse_effect_scene = preload("res://scenes/CollapseEffect.tscn")
 var current_collapse_max_time: float = 15.0
 
 func _ready():
@@ -39,10 +37,8 @@ func _ready():
 
 func _process(delta):
 	if game_over or game_won:
-		update_particles_visual(delta)
 		return
 	
-	update_particles_visual(delta)
 	handle_input(delta)
 	update_timer_display()
 
@@ -133,8 +129,8 @@ func victory_effects():
 	# Gentle green flash
 	create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
 	
-	# Subtle green particles (fewer, smaller)
-	create_gentle_burst(selected_particle.position, Color.GREEN, 12)
+	# Use VFX scene for green burst
+	VFXSpawner.spawn_burst(selected_particle.global_position, Color.GREEN)
 	
 	# Light screen shake for victory
 	screen_shake(2.5, 0.4)
@@ -147,8 +143,8 @@ func defeat_effects():
 	# Subtle red flash
 	create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
 	
-	# Fewer red particles
-	create_gentle_burst(selected_particle.position, Color.RED, 10)
+	# Use VFX scene for red burst
+	VFXSpawner.spawn_burst(selected_particle.global_position, Color.RED)
 	
 	# Light screen shake
 	screen_shake(2.0, 0.3)
@@ -203,7 +199,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	var border = Node2D.new()
 	border.position = pos
 	
-	# Top line
 	var top = Line2D.new()
 	top.add_point(Vector2(0, 0))
 	top.add_point(Vector2(size.x, 0))
@@ -211,7 +206,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	top.default_color = color
 	border.add_child(top)
 	
-	# Bottom line
 	var bottom = Line2D.new()
 	bottom.add_point(Vector2(0, size.y))
 	bottom.add_point(Vector2(size.x, size.y))
@@ -219,7 +213,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	bottom.default_color = color
 	border.add_child(bottom)
 	
-	# Left line
 	var left = Line2D.new()
 	left.add_point(Vector2(0, 0))
 	left.add_point(Vector2(0, size.y))
@@ -227,7 +220,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	left.default_color = color
 	border.add_child(left)
 	
-	# Right line
 	var right = Line2D.new()
 	right.add_point(Vector2(size.x, 0))
 	right.add_point(Vector2(size.x, size.y))
@@ -237,13 +229,6 @@ func create_border(pos: Vector2, size: Vector2, color: Color) -> Node2D:
 	
 	return border
 
-
-func create_collapse_effect(particle):
-	# Instantiate collapse VFX at particle position
-	var effect = collapse_effect_scene.instantiate()
-	effect.position = particle.position
-	add_child(effect)
-
 func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 	if camera == null:
 		return
@@ -251,7 +236,6 @@ func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 	var original_offset = camera.offset
 	var tween = create_tween()
 	
-	# 6 quick shakes with dampening
 	for i in range(6):
 		var dampen = 1.0 - (float(i) / 6.0)
 		var offset = Vector2(
@@ -261,69 +245,36 @@ func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 		
 		tween.tween_property(camera, "offset", offset, duration / 6)
 	
-	# Return to original
 	tween.tween_property(camera, "offset", original_offset, duration / 6)
 
 func dissolve_particle(particle):
-	# Gentle dissolve effect for particles being removed from reality
+	# Spawn VFX scene for dissolve effect
+	var color = particle.base_color if !particle.is_survived else particle.survived_color
+	VFXSpawner.spawn_dissolve(particle.global_position, color)
 	
-	# Small explosion burst when particle disappears
-	create_micro_burst(particle.global_position, particle.base_color if !particle.is_survived else particle.survived_color)
-	
+	# Tween the particle fading out
 	var tween = create_tween()
-	
-	# Fade out and shrink
 	tween.tween_property(particle, "modulate:a", 0.0, 0.3)
 	tween.parallel().tween_property(particle, "scale", Vector2(0.3, 0.3), 0.3)
-	
-	# Optional: tiny particles falling off (simplified without extra nodes)
-	particle.modulate = Color(0.7, 0.7, 0.8)  # Turn grayish before disappearing
-
-func create_micro_burst(pos: Vector2, color: Color):
-	# Visible burst for disappearing particles (8-10 particles)
-	for i in range(10):
-		var p = Node2D.new()
-		p.position = pos
-		
-		# Larger particle (4px)
-		var sprite = Polygon2D.new()
-		var points = PackedVector2Array()
-		for j in range(6):
-			var angle = j * TAU / 6
-			points.append(Vector2(cos(angle), sin(angle)) * 4)
-		sprite.polygon = points
-		# Make color brighter/more visible
-		var bright_color = color.lightened(0.3)
-		bright_color.a = 0.9
-		sprite.color = bright_color
-		p.add_child(sprite)
-		
-		# Faster velocity for more visibility
-		var angle = randf() * TAU
-		var speed = randf_range(60, 120)
-		var vel = Vector2(cos(angle), sin(angle)) * speed
-		p.set_meta("velocity", vel)
-		p.set_meta("life", 0.6)
-		p.set_meta("color", bright_color)
-		
-		add_child(p)
-		collapse_particles.append(p)
 
 func stabilize_particle(particle):
-	# Gentle stabilization effect for the chosen particle
-	var tween = create_tween()
+	# Spawn VFX scene for stabilization effect
+	VFXSpawner.spawn_stabilize(particle.global_position)
 	
-	# Soft pulse (breathe effect)
-	tween.tween_property(particle, "scale", Vector2(1.15, 1.15), 0.2)
-	tween.tween_property(particle, "scale", Vector2(1.0, 1.0), 0.2)
+	# Animate the yellow ring
+	var ring_tween = create_tween()
+	particle.ring_alpha = 0.0
+	particle.queue_redraw()
 	
-	# Subtle glow increase if it has a light
-	if particle.has_node("GlowLight"):
-		var light = particle.get_node("GlowLight")
-		var original_energy = light.energy
-		tween.parallel().tween_property(light, "energy", original_energy * 1.3, 0.3)
-		tween.tween_property(light, "energy", original_energy, 0.3)
-		tween.tween_property(particle, "scale", Vector2.ONE, 0.1)
+	ring_tween.tween_property(particle, "ring_alpha", 1.0, 0.3)
+	ring_tween.parallel().tween_callback(particle.queue_redraw)
+	ring_tween.tween_property(particle, "ring_alpha", 0.0, 0.3)
+	ring_tween.parallel().tween_callback(particle.queue_redraw)
+	
+	# Gentle scale pulse
+	var tween2 = create_tween()
+	tween2.tween_property(particle, "scale", Vector2(1.2, 1.2), 0.3)
+	tween2.tween_property(particle, "scale", Vector2(1.0, 1.0), 0.3)
 
 func create_flash_overlay(color: Color, duration: float = 0.5):
 	var flash = ColorRect.new()
@@ -331,7 +282,6 @@ func create_flash_overlay(color: Color, duration: float = 0.5):
 	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
 	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# Add to HUD or root
 	if hud and hud.has_node("UI"):
 		hud.get_node("UI").add_child(flash)
 	else:
@@ -340,85 +290,6 @@ func create_flash_overlay(color: Color, duration: float = 0.5):
 	var tween = create_tween()
 	tween.tween_property(flash, "modulate:a", 0.0, duration)
 	tween.tween_callback(func(): flash.queue_free())
-
-func create_explosion(pos: Vector2, color: Color):
-	for i in range(20):
-		var p = _create_particle(pos, color)
-		add_child(p)
-		collapse_particles.append(p)
-
-func create_gentle_burst(pos: Vector2, color: Color, count: int = 12):
-	# Lighter, gentler particle burst
-	for i in range(count):
-		var p = _create_gentle_particle(pos, color)
-		add_child(p)
-		collapse_particles.append(p)
-
-func _create_gentle_particle(pos: Vector2, color: Color) -> Node2D:
-	var p = Node2D.new()
-	p.position = pos
-	
-	# Smaller, softer particles
-	var sprite = Polygon2D.new()
-	var points = PackedVector2Array()
-	for i in range(6):
-		var angle = i * TAU / 6
-		points.append(Vector2(cos(angle), sin(angle)) * 3)  # Smaller (3 instead of 4)
-	sprite.polygon = points
-	sprite.color = color
-	p.add_child(sprite)
-	
-	# Slower, more gentle velocity
-	var angle = randf() * TAU
-	var speed = randf_range(30, 80)  # Slower (30-80 instead of 100)
-	var vel = Vector2(cos(angle), sin(angle)) * speed
-	p.set_meta("velocity", vel)
-	p.set_meta("life", 0.8)  # Shorter life
-	p.set_meta("color", color)
-	
-	return p
-
-func _create_particle(pos: Vector2, color: Color) -> Node2D:
-	var p = Node2D.new()
-	p.position = pos
-	
-	var sprite = Polygon2D.new()
-	var points = PackedVector2Array()
-	for i in range(8):
-		var angle = i * TAU / 8
-		points.append(Vector2(cos(angle), sin(angle)) * 4)
-	sprite.polygon = points
-	sprite.color = color
-	p.add_child(sprite)
-	
-	var vel = Vector2(randf_range(-100, 100), randf_range(-100, 100))
-	p.set_meta("velocity", vel)
-	p.set_meta("life", 1.0)
-	p.set_meta("color", color)
-	
-	return p
-
-func update_particles_visual(delta):
-	# Filter out freed instances first
-	collapse_particles = collapse_particles.filter(func(x): return is_instance_valid(x))
-	
-	for p in collapse_particles:
-		if not is_instance_valid(p):
-			continue
-		var life = p.get_meta("life") - delta
-		p.set_meta("life", life)
-		
-		var vel = p.get_meta("velocity")
-		p.position += vel * delta
-		vel *= 0.95
-		p.set_meta("velocity", vel)
-		
-		p.scale = Vector2.ONE * life
-		
-		if life <= 0:
-			p.queue_free()
-	
-	collapse_particles = collapse_particles.filter(func(x): return is_instance_valid(x))
 
 func restart_level():
 	game_over = false

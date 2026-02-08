@@ -6,6 +6,7 @@ extends CharacterBody2D
 
 var is_survived: bool = false
 var fade_alpha: float = 1.0
+var ring_alpha: float = 0.0  # For animating the survivor ring
 var base_color: Color = Color(0.39, 0.59, 1.0)
 var survived_color: Color = Color(1.0, 0.84, 0.0)
 
@@ -64,10 +65,10 @@ func _draw():
 	highlight_color.a = fade_alpha
 	draw_circle(Vector2.ZERO * 0.6, RADIUS * 0.6, highlight_color)
 	
-	# Survivor ring
-	if is_survived:
+	# Survivor ring (animated via ring_alpha)
+	if ring_alpha > 0.01:
 		var ring_color = survived_color
-		ring_color.a = fade_alpha
+		ring_color.a = ring_alpha * fade_alpha
 		draw_arc(Vector2.ZERO, RADIUS + 3, 0, TAU, 16, ring_color, 2.0)
 
 func set_fade(value: float):
