@@ -5,11 +5,11 @@
       "type": "local",
       "command": [
         "node",
-        "K:\\Godot MCP\\godot-mcp\\build\\index.js"
+        "C:\\Users\\ivani\\Desktop\\godotmcp\\godot-mcp\\build\\index.js"
       ],
       "enabled": true,
       "environment": {
-        "GODOT_PATH": "K:\\Godot\\Godot_v4.6-stable_win64.exe",
+        "GODOT_PATH": "C:\\Users\\ivani\\Desktop\\Godot_v4.6-stable_win64.exe",
         "DEBUG": "true"
       }
     }
