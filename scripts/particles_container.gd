@@ -16,19 +16,17 @@ func _ready():
 	spawn_initial_particles()
 
 func _process(delta):
-	# Update lines every frame to ensure they're visible
 	update_connection_lines()
 
 func create_connection_lines():
 	connection_lines = Line2D.new()
 	connection_lines.width = 2.0
-	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)  # Softer blue, subtle
+	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)
 	connection_lines.antialiased = true
-	connection_lines.z_index = 5  # Draw on top but not extreme
+	connection_lines.z_index = 5
 	add_child(connection_lines)
 
 func get_spawn_positions() -> Array[Vector2]:
-	# Look for SpawnPoint nodes in the parent (level) scene
 	var spawn_positions: Array[Vector2] = []
 	var parent = get_parent()
 	
@@ -37,7 +35,6 @@ func get_spawn_positions() -> Array[Vector2]:
 			if child is SpawnPoint:
 				spawn_positions.append(child.global_position)
 	
-	# Fallback to default if no spawn points found
 	if spawn_positions.is_empty():
 		spawn_positions = DEFAULT_SPAWN_POSITIONS.duplicate()
 	
@@ -49,83 +46,116 @@ func spawn_initial_particles():
 	for pos in spawn_positions:
 		var p = particle_scene.instantiate()
 		p.position = pos
-		p.setup(true)  # Starts invisible (alpha = 0)
+		p.setup(true)  # Starts invisible
 		add_child(p)
 		particles.append(p)
 		
-		# Fade in initial particles
+		# Fade in
 		var tween = create_tween()
 		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
 
-func respawn_two_particles(_exclude_position: Vector2):
-	var available_spawns = get_spawn_positions().duplicate()
-	available_spawns.shuffle()
-	
-	for i in range(2):
-		var spawn = available_spawns[i]
-		var p = particle_scene.instantiate()
-		p.position = spawn
-		p.setup(true)  # Starts invisible (alpha = 0)
-		add_child(p)
-		particles.append(p)
-		
-		# Create fade-in tween (quick fade in)
-		var tween = create_tween()
-		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
-
-func get_survived_particle() -> Node2D:
-	for p in particles:
-		if p.is_survived:
-			return p
-	return null
-
-func clear_non_survived():
-	# Remove all non-survived particles from scene
-	for p in particles:
-		if not p.is_survived:
-			p.queue_free()
-	
-	# Rebuild array with only survived particle
+func respawn_after_collapse(survivor: Node2D):
+	# Remove all particles except the survivor from the array
 	var new_particles = []
 	for p in particles:
-		if p.is_survived:
+		if p == survivor and is_instance_valid(p):
 			new_particles.append(p)
+		else:
+			# Already fading out and will be freed by tween callback
+			pass
 	particles = new_particles
-
-func add_particle(pos: Vector2, is_survived: bool = false):
-	var p = particle_scene.instantiate()
-	p.position = pos
-	p.setup(false if is_survived else true)
-	p.set_survived(is_survived)
-	add_child(p)
-	particles.append(p)
+	
+	# Get survivor's current position
+	var survivor_pos = survivor.global_position
+	
+	# Get all spawn positions
+	var spawn_positions = get_spawn_positions()
+	
+	# Find the closest spawn point to the survivor
+	var closest_spawn_index = -1
+	var closest_distance = 999999.0
+	
+	for i in range(spawn_positions.size()):
+		var dist = spawn_positions[i].distance_to(survivor_pos)
+		if dist < closest_distance:
+			closest_distance = dist
+			closest_spawn_index = i
+	
+	# Create list of available spawn indices (excluding the one closest to survivor)
+	var available_indices = []
+	for i in range(spawn_positions.size()):
+		if i != closest_spawn_index:
+			available_indices.append(i)
+	
+	# Shuffle available indices
+	available_indices.shuffle()
+	
+	# Spawn 2 new particles
+	var spawned_count = 0
+	for i in range(min(2, available_indices.size())):
+		var spawn_index = available_indices[i]
+		var spawn_pos = spawn_positions[spawn_index]
+		var p = particle_scene.instantiate()
+		p.global_position = spawn_pos
+		p.setup(true)  # Starts invisible
+		add_child(p)
+		particles.append(p)
+		spawned_count += 1
+		
+		# Fade in
+		var tween = create_tween()
+		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
+	
+	# Safety: if we couldn't spawn 2, spawn at any available position
+	while spawned_count < 2 and spawn_positions.size() > spawned_count:
+		var spawn_pos = spawn_positions[spawned_count % spawn_positions.size()]
+		# Make sure this position is far enough from survivor
+		if spawn_pos.distance_to(survivor_pos) > 50.0:  # At least 50px away
+			var p = particle_scene.instantiate()
+			p.global_position = spawn_pos
+			p.setup(true)
+			add_child(p)
+			particles.append(p)
+			spawned_count += 1
+			
+			var tween = create_tween()
+			tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
+		else:
+			# Try offsetting the position
+			var offset_pos = spawn_pos + Vector2(50, 0)
+			var p = particle_scene.instantiate()
+			p.global_position = offset_pos
+			p.setup(true)
+			add_child(p)
+			particles.append(p)
+			spawned_count += 1
+			
+			var tween = create_tween()
+			tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
 
 func reset():
 	for p in particles:
-		p.queue_free()
+		if is_instance_valid(p):
+			p.queue_free()
 	particles.clear()
 	spawn_initial_particles()
 
 func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 	for p in particles:
-		# Set velocity for this frame
-		p.velocity = direction * speed
+		if not is_instance_valid(p):
+			continue
 		
-		# Use Godot's built-in collision detection
+		p.velocity = direction * speed
 		var collision = p.move_and_collide(p.velocity)
 		
-		# Handle collision response
 		if collision:
 			var collider = collision.get_collider()
 			
-			# Check if we collided with another particle
 			if collider is CharacterBody2D and collider != p:
-				# Bounce off other particle
 				var bounce_dir = (p.position - collider.position).normalized()
 				p.velocity = bounce_dir * speed * 0.5
 				p.move_and_collide(p.velocity)
 			else:
-				# Slide along walls
 				var slide = collision.get_remainder().slide(collision.get_normal())
 				p.move_and_collide(slide)
 		
@@ -139,15 +169,12 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 			p.position.y = 600
 		elif p.position.y > 600:
 			p.position.y = 0
-	
-	# Update connection lines between particles
-	update_connection_lines()
 
 func update_connection_lines():
 	if connection_lines == null:
 		return
 	
-	# Filter out invalid particles
+	# Get valid particles with good visibility
 	var valid_particles = []
 	for p in particles:
 		if is_instance_valid(p) and p.fade_alpha > 0.1:
@@ -157,13 +184,11 @@ func update_connection_lines():
 		connection_lines.points = []
 		return
 	
-	# Build points array
+	# Build connection lines
 	var points = []
 	for i in range(valid_particles.size()):
 		for j in range(i + 1, valid_particles.size()):
-			var p1 = valid_particles[i]
-			var p2 = valid_particles[j]
-			points.append(p1.position)
-			points.append(p2.position)
+			points.append(valid_particles[i].position)
+			points.append(valid_particles[j].position)
 	
 	connection_lines.points = points

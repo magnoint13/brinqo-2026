@@ -1,63 +1,65 @@
-[gd_scene format=3 uid="uid://level02"]
+[gd_scene format=4 uid="uid://d0ei0humym7xm"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
-[ext_resource type="PackedScene" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
+[ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="9_red_tileset"]
 [ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="10_green_tileset"]
 
-[node name="Level02" type="Node2D"]
+[node name="Level01" type="Node2D" unique_id=1625279327]
 script = ExtResource("1_main")
 
-[node name="VFXManager" parent="." instance=ExtResource("6_vfxmanager")]
+[node name="VFXManager" parent="." unique_id=1937102369 instance=ExtResource("6_vfxmanager")]
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1673538779]
 offset_right = 800.0
 offset_bottom = 600.0
 color = Color(0.1, 0.1, 0.18, 1)
 
-[node name="Walls" type="Node2D" parent="."]
+[node name="Walls" type="Node2D" parent="." unique_id=181971116]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Walls"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=681864083]
+tile_map_data = PackedByteArray("AAAYABQAAQAAAAAAAAAYABAAAQAAAAAAAAAZABAAAQAAAAAAAAAaABAAAQAAAAAAAAAbABAAAQAAAAAAAAAbABEAAQAAAAAAAAAbABIAAQAAAAAAAAAbABMAAQAAAAAAAAAbABQAAQAAAAAAAAAaABQAAQAAAAAAAAAZABQAAQAAAAAAAAA=")
 tile_set = ExtResource("8_wall_tileset")
 
-[node name="RedZone" type="Node2D" parent="."]
+[node name="RedZone" type="Node2D" parent="." unique_id=686021094]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="RedZone"]
+[node name="TileMapLayer" type="TileMapLayer" parent="RedZone" unique_id=1695040775]
 tile_set = ExtResource("9_red_tileset")
 
-[node name="GreenZone" type="Node2D" parent="."]
+[node name="GreenZone" type="Node2D" parent="." unique_id=668904911]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="GreenZone"]
+[node name="TileMapLayer" type="TileMapLayer" parent="GreenZone" unique_id=1796265545]
+tile_map_data = PackedByteArray("AAAkAAsAAQAAAAAAAAAlAAsAAQAAAAAAAAAmAAsAAQAAAAAAAAAnAAsAAQAAAAAAAAAoAAsAAQAAAAAAAAApAAsAAQAAAAAAAAApAAwAAQAAAAAAAAApAA0AAQAAAAAAAAApAA4AAQAAAAAAAAApAA8AAQAAAAAAAAApABAAAQAAAAAAAAApABEAAQAAAAAAAAApABIAAQAAAAAAAAApABMAAQAAAAAAAAApABQAAQAAAAAAAAApABUAAQAAAAAAAAApABoAAQAAAAAAAAApABkAAQAAAAAAAAApABgAAQAAAAAAAAApABcAAQAAAAAAAAApABYAAQAAAAAAAAAkAAwAAQAAAAAAAAAkAA0AAQAAAAAAAAAkAA4AAQAAAAAAAAAkAA8AAQAAAAAAAAAkABAAAQAAAAAAAAAkABEAAQAAAAAAAAAkABIAAQAAAAAAAAAkABMAAQAAAAAAAAAkABQAAQAAAAAAAAAkABUAAQAAAAAAAAAkABYAAQAAAAAAAAAkABcAAQAAAAAAAAAkABgAAQAAAAAAAAAkABkAAQAAAAAAAAAkABoAAQAAAAAAAAAlABoAAQAAAAAAAAAmABoAAQAAAAAAAAAnABoAAQAAAAAAAAAoABoAAQAAAAAAAAAoABkAAQAAAAAAAAAnABkAAQAAAAAAAAAmABkAAQAAAAAAAAAlABkAAQAAAAAAAAAlABgAAQAAAAAAAAAmABgAAQAAAAAAAAAmABcAAQAAAAAAAAAnABcAAQAAAAAAAAAnABgAAQAAAAAAAAAoABcAAQAAAAAAAAAoABYAAQAAAAAAAAAoABUAAQAAAAAAAAAoABQAAQAAAAAAAAAoABgAAQAAAAAAAAAnABYAAQAAAAAAAAAnABUAAQAAAAAAAAAmABUAAQAAAAAAAAAmABQAAQAAAAAAAAAlABQAAQAAAAAAAAAlABUAAQAAAAAAAAAlABYAAQAAAAAAAAAlABcAAQAAAAAAAAAmABYAAQAAAAAAAAAnABQAAQAAAAAAAAAnABMAAQAAAAAAAAAnABIAAQAAAAAAAAAnABEAAQAAAAAAAAAoABMAAQAAAAAAAAAoABIAAQAAAAAAAAAmABEAAQAAAAAAAAAmABIAAQAAAAAAAAAlABIAAQAAAAAAAAAlABMAAQAAAAAAAAAmABMAAQAAAAAAAAAlABEAAQAAAAAAAAAmABAAAQAAAAAAAAAmAA8AAQAAAAAAAAAnAA4AAQAAAAAAAAAoAA0AAQAAAAAAAAAlAA8AAQAAAAAAAAAlAA4AAQAAAAAAAAAlAA0AAQAAAAAAAAAlAAwAAQAAAAAAAAAlABAAAQAAAAAAAAAmAA4AAQAAAAAAAAAmAA0AAQAAAAAAAAAnAA0AAQAAAAAAAAAnAAwAAQAAAAAAAAAmAAwAAQAAAAAAAAAoAAwAAQAAAAAAAAAoAA4AAQAAAAAAAAAnAA8AAQAAAAAAAAAnABAAAQAAAAAAAAAoAA8AAQAAAAAAAAAoABAAAQAAAAAAAAAoABEAAQAAAAAAAAA=")
 tile_set = ExtResource("10_green_tileset")
 
-[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=587344752]
 
-[node name="SpawnPoint1" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
+[node name="SpawnPoint1" parent="SpawnPoints" unique_id=348912190 instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 200)
 
-[node name="SpawnPoint2" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
+[node name="SpawnPoint2" parent="SpawnPoints" unique_id=844607969 instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 300)
 
-[node name="SpawnPoint3" parent="SpawnPoints" instance=ExtResource("7_spawnpoint")]
+[node name="SpawnPoint3" parent="SpawnPoints" unique_id=918776374 instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 400)
 
-[node name="Particles" type="Node2D" parent="."]
+[node name="Particles" type="Node2D" parent="." unique_id=399368420]
 script = ExtResource("2_container")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1761998080]
 anchor_mode = 0
 
-[node name="HUD" parent="." instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=1532308756 instance=ExtResource("5_hud")]
 
-[node name="CollapseTimer" type="Timer" parent="."]
+[node name="CollapseTimer" type="Timer" parent="." unique_id=919418560]
 one_shot = true
 
-[node name="RespawnTimer" type="Timer" parent="."]
+[node name="RespawnTimer" type="Timer" parent="." unique_id=1077710588]
 one_shot = true
 
-[node name="AnimationTimer" type="Timer" parent="."]
+[node name="AnimationTimer" type="Timer" parent="." unique_id=2018018186]
 one_shot = true
