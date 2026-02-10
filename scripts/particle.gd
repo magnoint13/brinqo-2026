@@ -1,9 +1,13 @@
 extends CharacterBody2D
 
+@export var WAVE_STD: float = 100
+@export var WAVE_SIZE: float = 100
 @export var BALL_RADIUS: float = 8.0
 @export var BALL_SPEED: float = 300.0
 @export var BASE_COLOR: Color = Color(0.39, 0.59, 1.0)
 @export var SURVIVED_COLOR: Color = Color(1.0, 0.84, 0.0)
+
+const WAVE_SHADER = preload("res://scripts/wave_shader.gdshader")
 
 @onready var glow_light = $GlowLight
 @onready var trail_particles = $TrailParticles
@@ -15,6 +19,7 @@ var collapsed_state: bool = true
 var is_survived: bool = false
 
 # Visual state
+var wave_rect: MeshInstance2D
 var fade_alpha: float = 1.0
 var ring_alpha: float = 0.0  # For animating the survivor ring
 
@@ -27,6 +32,18 @@ func setup(is_new: bool = true):
 
 func _ready():
 	rng = RandomNumberGenerator.new()
+
+	wave_rect = MeshInstance2D.new()
+	# Setup shape
+	var quad = QuadMesh.new()
+	quad.size = Vector2(WAVE_SIZE, WAVE_SIZE)
+	wave_rect.mesh = quad
+	# Setup shader
+	var mat = ShaderMaterial.new()
+	mat.shader = WAVE_SHADER
+	wave_rect.material = mat
+	add_child(wave_rect)
+
 	move_and_slide()
 	if trail_particles:
 		trail_particles.emitting = true
@@ -34,13 +51,6 @@ func _ready():
 func _physics_process(delta):
 	# Draw every frame
 	queue_redraw()
-	
-	# Update trail emission based on movement
-	if trail_particles:
-		if velocity.length() > 20:
-			trail_particles.amount_ratio = 0.8
-		else:
-			trail_particles.amount_ratio = 0.2
 
 	#### Handle input ####
 	var direction = Vector2.ZERO
@@ -55,10 +65,14 @@ func _physics_process(delta):
 		
 	if Input.is_action_just_pressed("collapse"):
 		collapsed_state = not collapsed_state
+		if collapsed_state:
+			position.x = rng.randfn(position.x, WAVE_STD)
+			position.y = rng.randfn(position.y, WAVE_STD)
 	
 	#### Apply movement ####
 	if direction == Vector2.ZERO:
 		return
+		
 	direction = direction.normalized()
 
 	# Set velocity for this frame
@@ -83,19 +97,24 @@ func _physics_process(delta):
 			move_and_collide(slide)
 	
 	#### Wrap around screen edges ####
+	var window = get_viewport_rect().size
 	if position.x < 0:
-		position.x = 800
-	elif position.x > 800:
-		position.x = 0
+		position.x += window.x
+	elif position.x > window.x:
+		position.x -= window.x
 	
 	if position.y < 0:
-		position.y = 600
-	elif position.y > 600:
-		position.y = 0
+		position.y += window.y
+	elif position.y > window.y:
+		position.y -= window.y
 
 func _draw():
 	if collapsed_state:
 		#### Draw as particle ####
+		wave_rect.visible = false
+		glow_light.visible = true
+		trail_particles.visible = true
+		
 		# Main body
 		var color = SURVIVED_COLOR if is_survived else BASE_COLOR
 		color.a = fade_alpha
@@ -115,6 +134,12 @@ func _draw():
 			draw_arc(Vector2.ZERO, BALL_RADIUS + 3, 0, TAU, 16, ring_color, 2.0)
 		
 		#### Other effects ####
+		# Update trail emission based on movement
+		if velocity.length() > 20:
+			trail_particles.amount_ratio = 0.8
+		else:
+			trail_particles.amount_ratio = 0.2
+		
 		survivor_aura.visible = is_survived and fade_alpha > 0.1
 		if is_survived:
 			survivor_aura.energy = 1.2 * fade_alpha
@@ -127,10 +152,11 @@ func _draw():
 
 	else:
 		#### Draw as wave ####
-		pass
+		wave_rect.visible = true
+		glow_light.visible = false
+		trail_particles.visible = false
 
 #### VFX ######################################################################
-
 
 func set_fade(value: float):
 	fade_alpha = value
