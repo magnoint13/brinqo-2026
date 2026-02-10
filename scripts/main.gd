@@ -227,7 +227,7 @@ func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 
 func dissolve_particle(particle):
 	# Spawn VFX scene for dissolve effect
-	var color = particle.base_color if !particle.is_survived else particle.survived_color
+	var color = particle.BASE_COLOR if !particle.is_survived else particle.SURVIVED_COLOR
 	VFXSpawner.spawn_dissolve(particle.global_position, color)
 	
 	# Tween the particle fading out
