@@ -79,6 +79,7 @@ func _on_collapse_timeout():
 		
 		# PHASE 2: Dissolve effect on non-selected particles (they're being destroyed)
 		for i in range(particles_node.particles.size()):
+			particles_node.particles[i].to_particle_animated()
 			if i != chosen_index:
 				dissolve_particle(particles_node.particles[i])
 		
@@ -136,6 +137,7 @@ func handle_neutral_collapse(survived):
 	hud.set_status_text("Particle survived! Respawning...", Color(0.7, 0.7, 0.7))
 	
 	survived.set_survived(true)
+	survived.collapsed_state = false
 	particles_node.clear_non_survived()
 	
 	respawn_timer.start(0.5)
@@ -149,6 +151,7 @@ func _on_respawn_timeout():
 	# Fade survived particle back to blue after respawn completes
 	var survived = particles_node.get_survived_particle()
 	if survived:
+		survived.collapsed_state = false
 		var tween = create_tween()
 		tween.tween_callback(survived.set_survived.bind(false)).set_delay(1.5)
 	

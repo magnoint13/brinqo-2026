@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var WAVE_STD: float = 25
+@export var WAVE_STD: float = 40
 @export var WAVE_SIZE: float = 200
 @export var BALL_RADIUS: float = 8.0
 @export var BALL_SPEED: float = 300.0
@@ -13,6 +13,8 @@ const WAVE_SHADER = preload("res://scripts/wave_shader.gdshader")
 @onready var glow_light = $GlowLight
 @onready var trail_particles = $TrailParticles
 @onready var survivor_aura = $SurvivorAura
+@onready var collapsed_timer = $CollapsedTimer
+@onready var collapse_particles = $CollapseParticleEffect
 
 # State
 var rng: RandomNumberGenerator
@@ -34,6 +36,7 @@ func setup(is_new: bool = true):
 
 func _ready():
 	rng = RandomNumberGenerator.new()
+	collapsed_state = false
 
 	wave_rect = MeshInstance2D.new()
 	# Setup shape
@@ -68,8 +71,7 @@ func _physics_process(delta):
 		direction.y = 1
 		
 	if Input.is_action_just_pressed("collapse"):
-		collapsed_state = not collapsed_state
-		if collapsed_state:
+		if not collapsed_state:
 			# The generated random number may end up inside a wall
 			# In that case, regenerate
 			var safe_position = false
@@ -85,6 +87,10 @@ func _physics_process(delta):
 					safe_position = true
 				attempts += 1
 			# Else, fallback to center (keep the current position)
+			collapsed_timer.start()
+			to_particle_animated()
+		else:
+			to_wave_animated()
 	
 	#### Apply movement ####
 	# NOTE: collapsed particles cannot move
@@ -190,3 +196,25 @@ func set_survived(value: bool):
 		var tween = create_tween().set_loops(3)
 		tween.tween_property(survivor_aura, "energy", 1.8, 0.3)
 		tween.tween_property(survivor_aura, "energy", 1.2, 0.3)
+
+func _on_collapsed_timer_timeout():
+	to_wave_animated()
+
+func to_particle_animated():
+	if not collapsed_state:
+		collapse_particles.process_material.radial_velocity *= -1
+		collapse_particles.restart()
+		var tween = get_tree().create_tween()
+		tween.tween_property(self, "scale", Vector2(0.2, 0.2), 0.2)
+		tween.tween_callback(func():
+			collapsed_state = true
+			scale = Vector2(1, 1)
+		)
+
+func to_wave_animated():
+	if collapsed_state:
+		collapse_particles.restart()
+		collapsed_state = false
+		scale = Vector2(0.2, 0.2)
+		var tween = get_tree().create_tween()
+		tween.tween_property(self, "scale", Vector2(1, 1), 0.2)

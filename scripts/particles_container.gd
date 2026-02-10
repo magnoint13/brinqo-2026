@@ -104,14 +104,12 @@ func get_survived_particle() -> Node2D:
 
 func clear_non_survived():
 	# Remove all non-survived particles from scene
+	var new_particles = []
 	for p in particles:
 		if not p.is_survived:
 			p.queue_free()
-	
-	# Rebuild array with only survived particle
-	var new_particles = []
-	for p in particles:
-		if p.is_survived:
+		else:
+			p.collapsed_state = false
 			new_particles.append(p)
 	particles = new_particles
 
