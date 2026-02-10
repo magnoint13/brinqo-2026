@@ -20,11 +20,14 @@ scale_max = 0.6
 color = Color(1, 0.84, 0, 0.8)
 
 [sub_resource type="Gradient" id="Gradient_ring"]
+offsets = PackedFloat32Array(0.643013, 1)
 colors = PackedColorArray(1, 0.84, 0, 0.8, 1, 0.84, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_ring"]
 gradient = SubResource("Gradient_ring")
 fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0.081)
 
 [node name="StabilizeVFX" type="Node2D" unique_id=246347216]
 script = ExtResource("1_vfxemitter")

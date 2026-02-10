@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
-@export var WAVE_STD: float = 100
-@export var WAVE_SIZE: float = 100
+@export var WAVE_STD: float = 25
+@export var WAVE_SIZE: float = 200
 @export var BALL_RADIUS: float = 8.0
 @export var BALL_SPEED: float = 300.0
+@export var MAX_REROLL_ATTEMPS: int = 50
 @export var BASE_COLOR: Color = Color(0.39, 0.59, 1.0)
 @export var SURVIVED_COLOR: Color = Color(1.0, 0.84, 0.0)
 
@@ -15,7 +16,7 @@ const WAVE_SHADER = preload("res://scripts/wave_shader.gdshader")
 
 # State
 var rng: RandomNumberGenerator
-var collapsed_state: bool = true
+var collapsed_state: bool = false
 var is_survived: bool = false
 
 # Visual state
@@ -26,6 +27,7 @@ var ring_alpha: float = 0.0  # For animating the survivor ring
 #### CORE FUNCTIONALITY ########################################################
 
 func setup(is_new: bool = true):
+	collapsed_state = false
 	is_survived = not is_new
 	fade_alpha = 0.0 if is_new else 1.0
 	velocity = Vector2.ZERO
@@ -42,6 +44,7 @@ func _ready():
 	var mat = ShaderMaterial.new()
 	mat.shader = WAVE_SHADER
 	wave_rect.material = mat
+	wave_rect.material.set_shader_parameter("time_offset", rng.randf_range(0, 5))
 	add_child(wave_rect)
 
 	move_and_slide()
@@ -51,6 +54,7 @@ func _ready():
 func _physics_process(delta):
 	# Draw every frame
 	queue_redraw()
+	wave_rect.mesh.size = Vector2(WAVE_SIZE, WAVE_SIZE)
 
 	#### Handle input ####
 	var direction = Vector2.ZERO
@@ -66,11 +70,26 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("collapse"):
 		collapsed_state = not collapsed_state
 		if collapsed_state:
-			position.x = rng.randfn(position.x, WAVE_STD)
-			position.y = rng.randfn(position.y, WAVE_STD)
+			# The generated random number may end up inside a wall
+			# In that case, regenerate
+			var safe_position = false
+			var attempts = 0
+			while not safe_position and attempts < MAX_REROLL_ATTEMPS:
+				var target_pos = Vector2(
+					rng.randfn(position.x, WAVE_STD),
+					rng.randfn(position.y, WAVE_STD)
+				)
+				var rel_vec = target_pos - global_position
+				if not test_move(global_transform, rel_vec):
+					global_position = target_pos
+					safe_position = true
+				attempts += 1
+			# Else, fallback to center (keep the current position)
 	
 	#### Apply movement ####
-	if direction == Vector2.ZERO:
+	# NOTE: collapsed particles cannot move
+	# The position is known, but the velocity is not
+	if collapsed_state or direction == Vector2.ZERO:
 		return
 		
 	direction = direction.normalized()
@@ -164,6 +183,7 @@ func set_fade(value: float):
 func set_survived(value: bool):
 	is_survived = value
 	fade_alpha = 1.0
+	collapsed_state = false
 	
 	# Survivor effect
 	if is_survived and survivor_aura:

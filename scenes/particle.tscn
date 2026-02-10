@@ -46,6 +46,8 @@ gradient = SubResource("Gradient_aura")
 width = 128
 height = 128
 fill = 1
+fill_from = Vector2(0.5237213, 0.531467)
+fill_to = Vector2(0.8178419, 0.19598024)
 
 [node name="Particle" type="CharacterBody2D" unique_id=968643451]
 collision_layer = 2

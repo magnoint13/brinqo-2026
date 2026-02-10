@@ -1,40 +1,38 @@
-[gd_scene load_steps=5 format=3 uid="uid://vfxexplosion001"]
+[gd_scene format=3 uid="uid://g7vycio4gxho"]
 
-[ext_resource type="Script" path="res://scripts/VFXEmitter.gd" id="1_vfxemitter"]
+[ext_resource type="Script" uid="uid://dbypp8l2ohiot" path="res://scripts/VFXEmitter.gd" id="1_vfxemitter"]
 
 [sub_resource type="Gradient" id="Gradient_glow"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-offsets = PackedFloat32Array(0, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
 gradient = SubResource("Gradient_glow")
-fill = 1
 width = 32
 height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_explosion"]
+particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 5.0
-particle_flag_disable_z = true
 direction = Vector3(0, 0, 0)
 spread = 180.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 80.0
 initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
 damping_min = 15.0
 damping_max = 25.0
 scale_min = 0.5
-scale_max = 1.0
-color = Color(1, 1, 1, 1)
 
-[node name="ExplosionVFX" type="Node2D"]
+[node name="ExplosionVFX" type="Node2D" unique_id=325124937]
 script = ExtResource("1_vfxemitter")
 
-[node name="Sparks" type="GPUParticles2D" parent="."]
+[node name="Sparks" type="GPUParticles2D" parent="." unique_id=345118569]
+emitting = false
 amount = 15
+texture = SubResource("GradientTexture2D_glow")
 lifetime = 0.5
 one_shot = true
 explosiveness = 0.8
-fixed_fps = 30
-texture = SubResource("GradientTexture2D_glow")
 process_material = SubResource("ParticleProcessMaterial_explosion")
