@@ -1,12 +1,12 @@
 extends Node2D
 
-const BALL_RADIUS = 8.0
-const BALL_SPEED = 300.0
-const COLLAPSE_MIN_TIME = 7.0
-const COLLAPSE_MAX_TIME = 15.0
-const COLLAPSE_ANIM_DURATION = 0.8
-const RESPAWN_DURATION = 1.5
+#### Game config ####
+@export var COLLAPSE_MIN_TIME = 7.0
+@export var COLLAPSE_MAX_TIME = 15.0
+@export var COLLAPSE_ANIM_DURATION = 0.8
+@export var RESPAWN_DURATION = 1.5
 
+#### Nodes ####
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
 @onready var respawn_timer = $RespawnTimer
@@ -17,6 +17,7 @@ const RESPAWN_DURATION = 1.5
 @onready var green_zones = $GreenZone/TileMapLayer
 @onready var hud = $HUD
 
+#### State ####
 var game_over = false
 var game_won = false
 var is_collapsing = false
@@ -34,28 +35,11 @@ func _ready():
 	start_collapse_timer()
 	hud.show_progress_bar()
 
-func _process(delta):
+func _process(_delta):
 	if game_over or game_won:
 		return
-	
-	handle_input(delta)
-	update_timer_display()
 
-func handle_input(delta: float):
-	var direction = Vector2.ZERO
-	
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
-		direction.x = -1
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
-		direction.x = 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
-		direction.y = -1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
-		direction.y = 1
-	
-	if direction != Vector2.ZERO:
-		direction = direction.normalized()
-		particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
+	update_timer_display()
 
 func update_timer_display():
 	var time_left = max(0, collapse_timer.time_left)
@@ -173,6 +157,7 @@ func _on_respawn_timeout():
 	if not game_over and not game_won:
 		hud.clear_status()
 
+# TODO: move to particle scene?
 func check_zone(pos: Vector2) -> String:
 	# Check green zones first (win condition)
 	if green_zones:
