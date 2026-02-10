@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://hud001"]
 
 [ext_resource type="Script" uid="uid://canll4uclodku" path="res://ui/HUD.gd" id="1_hud"]
+[ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_jd13s"]
+[ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_wxbmk"]
+[ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="4_wxbmk"]
 
 [node name="HUD" type="CanvasLayer" unique_id=258169263]
 process_mode = 3
@@ -78,6 +81,7 @@ offset_top = 20.0
 offset_right = -20.0
 offset_bottom = 60.0
 grow_horizontal = 0
+theme = ExtResource("3_wxbmk")
 text = "Restart"
 
 [node name="MenuButton" type="Button" parent="UI" unique_id=1003777254]
@@ -86,7 +90,53 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = 100.0
 offset_bottom = 60.0
+theme = ExtResource("2_jd13s")
 text = "Menu"
+
+[node name="RotateContainer" type="HBoxContainer" parent="UI" unique_id=1256765927]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 483.0
+offset_right = 139.0
+offset_bottom = 523.0
+theme_override_constants/separation = 6
+
+[node name="RotateButton" type="Button" parent="UI/RotateContainer" unique_id=1810332559]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme = ExtResource("2_jd13s")
+text = "R
+"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/RotateContainer" unique_id=814105693]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("4_wxbmk")
+text = "Rotate"
+scroll_active = false
+vertical_alignment = 1
+
+[node name="CollapseContainer" type="HBoxContainer" parent="UI" unique_id=962661378]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 430.0
+offset_right = 139.0
+offset_bottom = 470.0
+theme_override_constants/separation = 6
+
+[node name="CollapseButton" type="Button" parent="UI/CollapseContainer" unique_id=1017862074]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme = ExtResource("2_jd13s")
+text = "C"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/CollapseContainer" unique_id=1023178081]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("4_wxbmk")
+text = "Force Collapse"
+scroll_active = false
+vertical_alignment = 1
 
 [node name="PauseMenu" type="Control" parent="UI" unique_id=1274209340]
 process_mode = 3

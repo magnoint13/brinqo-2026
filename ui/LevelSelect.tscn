@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://levelselect001"]
+[gd_scene format=3 uid="uid://dys6kwfxj74iu"]
 
-[ext_resource type="Script" path="res://ui/LevelSelect.gd" id="1_levelselect"]
+[ext_resource type="Script" uid="uid://g6a0b3phvsli" path="res://ui/LevelSelect.gd" id="1_levelselect"]
+[ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="2_droh6"]
+[ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_jbleg"]
 
-[node name="LevelSelect" type="Control"]
+[node name="LevelSelect" type="Control" unique_id=304062800]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_levelselect")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1231890860]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.05, 0.1, 1)
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=1990302365]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -30,11 +32,12 @@ offset_top = 80.0
 offset_right = 150.0
 offset_bottom = 140.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_droh6")
 theme_override_font_sizes/font_size = 36
 text = "Select Level"
 horizontal_alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1548603207]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -51,7 +54,7 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="BackButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="." unique_id=841355118]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -61,4 +64,5 @@ offset_top = -80.0
 offset_right = 140.0
 offset_bottom = -40.0
 grow_vertical = 0
+theme = ExtResource("3_jbleg")
 text = "Back"

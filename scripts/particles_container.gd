@@ -4,6 +4,8 @@ var particles: Array = []
 var particle_scene = preload("res://scenes/particle.tscn")
 var connection_lines: Line2D
 
+var spawn_positions : Array[Vector2] = []
+#@onready var spawnPointContainer : Array[SpawnPoint] = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
 # Fallback spawn positions if no SpawnPoint nodes are found
 const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 	Vector2(100, 200),
@@ -12,6 +14,14 @@ const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 ]
 
 func _ready():
+	var spawnPointContainer = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
+	
+	for spawnPoint in spawnPointContainer:
+		spawn_positions.append(spawnPoint.position)
+	
+	if spawn_positions.is_empty():
+		print("ERROR: Missing spawnpoints")
+		
 	create_connection_lines()
 	spawn_initial_particles()
 
@@ -26,26 +36,18 @@ func create_connection_lines():
 	connection_lines.z_index = 5
 	add_child(connection_lines)
 
-func get_spawn_positions() -> Array[Vector2]:
-	var spawn_positions: Array[Vector2] = []
-	var parent = get_parent()
+
+	#var spawn_positions: Array[Vector2] = []
 	
-	if parent:
-		for child in parent.get_children():
-			if child is SpawnPoint:
-				spawn_positions.append(child.global_position)
 	
-	if spawn_positions.is_empty():
-		spawn_positions = DEFAULT_SPAWN_POSITIONS.duplicate()
-	
-	return spawn_positions
 
 func spawn_initial_particles():
-	var spawn_positions = get_spawn_positions()
+	#var spawn_positions = get_spawn_positions()
 	
-	for pos in spawn_positions:
+	for i in range(spawn_positions.size()):
 		var p = particle_scene.instantiate()
-		p.position = pos
+		p.spawn_index = i  # Store which spawnpoint this particle came from
+		p.position = spawn_positions[i]
 		p.setup(true)  # Starts invisible
 		add_child(p)
 		particles.append(p)
@@ -65,37 +67,29 @@ func respawn_after_collapse(survivor: Node2D):
 			pass
 	particles = new_particles
 	
-	# Get survivor's current position
-	var survivor_pos = survivor.global_position
-	
 	# Get all spawn positions
-	var spawn_positions = get_spawn_positions()
+	#var spawn_positions = get_spawn_positions()
 	
-	# Find the closest spawn point to the survivor
-	var closest_spawn_index = -1
-	var closest_distance = 999999.0
+	# Get the spawn index of the survivor (ID-based association)
+	var occupied_spawn_index = survivor.spawn_index
 	
-	for i in range(spawn_positions.size()):
-		var dist = spawn_positions[i].distance_to(survivor_pos)
-		if dist < closest_distance:
-			closest_distance = dist
-			closest_spawn_index = i
-	
-	# Create list of available spawn indices (excluding the one closest to survivor)
+	# Create list of available spawn indices (excluding the survivor's spawn)
 	var available_indices = []
 	for i in range(spawn_positions.size()):
-		if i != closest_spawn_index:
+		if i != occupied_spawn_index:
 			available_indices.append(i)
 	
 	# Shuffle available indices
 	available_indices.shuffle()
 	
-	# Spawn 2 new particles
+	# Spawn new particles to fill all available spawnpoints (excluding survivor's)
+	var target_particle_count = spawn_positions.size() - 1
 	var spawned_count = 0
-	for i in range(min(2, available_indices.size())):
+	for i in range(min(target_particle_count, available_indices.size())):
 		var spawn_index = available_indices[i]
 		var spawn_pos = spawn_positions[spawn_index]
 		var p = particle_scene.instantiate()
+		p.spawn_index = spawn_index  # Store spawn index for this new particle
 		p.global_position = spawn_pos
 		p.setup(true)  # Starts invisible
 		add_child(p)
@@ -106,32 +100,25 @@ func respawn_after_collapse(survivor: Node2D):
 		var tween = create_tween()
 		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
 	
-	# Safety: if we couldn't spawn 2, spawn at any available position
-	while spawned_count < 2 and spawn_positions.size() > spawned_count:
-		var spawn_pos = spawn_positions[spawned_count % spawn_positions.size()]
-		# Make sure this position is far enough from survivor
-		if spawn_pos.distance_to(survivor_pos) > 50.0:  # At least 50px away
-			var p = particle_scene.instantiate()
-			p.global_position = spawn_pos
-			p.setup(true)
-			add_child(p)
-			particles.append(p)
+	# Safety: if we couldn't spawn enough, spawn at any available position
+	while spawned_count < target_particle_count and spawn_positions.size() > spawned_count:
+		var spawn_idx = spawned_count % spawn_positions.size()
+		var spawn_pos = spawn_positions[spawn_idx]
+		# Skip if this is the occupied spawn
+		if spawn_idx == occupied_spawn_index:
 			spawned_count += 1
+			continue
 			
-			var tween = create_tween()
-			tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
-		else:
-			# Try offsetting the position
-			var offset_pos = spawn_pos + Vector2(50, 0)
-			var p = particle_scene.instantiate()
-			p.global_position = offset_pos
-			p.setup(true)
-			add_child(p)
-			particles.append(p)
-			spawned_count += 1
-			
-			var tween = create_tween()
-			tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
+		var p = particle_scene.instantiate()
+		p.spawn_index = spawn_idx  # Store spawn index
+		p.global_position = spawn_pos
+		p.setup(true)
+		add_child(p)
+		particles.append(p)
+		spawned_count += 1
+		
+		var tween = create_tween()
+		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
 
 func reset():
 	for p in particles:
@@ -169,6 +156,72 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 			p.position.y = 600
 		elif p.position.y > 600:
 			p.position.y = 0
+
+func rotate_particles(delta: float, direction: int, rotation_speed: float, walls: Node2D):
+	# Get valid particles
+	var valid_particles = []
+	for p in particles:
+		if is_instance_valid(p) and p.fade_alpha > 0.1:
+			valid_particles.append(p)
+	
+	if valid_particles.size() < 2:
+		return
+	
+	# Calculate rotation center
+	var center: Vector2
+	
+	if valid_particles.size() == 3:
+		# Check if particles form a line (colinear)
+		var p0 = valid_particles[0].position
+		var p1 = valid_particles[1].position
+		var p2 = valid_particles[2].position
+		
+		# Calculate vectors
+		var v1 = p1 - p0
+		var v2 = p2 - p0
+		
+		# Check if colinear using cross product (2D equivalent)
+		var cross = v1.x * v2.y - v1.y * v2.x
+		var is_colinear = abs(cross) < 0.01
+		
+		if is_colinear:
+			# Particles are in a line - find spatial middle particle
+			# Sort by position along the line
+			valid_particles.sort_custom(func(a, b): return a.position.x < b.position.x if abs(v1.x) > abs(v1.y) else a.position.y < b.position.y)
+			center = valid_particles[1].position  # Middle particle
+		else:
+			# Triangle - use centroid
+			center = (p0 + p1 + p2) / 3.0
+	else:
+		# For 2+ particles (not 3), use centroid
+		center = Vector2.ZERO
+		for p in valid_particles:
+			center += p.position
+		center /= valid_particles.size()
+	
+	# Apply rotation
+	var rotation_angle = deg_to_rad(rotation_speed * delta * direction)
+	
+	for p in valid_particles:
+		# Calculate offset from center
+		var offset = p.position - center
+		
+		# Rotate the offset
+		var rotated_offset = offset.rotated(rotation_angle)
+		
+		# Calculate new position
+		var new_position = center + rotated_offset
+		
+		# Calculate movement needed
+		var movement = new_position - p.position
+		
+		# Apply movement with collision
+		p.velocity = movement / delta
+		var collision = p.move_and_collide(movement)
+		
+		if collision:
+			# Collision occurred - particle stays at current position
+			pass
 
 func update_connection_lines():
 	if connection_lines == null:

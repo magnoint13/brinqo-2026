@@ -10,9 +10,14 @@ extends CanvasLayer
 @onready var pause_restart_button = $UI/PauseMenu/CenterContainer/VBoxContainer/RestartButton2
 @onready var level_select_button = $UI/PauseMenu/CenterContainer/VBoxContainer/LevelSelectButton
 @onready var main_menu_button = $UI/PauseMenu/CenterContainer/VBoxContainer/MainMenuButton
+@onready var rotate_button = $UI/RotateContainer/RotateButton
+@onready var collapse_button = $UI/CollapseContainer/CollapseButton
+var rotate_button_original_style: StyleBox = null
+var collapse_button_original_style: StyleBox = null
 
 var max_collapse_time: float = 15.0
 var is_paused: bool = false
+var can_pause: bool = true  # Prevent pausing when game is over
 
 func _ready():
 	restart_button.pressed.connect(_on_restart_pressed)
@@ -21,12 +26,18 @@ func _ready():
 	pause_restart_button.pressed.connect(_on_pause_restart_pressed)
 	level_select_button.pressed.connect(_on_level_select_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
-	# Style the progress bar
-	progress_bar.modulate = Color(1, 0.42, 0.42, 1)  # Reddish color matching timer
+	progress_bar.modulate = Color(1, 0.42, 0.42, 1)
+	
+	# Store original styles for buttons
+	if rotate_button:
+		rotate_button_original_style = rotate_button.get_theme_stylebox("normal")
+	if collapse_button:
+		collapse_button_original_style = collapse_button.get_theme_stylebox("normal")
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
-		toggle_pause()
+		if can_pause:
+			toggle_pause()
 
 func toggle_pause():
 	is_paused = !is_paused
@@ -86,3 +97,24 @@ func set_status_text(text: String, color: Color = Color.WHITE):
 
 func clear_status():
 	status_label.text = ""
+
+func set_game_over(disabled: bool = true):
+	can_pause = not disabled
+
+func set_rotate_button_pressed(pressed: bool):
+	if rotate_button and rotate_button_original_style:
+		if pressed:
+			var pressed_style = rotate_button.get_theme_stylebox("pressed")
+			if pressed_style:
+				rotate_button.add_theme_stylebox_override("normal", pressed_style)
+		else:
+			rotate_button.add_theme_stylebox_override("normal", rotate_button_original_style)
+
+func set_collapse_button_pressed(pressed: bool):
+	if collapse_button and collapse_button_original_style:
+		if pressed:
+			var pressed_style = collapse_button.get_theme_stylebox("pressed")
+			if pressed_style:
+				collapse_button.add_theme_stylebox_override("normal", pressed_style)
+		else:
+			collapse_button.add_theme_stylebox_override("normal", collapse_button_original_style)

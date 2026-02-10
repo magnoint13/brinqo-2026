@@ -4,6 +4,7 @@ const BALL_RADIUS = 8.0
 const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
 const COLLAPSE_MAX_TIME = 15.0
+const ROTATION_SPEED = 180.0
 
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
@@ -36,24 +37,40 @@ func _process(delta):
 	update_timer_display()
 
 func handle_input(delta: float):
-	# Movement
-	var direction = Vector2.ZERO
+	# Check for rotation mode (R key)
+	var is_rotating = Input.is_key_pressed(KEY_R)
+	hud.set_rotate_button_pressed(is_rotating)
 	
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
-		direction.x = -1
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
-		direction.x = 1
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
-		direction.y = -1
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
-		direction.y = 1
-	
-	if direction != Vector2.ZERO:
-		direction = direction.normalized()
-		particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
+	if is_rotating:
+		# Rotation mode - check for A/D to rotate
+		var rotation_direction = 0
+		if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
+			rotation_direction = 1  # Clockwise
+		elif Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
+			rotation_direction = -1  # Counter-clockwise
+		
+		if rotation_direction != 0:
+			particles_node.rotate_particles(delta, rotation_direction, ROTATION_SPEED, walls)
+	else:
+		# Normal movement mode
+		var direction = Vector2.ZERO
+		
+		if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
+			direction.x = -1
+		if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
+			direction.x = 1
+		if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_W):
+			direction.y = -1
+		if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+			direction.y = 1
+		
+		if direction != Vector2.ZERO:
+			direction = direction.normalized()
+			particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
 	
 	# Force collapse on C key
 	var c_pressed = Input.is_key_pressed(KEY_C)
+	hud.set_collapse_button_pressed(c_pressed)
 	if c_pressed and not c_key_was_pressed and not is_processing_collapse:
 		collapse_timer.stop()
 		trigger_collapse()
@@ -112,6 +129,7 @@ func trigger_collapse():
 	match zone_result:
 		"green":
 			game_won = true
+			hud.set_game_over()  # Prevent further pausing
 			hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
 			create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
 			VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
@@ -120,6 +138,7 @@ func trigger_collapse():
 		
 		"red":
 			game_over = true
+			hud.set_game_over()  # Prevent further pausing
 			hud.set_status_text("COLLAPSED IN DANGER ZONE! GAME OVER!", Color(1, 0.2, 0.2))
 			create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
 			VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
@@ -227,6 +246,7 @@ func restart_level():
 	game_won = false
 	is_processing_collapse = false
 	hud.clear_status()
+	hud.set_game_over(false)  # Re-enable pausing
 	hud.set_timer_text("Next collapse: --")
 	particles_node.reset()
 	start_collapse_timer()

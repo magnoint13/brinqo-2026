@@ -9,6 +9,7 @@ var fade_alpha: float = 1.0
 var ring_alpha: float = 0.0  # For animating the survivor ring
 var base_color: Color = Color(0.39, 0.59, 1.0)
 var survived_color: Color = Color(1.0, 0.84, 0.0)
+var spawn_index: int = -1  # Index of the spawnpoint this particle originated from
 
 const RADIUS: float = 8.0
 

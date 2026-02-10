@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://wko5fqnuqcyy"]
+
+[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_xy2ny"]
+[ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_4r3jr"]
+[ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_14wqy"]
+[ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_jvggd"]
+[ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="5_yvsc2"]
+[ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_ljfkf"]
+[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="7_c88o2"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_h5kw6"]
+
+[node name="Level05" type="Node2D" unique_id=79104288]
+script = ExtResource("1_xy2ny")
+
+[node name="VFXManager" parent="." unique_id=222195123 instance=ExtResource("2_4r3jr")]
+
+[node name="Background" type="ColorRect" parent="." unique_id=1761708234]
+offset_right = 800.0
+offset_bottom = 600.0
+color = Color(0.1, 0.1, 0.18, 1)
+
+[node name="Walls" type="Node2D" parent="." unique_id=205708274]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=373289632]
+tile_set = ExtResource("3_14wqy")
+
+[node name="RedZone" type="Node2D" parent="." unique_id=1662637452]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="RedZone" unique_id=394790855]
+tile_set = ExtResource("4_jvggd")
+
+[node name="GreenZone" type="Node2D" parent="." unique_id=214945435]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="GreenZone" unique_id=1490051787]
+tile_set = ExtResource("5_yvsc2")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=316589733]
+
+[node name="SpawnPoint1" parent="SpawnPoints" unique_id=1252491854 instance=ExtResource("6_ljfkf")]
+position = Vector2(100, 200)
+
+[node name="SpawnPoint2" parent="SpawnPoints" unique_id=892350687 instance=ExtResource("6_ljfkf")]
+position = Vector2(100, 300)
+
+[node name="SpawnPoint3" parent="SpawnPoints" unique_id=639471305 instance=ExtResource("6_ljfkf")]
+position = Vector2(100, 400)
+
+[node name="Particles" type="Node2D" parent="." unique_id=1085611094]
+script = ExtResource("7_c88o2")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=299328647]
+anchor_mode = 0
+
+[node name="HUD" parent="." unique_id=1155147751 instance=ExtResource("8_h5kw6")]
+
+[node name="CollapseTimer" type="Timer" parent="." unique_id=546067554]
+one_shot = true
+
+[node name="RespawnTimer" type="Timer" parent="." unique_id=705559605]
+one_shot = true
+
+[node name="AnimationTimer" type="Timer" parent="." unique_id=1500617774]
+one_shot = true
