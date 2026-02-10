@@ -23,7 +23,7 @@ The game simulates quantum superposition: multiple possibilities exist simultane
 - All particles receive the same movement input
 - Movement speed: 300 pixels per second
 - Particles can separate when encountering walls – one may be blocked while others continue
-- Movement is disabled during collapse animations and particle respawn sequences
+- Movement must NOT be interrumpted/disabled during collapse animations and particle respawn sequences
 - Particles wrap around screen edges (800x600 viewport)
 - Particles can collide with each other, bouncing off one another
 
@@ -42,7 +42,7 @@ The play area contains three types of zones:
 |-----------|--------|
 | Green Zone | The safe zone located on the right side. If the collapsed particle is here, the player wins the game. |
 | Red Zones | Danger zones scattered throughout the play area. If the collapsed particle is in any red zone, the game ends in failure. |
-| Neutral Zone | Any gray/empty area. If the collapsed particle is here, it survives and remains at its current position. Two new particles spawn at random spawn points, and the collapse timer resets. Total particles remain at 3. |
+| Neutral Zone | Outside Green and Red Zones. If the collapsed particle is here, it survives and remains at its current position. Two new particles spawn at random spawn points, and the collapse timer resets. Total particles remain at 3. |
 
 ### Walls
 - Solid gray obstacles that block particle movement using TileMapLayer (16x16 grid)
@@ -56,7 +56,6 @@ When a collapse occurs in a neutral zone:
 - Two new blue particles spawn at randomly selected spawn points
 - New particles fade in over 0.5 seconds while the survived particle remains visible
 - The player continues with 3 total particles (1 survived + 2 new)
-- Over multiple neutral collapses, all particles could potentially be survivors in different positions
 - Survived particles revert to blue after 1.5 seconds once respawn completes
 
 ## Visual Effects
