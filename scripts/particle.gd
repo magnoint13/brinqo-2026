@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 @export var WAVE_STD: float = 40
+@export var WAVE_DIRECTION_FACTOR: float = 50.0
 @export var WAVE_SIZE: float = 200
 @export var BALL_RADIUS: float = 8.0
 @export var BALL_SPEED: float = 300.0
@@ -15,8 +16,8 @@ const WAVE_SHADER = preload("res://scripts/wave_shader.gdshader")
 @onready var survivor_aura = $SurvivorAura
 @onready var collapsed_timer = $CollapsedTimer
 @onready var collapse_particles = $CollapseParticleEffect
-
-# State
+ 
+# State 
 var rng: RandomNumberGenerator
 var collapsed_state: bool = false
 var is_survived: bool = false
@@ -72,21 +73,7 @@ func _physics_process(delta):
 		
 	if Input.is_action_just_pressed("collapse"):
 		if not collapsed_state:
-			# The generated random number may end up inside a wall
-			# In that case, regenerate
-			var safe_position = false
-			var attempts = 0
-			while not safe_position and attempts < MAX_REROLL_ATTEMPS:
-				var target_pos = Vector2(
-					rng.randfn(position.x, WAVE_STD),
-					rng.randfn(position.y, WAVE_STD)
-				)
-				var rel_vec = target_pos - global_position
-				if not test_move(global_transform, rel_vec):
-					global_position = target_pos
-					safe_position = true
-				attempts += 1
-			# Else, fallback to center (keep the current position)
+			global_position = generate_random_pos(direction)
 			collapsed_timer.start()
 			to_particle_animated()
 		else:
@@ -218,3 +205,35 @@ func to_wave_animated():
 		scale = Vector2(0.2, 0.2)
 		var tween = get_tree().create_tween()
 		tween.tween_property(self, "scale", Vector2(1, 1), 0.2)
+		
+func generate_random_pos(direction: Vector2) -> Vector2:
+	# The generated random number may end up inside a wall
+	# In that case, regenerate
+	var attempts = 0
+	
+	# Requiredfor the collision testing
+	var space_state = get_world_2d().direct_space_state
+	
+	while attempts < MAX_REROLL_ATTEMPS:
+		# Here, we make easier the tunnel effect by giving more priority to the
+		# direction the player is moving to
+		var target_pos = Vector2(
+			rng.randfn(global_position.x + WAVE_DIRECTION_FACTOR * direction.x, WAVE_STD),
+			rng.randfn(global_position.y + WAVE_DIRECTION_FACTOR * direction.y, WAVE_STD)
+		)
+
+		# We cannot use regular collision detection methods here, as they check
+		# objects in the middle of the trayectory. But in this case, that is exactly
+		# what we don't want.
+		var query = PhysicsPointQueryParameters2D.new()
+		query.position = target_pos
+		query.collision_mask = collision_mask # Same mask as this object
+
+		# Query returns the intersecting objects
+		var result = space_state.intersect_point(query)
+		if result.is_empty():
+			return target_pos
+		attempts += 1
+		
+	# Else, fallback to center (keep the current position)
+	return global_position
