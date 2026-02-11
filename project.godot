@@ -13,7 +13,7 @@ config_version=5
 config/name="Quantum Collapse"
 run/main_scene="res://ui/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://bvveml5a1d4sn"
 
 [autoload]
 
