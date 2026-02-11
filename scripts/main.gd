@@ -79,7 +79,7 @@ func handle_input(delta: float):
 			particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
 	
 	# Handle Collapse button (C key) - sync button state with key state
-	var is_c_pressed = Input.is_key_pressed(KEY_C)
+	var is_c_pressed = Input.is_key_pressed(KEY_C) or Input.is_key_pressed(KEY_SPACE)
 	if is_c_pressed != c_key_was_pressed:
 		hud.collapse_button.button_pressed = is_c_pressed
 		hud.set_collapse_button_visual_pressed(is_c_pressed)  # Update visual
@@ -103,7 +103,7 @@ func update_timer_display():
 		hud.set_timer_text("COLLAPSING...")
 		hud.hide_progress_bar()
 	else:
-		hud.set_timer_text("Next collapse: %.1fs" % time_left)
+		hud.set_timer_text("Coherence time: %.1fs" % time_left)
 		hud.set_collapse_progress(time_left, current_collapse_max_time)
 
 func start_collapse_timer():
@@ -302,6 +302,6 @@ func restart_level():
 	is_processing_collapse = false
 	hud.clear_status()
 	hud.set_game_over(false)  # Re-enable pausing
-	hud.set_timer_text("Next collapse: --")
+	hud.set_timer_text("Coherence time: --")
 	particles_node.reset()
 	start_collapse_timer()

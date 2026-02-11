@@ -12,7 +12,7 @@ const RADIUS: float = 8.0
 
 # Wave state variables
 const WAVE_SHADER = preload("res://resources/wave_shader.gdshader")
-@export var WAVE_STD: float = 40
+@export var WAVE_STD: float = 25
 @export var WAVE_DIRECTION_FACTOR: float = 50.0
 @export var WAVE_SIZE: float = 200
 var collapsed_state: bool = false
@@ -86,7 +86,7 @@ func set_fade(value: float):
 	update_visuals()
 	queue_redraw()
 
-func _process(delta):
+func _process(_delta):
 	# Update trail emission based on movement
 	if trail_particles:
 		if velocity.length() > 20:
@@ -108,10 +108,15 @@ func generate_random_pos(direction: Vector2) -> Vector2:
 	var space_state = get_world_2d().direct_space_state
 	
 	while attempts < 50:
+		attempts += 1
+		
 		var target_pos = Vector2(
 			rng.randfn(global_position.x + WAVE_DIRECTION_FACTOR * direction.x, WAVE_STD),
 			rng.randfn(global_position.y + WAVE_DIRECTION_FACTOR * direction.y, WAVE_STD)
 		)
+		
+		if target_pos.distance_to(global_position) > WAVE_SIZE:
+			continue
 		
 		# Check if position is valid (not inside a wall)
 		var query = PhysicsPointQueryParameters2D.new()
@@ -121,7 +126,6 @@ func generate_random_pos(direction: Vector2) -> Vector2:
 		var result = space_state.intersect_point(query)
 		if result.is_empty():
 			return target_pos
-		attempts += 1
 	
 	# Fallback: return current position
 	return global_position

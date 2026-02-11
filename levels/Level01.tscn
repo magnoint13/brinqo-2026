@@ -1,8 +1,7 @@
 [gd_scene format=4 uid="uid://d0ei0humym7xm"]
 
-[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="Texture2D" uid="uid://c7nssp223k280" path="res://resources/backgrounds/01.png" id="3_qd5dk"]
+[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
@@ -24,7 +23,6 @@ color = Color(0, 0, 0, 1)
 modulate = Color(1, 1, 1, 0.39215687)
 offset_right = 800.0
 offset_bottom = 600.0
-texture = ExtResource("3_qd5dk")
 
 [node name="Walls" type="Node2D" parent="." unique_id=1733820030]
 

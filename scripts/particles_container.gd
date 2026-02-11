@@ -26,7 +26,7 @@ func _ready():
 	create_connection_lines()
 	spawn_initial_particles()
 
-func _process(delta):
+func _process(_delta):
 	update_connection_lines()
 
 func create_connection_lines():
@@ -34,7 +34,6 @@ func create_connection_lines():
 	connection_lines.width = 2.0
 	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)
 	connection_lines.antialiased = true
-	connection_lines.z_index = 5
 	add_child(connection_lines)
 
 func fade_out_lines(duration: float = 0.2):
@@ -53,14 +52,7 @@ func _set_lines_alpha(alpha: float):
 		color.a = alpha
 		connection_lines.default_color = color
 
-
-	#var spawn_positions: Array[Vector2] = []
-	
-	
-
 func spawn_initial_particles():
-	#var spawn_positions = get_spawn_positions()
-	
 	for i in range(spawn_positions.size()):
 		var p = particle_scene.instantiate()
 		p.spawn_index = i  # Store which spawnpoint this particle came from
@@ -136,6 +128,10 @@ func respawn_after_collapse(survivor: Node2D):
 		
 		var tween = create_tween()
 		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
+		
+	# Ensure everyone is in wave form
+	for p in particles:
+		p.to_wave_animated()
 
 func reset():
 	for p in particles:
@@ -150,7 +146,7 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 		last_movement_direction = direction
 	
 	for p in particles:
-		if not is_instance_valid(p):
+		if not is_instance_valid(p) or p.collapsed_state:
 			continue
 		
 		p.velocity = direction * speed
@@ -178,10 +174,12 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 		elif p.position.y > 600:
 			p.position.y = 0
 
-func rotate_particles(delta: float, direction: int, rotation_speed: float, walls: Node2D):
+func rotate_particles(delta: float, direction: int, rotation_speed: float, _walls: Node2D):
 	# Get valid particles
 	var valid_particles = []
 	for p in particles:
+		if p.collapsed_state:
+			return
 		if is_instance_valid(p) and p.fade_alpha > 0.1:
 			valid_particles.append(p)
 	
