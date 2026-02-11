@@ -130,6 +130,9 @@ func trigger_collapse():
 	
 	is_processing_collapse = true
 	
+	# Fade out connection lines immediately
+	particles_node.fade_out_lines(0.2)
+	
 	# Get movement direction for wave collapse bias
 	var direction = particles_node.last_movement_direction
 	if direction == Vector2.ZERO:
@@ -145,21 +148,17 @@ func trigger_collapse():
 	# Wait for wave animation
 	await get_tree().create_timer(0.25).timeout
 	
-	# PHASE 2: Generate random positions for all particles
-	var new_positions = []
-	for particle in all_particles:
-		if is_instance_valid(particle):
-			var new_pos = particle.generate_random_pos(direction)
-			new_positions.append(new_pos)
-			particle.global_position = new_pos
-		else:
-			new_positions.append(Vector2.ZERO)
-	
-	# PHASE 3: Pick survivor from new positions
+	# PHASE 2: Pick survivor first, then only move the survivor
 	var survivor_index = randi() % all_particles.size()
 	var survivor = all_particles[survivor_index]
 	
-	# PHASE 4: Animate all particles to particle state
+	# Only generate random position for the survivor particle
+	if is_instance_valid(survivor):
+		var new_pos = survivor.generate_random_pos(direction)
+		survivor.global_position = new_pos
+	# Non-survivor particles stay at their current positions (no movement)
+	
+	# PHASE 3: Animate all particles to particle state
 	for particle in all_particles:
 		if is_instance_valid(particle):
 			particle.to_particle_animated()
@@ -167,18 +166,23 @@ func trigger_collapse():
 	# Wait for particle animation
 	await get_tree().create_timer(0.25).timeout
 	
-	# PHASE 5: Dissolve non-survivors
+	# PHASE 4: Dissolve non-survivors
 	for i in range(all_particles.size()):
 		if i != survivor_index and is_instance_valid(all_particles[i]):
 			dissolve_particle(all_particles[i])
 	
-	# PHASE 6: Stabilize survivor and start auto-revert timer
+	# PHASE 5: Stabilize survivor and start auto-revert timer
 	if is_instance_valid(survivor):
 		stabilize_particle(survivor)
 		# Start auto-revert timer (2 seconds to revert to wave state)
 		var timer = survivor.get_node("CollapsedTimer")
 		if timer:
 			timer.start()
+		
+		# Spawn ripple effect at survivor's position
+		var ripple = preload("res://scripts/RippleEffect.gd").new()
+		ripple.position = survivor.global_position
+		add_child(ripple)
 	
 	screen_shake(2.0, 0.2)
 	
@@ -212,6 +216,9 @@ func trigger_collapse():
 			
 			# Clean up dissolved particles and respawn
 			particles_node.respawn_after_collapse(survivor)
+			
+			# Fade in connection lines after respawn
+			particles_node.fade_in_lines(0.5)
 			
 			# Clear status after delay
 			await get_tree().create_timer(1.0).timeout

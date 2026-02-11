@@ -37,6 +37,22 @@ func create_connection_lines():
 	connection_lines.z_index = 5
 	add_child(connection_lines)
 
+func fade_out_lines(duration: float = 0.2):
+	if connection_lines:
+		var tween = create_tween()
+		tween.tween_method(_set_lines_alpha, 0.4, 0.0, duration)
+
+func fade_in_lines(duration: float = 0.5):
+	if connection_lines:
+		var tween = create_tween()
+		tween.tween_method(_set_lines_alpha, 0.0, 0.4, duration)
+
+func _set_lines_alpha(alpha: float):
+	if connection_lines:
+		var color = connection_lines.default_color
+		color.a = alpha
+		connection_lines.default_color = color
+
 
 	#var spawn_positions: Array[Vector2] = []
 	
