@@ -20,14 +20,16 @@ var game_won = false
 var is_processing_collapse = false
 var current_collapse_max_time: float = 15.0
 
-# Input tracking
+# Input tracking for button sync
 var c_key_was_pressed = false
+var r_key_was_pressed = false
 
 func _ready():
 	randomize()
 	collapse_timer.timeout.connect(trigger_collapse)
 	start_collapse_timer()
 	hud.show_progress_bar()
+	hud.setup_action_buttons(self)
 
 func _process(delta):
 	if game_over or game_won:
@@ -37,12 +39,20 @@ func _process(delta):
 	update_timer_display()
 
 func handle_input(delta: float):
-	# Check for rotation mode (R key)
-	var is_rotating = Input.is_key_pressed(KEY_R)
-	hud.set_rotate_button_pressed(is_rotating)
+	# Handle Rotate button (R key) - sync button state with key state
+	var is_r_pressed = Input.is_key_pressed(KEY_R)
+	if is_r_pressed != r_key_was_pressed:
+		hud.rotate_button.button_pressed = is_r_pressed
+		hud.is_rotating = is_r_pressed  # Sync rotation state
+		hud.set_rotate_button_visual_pressed(is_r_pressed)  # Update visual
+		if is_r_pressed:
+			hud.rotate_button.button_down.emit()
+		else:
+			hud.rotate_button.button_up.emit()
+	r_key_was_pressed = is_r_pressed
 	
-	if is_rotating:
-		# Rotation mode - check for A/D to rotate
+	# Rotation logic - check button state (works for both key and click)
+	if hud.is_rotating:
 		var rotation_direction = 0
 		if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 			rotation_direction = 1  # Clockwise
@@ -68,13 +78,17 @@ func handle_input(delta: float):
 			direction = direction.normalized()
 			particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
 	
-	# Force collapse on C key
-	var c_pressed = Input.is_key_pressed(KEY_C)
-	hud.set_collapse_button_pressed(c_pressed)
-	if c_pressed and not c_key_was_pressed and not is_processing_collapse:
-		collapse_timer.stop()
-		trigger_collapse()
-	c_key_was_pressed = c_pressed
+	# Handle Collapse button (C key) - sync button state with key state
+	var is_c_pressed = Input.is_key_pressed(KEY_C)
+	if is_c_pressed != c_key_was_pressed:
+		hud.collapse_button.button_pressed = is_c_pressed
+		hud.set_collapse_button_visual_pressed(is_c_pressed)  # Update visual
+		if is_c_pressed:
+			hud.collapse_button.button_down.emit()
+			hud.collapse_button.pressed.emit()  # Trigger the action!
+		else:
+			hud.collapse_button.button_up.emit()
+	c_key_was_pressed = is_c_pressed
 
 func update_timer_display():
 	var time_left = max(0, collapse_timer.time_left)
@@ -98,6 +112,13 @@ func start_collapse_timer():
 	collapse_timer.start(random_time)
 	hud.show_progress_bar()
 	hud.reset_progress_bar()
+
+# Called by collapse button (both keyboard and mouse)
+func trigger_collapse_manual():
+	if is_processing_collapse or game_over or game_won:
+		return
+	collapse_timer.stop()
+	trigger_collapse()
 
 func trigger_collapse():
 	# Prevent re-entry

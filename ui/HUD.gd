@@ -12,12 +12,15 @@ extends CanvasLayer
 @onready var main_menu_button = $UI/PauseMenu/MainMenuButton
 @onready var rotate_button = $UI/RotateContainer/RotateButton
 @onready var collapse_button = $UI/CollapseContainer/CollapseButton
-var rotate_button_original_style: StyleBox = null
-var collapse_button_original_style: StyleBox = null
 
 var max_collapse_time: float = 15.0
 var is_paused: bool = false
 var can_pause: bool = true  # Prevent pausing when game is over
+var is_rotating: bool = false  # Track rotation button hold state
+
+# Store original styles for visual state management
+var rotate_button_original_style: StyleBox = null
+var collapse_button_original_style: StyleBox = null
 
 func _ready():
 	#restart_button.pressed.connect(_on_restart_pressed)
@@ -33,6 +36,11 @@ func _ready():
 		rotate_button_original_style = rotate_button.get_theme_stylebox("normal")
 	if collapse_button:
 		collapse_button_original_style = collapse_button.get_theme_stylebox("normal")
+	
+	# Setup action buttons
+	collapse_button.pressed.connect(_on_collapse_pressed)
+	rotate_button.button_down.connect(_on_rotate_down)
+	rotate_button.button_up.connect(_on_rotate_up)
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -101,20 +109,48 @@ func clear_status():
 func set_game_over(disabled: bool = true):
 	can_pause = not disabled
 
-func set_rotate_button_pressed(pressed: bool):
-	if rotate_button and rotate_button_original_style:
-		if pressed:
-			var pressed_style = rotate_button.get_theme_stylebox("pressed")
-			if pressed_style:
-				rotate_button.add_theme_stylebox_override("normal", pressed_style)
-		else:
-			rotate_button.add_theme_stylebox_override("normal", rotate_button_original_style)
+# Setup connections between buttons and game logic
+func setup_action_buttons(main_node: Node):
+	# Collapse button triggers collapse in main
+	collapse_button.pressed.connect(main_node.trigger_collapse_manual)
+	# Rotation state is read directly from button in main.handle_input()
 
-func set_collapse_button_pressed(pressed: bool):
-	if collapse_button and collapse_button_original_style:
+func _on_collapse_pressed():
+	# Visual state is handled by button's own pressed state
+	# Action is handled by connection to main.trigger_collapse_manual
+	pass
+
+func _on_rotate_down():
+	# Mouse/touch press on rotate button
+	is_rotating = true
+	rotate_button.button_pressed = true
+	_set_button_pressed_style(rotate_button, true)
+
+func _on_rotate_up():
+	# Mouse/touch release on rotate button
+	is_rotating = false
+	rotate_button.button_pressed = false
+	_set_button_pressed_style(rotate_button, false)
+
+# Set visual pressed/unpressed state for buttons
+func _set_button_pressed_style(button: Button, pressed: bool):
+	var original_style = null
+	if button == rotate_button:
+		original_style = rotate_button_original_style
+	elif button == collapse_button:
+		original_style = collapse_button_original_style
+	
+	if button and original_style:
 		if pressed:
-			var pressed_style = collapse_button.get_theme_stylebox("pressed")
+			var pressed_style = button.get_theme_stylebox("pressed")
 			if pressed_style:
-				collapse_button.add_theme_stylebox_override("normal", pressed_style)
+				button.add_theme_stylebox_override("normal", pressed_style)
 		else:
-			collapse_button.add_theme_stylebox_override("normal", collapse_button_original_style)
+			button.add_theme_stylebox_override("normal", original_style)
+
+# Public methods to set visual state from keyboard input
+func set_collapse_button_visual_pressed(pressed: bool):
+	_set_button_pressed_style(collapse_button, pressed)
+
+func set_rotate_button_visual_pressed(pressed: bool):
+	_set_button_pressed_style(rotate_button, pressed)
