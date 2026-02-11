@@ -5,6 +5,7 @@ const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
 const COLLAPSE_MAX_TIME = 15.0
 const ROTATION_SPEED = 180.0
+const SCALE_SPEED = 5.0
 
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
@@ -53,14 +54,24 @@ func handle_input(delta: float):
 	
 	# Rotation logic - check button state (works for both key and click)
 	if hud.is_rotating:
+		# rotation
 		var rotation_direction = 0
+		var triangle_scale = 0
 		if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
 			rotation_direction = 1  # Clockwise
 		elif Input.is_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
 			rotation_direction = -1  # Counter-clockwise
+
+		# scaling
+		elif Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
+			triangle_scale = 1  # bigger
+		elif Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
+			triangle_scale = -1  # smaller
 		
 		if rotation_direction != 0:
 			particles_node.rotate_particles(delta, rotation_direction, ROTATION_SPEED, walls)
+		elif triangle_scale != 0:
+			particles_node.scale_particles(delta, triangle_scale, SCALE_SPEED)
 	else:
 		# Normal movement mode
 		var direction = Vector2.ZERO

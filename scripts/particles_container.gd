@@ -174,21 +174,23 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 		elif p.position.y > 600:
 			p.position.y = 0
 
-func rotate_particles(delta: float, direction: int, rotation_speed: float, _walls: Node2D):
+func _valid_particles():
 	# Get valid particles
 	var valid_particles = []
 	for p in particles:
 		if p.collapsed_state:
-			return
+			return null
 		if is_instance_valid(p) and p.fade_alpha > 0.1:
 			valid_particles.append(p)
 	
 	if valid_particles.size() < 2:
-		return
-	
+		return null
+		
+	return valid_particles
+
+func _find_particles_center(valid_particles: Array) -> Vector2:
 	# Calculate rotation center
 	var center: Vector2
-	
 	if valid_particles.size() == 3:
 		# Check if particles form a line (colinear)
 		var p0 = valid_particles[0].position
@@ -217,6 +219,14 @@ func rotate_particles(delta: float, direction: int, rotation_speed: float, _wall
 		for p in valid_particles:
 			center += p.position
 		center /= valid_particles.size()
+
+	return center
+
+func rotate_particles(delta: float, direction: int, rotation_speed: float, _walls: Node2D):
+	var valid_particles = _valid_particles()
+	if not valid_particles:
+		return
+	var center = _find_particles_center(valid_particles)
 	
 	# Apply rotation
 	var rotation_angle = deg_to_rad(rotation_speed * delta * direction)
@@ -236,11 +246,19 @@ func rotate_particles(delta: float, direction: int, rotation_speed: float, _wall
 		
 		# Apply movement with collision
 		p.velocity = movement / delta
-		var collision = p.move_and_collide(movement)
-		
-		if collision:
-			# Collision occurred - particle stays at current position
-			pass
+		p.move_and_collide(movement)
+			
+func scale_particles(delta: float, scale_dir: int, scale_speed: float):
+	var valid_particles = _valid_particles()
+	if not valid_particles:
+		return
+	var center = _find_particles_center(valid_particles)
+	
+	for p in valid_particles:
+		var move_vector = p.position - center
+		var movement = move_vector.normalized() * scale_speed * scale_dir
+		p.velocity = movement / delta
+		p.move_and_collide(movement)
 
 func update_connection_lines():
 	if connection_lines == null:
