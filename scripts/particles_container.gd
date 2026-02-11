@@ -5,6 +5,7 @@ var particle_scene = preload("res://scenes/particle.tscn")
 var connection_lines: Line2D
 
 var spawn_positions : Array[Vector2] = []
+var last_movement_direction: Vector2 = Vector2.ZERO
 #@onready var spawnPointContainer : Array[SpawnPoint] = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
 # Fallback spawn positions if no SpawnPoint nodes are found
 const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
@@ -128,6 +129,10 @@ func reset():
 	spawn_initial_particles()
 
 func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
+	# Store last movement direction for collapse mechanic
+	if direction != Vector2.ZERO:
+		last_movement_direction = direction
+	
 	for p in particles:
 		if not is_instance_valid(p):
 			continue
