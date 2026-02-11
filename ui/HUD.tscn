@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://hud001"]
 
-[ext_resource type="Script" uid="uid://canll4uclodku" path="res://ui/HUD.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://21nrx2ddicn7" path="res://ui/HUD.gd" id="1_hud"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_jd13s"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_wxbmk"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="4_wxbmk"]
+[ext_resource type="PackedScene" uid="uid://djof7vib23it1" path="res://ui/PauseMenu.tscn" id="5_pausemenu"]
 
 [node name="HUD" type="CanvasLayer" unique_id=258169263]
 process_mode = 3
@@ -71,19 +72,6 @@ grow_horizontal = 2
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
-[node name="RestartButton" type="Button" parent="UI" unique_id=980874630]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -120.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 60.0
-grow_horizontal = 0
-theme = ExtResource("3_wxbmk")
-text = "Restart"
-
 [node name="MenuButton" type="Button" parent="UI" unique_id=1003777254]
 layout_mode = 1
 offset_left = 20.0
@@ -127,7 +115,7 @@ theme_override_constants/separation = 6
 [node name="CollapseButton" type="Button" parent="UI/CollapseContainer" unique_id=1017862074]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
-theme = ExtResource("2_jd13s")
+theme = ExtResource("3_wxbmk")
 text = "C"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="UI/CollapseContainer" unique_id=1023178081]
@@ -138,55 +126,6 @@ text = "Force Collapse"
 scroll_active = false
 vertical_alignment = 1
 
-[node name="PauseMenu" type="Control" parent="UI" unique_id=1274209340]
-process_mode = 3
+[node name="PauseMenu" parent="UI" unique_id=275002152 instance=ExtResource("5_pausemenu")]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Background" type="ColorRect" parent="UI/PauseMenu" unique_id=1582877499]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.7)
-
-[node name="CenterContainer" type="CenterContainer" parent="UI/PauseMenu" unique_id=487555805]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/PauseMenu/CenterContainer" unique_id=2089552206]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="PauseTitle" type="Label" parent="UI/PauseMenu/CenterContainer/VBoxContainer" unique_id=1391093757]
-layout_mode = 2
-theme_override_font_sizes/font_size = 36
-text = "PAUSED"
-horizontal_alignment = 1
-
-[node name="ResumeButton" type="Button" parent="UI/PauseMenu/CenterContainer/VBoxContainer" unique_id=1465736085]
-layout_mode = 2
-text = "Resume"
-
-[node name="RestartButton2" type="Button" parent="UI/PauseMenu/CenterContainer/VBoxContainer" unique_id=285979350]
-layout_mode = 2
-text = "Restart Level"
-
-[node name="LevelSelectButton" type="Button" parent="UI/PauseMenu/CenterContainer/VBoxContainer" unique_id=1968524240]
-layout_mode = 2
-text = "Level Select"
-
-[node name="MainMenuButton" type="Button" parent="UI/PauseMenu/CenterContainer/VBoxContainer" unique_id=1899080719]
-layout_mode = 2
-text = "Main Menu"

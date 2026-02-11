@@ -2,14 +2,14 @@ extends CanvasLayer
 
 @onready var timer_label = $UI/TimerLabel
 @onready var status_label = $UI/StatusLabel
-@onready var restart_button = $UI/RestartButton
+#@onready var restart_button = $UI/RestartButton
 @onready var menu_button = $UI/MenuButton
 @onready var progress_bar = $UI/CollapseProgressBar
 @onready var pause_menu = $UI/PauseMenu
-@onready var resume_button = $UI/PauseMenu/CenterContainer/VBoxContainer/ResumeButton
-@onready var pause_restart_button = $UI/PauseMenu/CenterContainer/VBoxContainer/RestartButton2
-@onready var level_select_button = $UI/PauseMenu/CenterContainer/VBoxContainer/LevelSelectButton
-@onready var main_menu_button = $UI/PauseMenu/CenterContainer/VBoxContainer/MainMenuButton
+@onready var resume_button = $UI/PauseMenu/ResumeButton
+@onready var pause_restart_button = $UI/PauseMenu/RestartButton
+@onready var level_select_button = $UI/PauseMenu/LevelSelectButton
+@onready var main_menu_button = $UI/PauseMenu/MainMenuButton
 @onready var rotate_button = $UI/RotateContainer/RotateButton
 @onready var collapse_button = $UI/CollapseContainer/CollapseButton
 var rotate_button_original_style: StyleBox = null
@@ -20,7 +20,7 @@ var is_paused: bool = false
 var can_pause: bool = true  # Prevent pausing when game is over
 
 func _ready():
-	restart_button.pressed.connect(_on_restart_pressed)
+	#restart_button.pressed.connect(_on_restart_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
 	resume_button.pressed.connect(_on_resume_pressed)
 	pause_restart_button.pressed.connect(_on_pause_restart_pressed)
