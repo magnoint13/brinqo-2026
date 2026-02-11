@@ -14,7 +14,7 @@ func create_textures():
 	glow_texture = GradientTexture2D.new()
 	glow_texture.gradient = Gradient.new()
 	glow_texture.gradient.colors = [Color.WHITE, Color.TRANSPARENT]
-	glow_texture.gradient.offsets = [0.0, 1.0]
+	glow_texture.gradient.offsets = [0.5, 1.0]
 	glow_texture.fill = GradientTexture2D.FILL_RADIAL
 	glow_texture.width = 64
 	glow_texture.height = 64
