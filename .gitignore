@@ -2,6 +2,7 @@
 .godot/
 /android/
 *.uid
+*.import
 
 # OpenCode
 opencode.json

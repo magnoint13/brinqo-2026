@@ -20,7 +20,7 @@ config/icon="res://icon.svg"
 GameManager="*res://autoload/GameManager.gd"
 VFXSpawner="*res://scripts/VFXSpawner.gd"
 AudioManager="*res://autoload/MusicManager.gd"
-ButtonSoundManager="*uid://cp3yg4i1koa38"
+ButtonSoundManager="*res://autoload/ButtonSoundManager.gd"
 
 [display]
 

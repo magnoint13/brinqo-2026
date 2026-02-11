@@ -145,11 +145,11 @@ This script sits on the "Particles" node and manages the array of 3 particles.
 **spawn_initial_particles()** - Creates starting particles:
 ```gdscript
 for pos in SPAWN_POSITIONS:
-    var p = particle_scene.instantiate()
-    p.position = pos
-    p.setup(true)
-    add_child(p)
-    particles.append(p)
+	var p = particle_scene.instantiate()
+	p.position = pos
+	p.setup(true)
+	add_child(p)
+	particles.append(p)
 ```
 - `preload("res://scenes/particle.tscn")` - Loads the particle scene file
 - `instantiate()` - Creates a new instance from the scene

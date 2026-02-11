@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://mainmenu001"]
 
 [ext_resource type="Script" uid="uid://bt7swmxvm2m6" path="res://ui/MainMenu.gd" id="1_mainmenu"]
-[ext_resource type="Shader" uid="uid://cwgwhy8l3p2hq" path="res://resources/lava_shader.gdshader" id="2_lavashader"]
-[ext_resource type="Shader" uid="uid://cbdt388eoo5mj" path="res://resources/sparkle_shader.gdshader" id="3_sparkle"]
+[ext_resource type="Shader" path="res://resources/lava_shader.gdshader" id="2_lavashader"]
+[ext_resource type="Shader" path="res://resources/sparkle_shader.gdshader" id="3_sparkle"]
 [ext_resource type="Texture2D" uid="uid://cm4x58plccq78" path="res://resources/GAME_TITLE.png" id="4_8v85u"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="5_x262b"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="6_qo3sn"]
