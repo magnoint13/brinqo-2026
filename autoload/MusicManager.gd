@@ -3,8 +3,8 @@ extends Node
 @onready var music_player: AudioStreamPlayer
 
 var scene_music = {
-	"MainMenu": "res://resources/Music/menu_music.mp3",
-	"LevelSelect": "res://resources/Music/menu_music.mp3",
+	"MainMenu": "res://resources/music/menu_music.mp3",
+	"LevelSelect": "res://resources/music/menu_music.mp3",
 }
 
 var current_music: String = ""
