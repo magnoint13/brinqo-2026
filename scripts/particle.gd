@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @onready var glow_light = $GlowLight
 @onready var trail_particles = $TrailParticles
+@onready var collision_shape = $CollisionShape2D
 
 var is_survived: bool = false
 var fade_alpha: float = 1.0
@@ -119,11 +120,12 @@ func generate_random_pos(direction: Vector2) -> Vector2:
 			continue
 		
 		# Check if position is valid (not inside a wall)
-		var query = PhysicsPointQueryParameters2D.new()
-		query.position = target_pos
+		var query = PhysicsShapeQueryParameters2D.new()
+		query.shape = collision_shape.shape
+		query.transform = Transform2D(0, target_pos)
 		query.collision_mask = collision_mask
 		
-		var result = space_state.intersect_point(query)
+		var result = space_state.intersect_shape(query)
 		if result.is_empty():
 			return target_pos
 	
