@@ -239,8 +239,6 @@ func stabilize_particle(particle):
 	if not is_instance_valid(particle):
 		return
 	
-	VFXSpawner.spawn_stabilize(particle.global_position)
-	
 	particle.set_fade(1.0)
 	particle.scale = Vector2(1.0, 1.0)
 	

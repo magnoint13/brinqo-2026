@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://particle001"]
 
-[ext_resource type="Script" uid="uid://c8jkv17tnw8dl" path="res://scripts/particle.gd" id="1_particle"]
+[ext_resource type="Script" uid="uid://bqfxbb6j4vdv6" path="res://scripts/particle.gd" id="1_particle"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 8.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_jw3tu"]
 
 [sub_resource type="Gradient" id="Gradient_glow"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -44,7 +43,7 @@ collision_mask = 3
 script = ExtResource("1_particle")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2141312755]
-shape = SubResource("CircleShape2D_1")
+shape = SubResource("CircleShape2D_jw3tu")
 
 [node name="GlowLight" type="PointLight2D" parent="." unique_id=1095724612]
 energy = 0.24
@@ -56,7 +55,7 @@ texture = SubResource("GradientTexture2D_trail")
 lifetime = 0.3
 process_material = SubResource("ParticleProcessMaterial_trail")
 
-[node name="CollapsedTimer" type="Timer" parent="."]
+[node name="CollapsedTimer" type="Timer" parent="." unique_id=755585025]
 wait_time = 2.0
 one_shot = true
 
