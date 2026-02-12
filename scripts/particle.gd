@@ -15,8 +15,8 @@ const RADIUS: float = 8.0
 # Wave state variables
 const WAVE_SHADER = preload("res://resources/wave_shader.gdshader")
 const RIPPLE_SCENE = preload("res://scripts/RippleEffect.gd")
-@export var WAVE_STD: float = 25
-@export var WAVE_DIRECTION_FACTOR: float = 50.0
+@export var WAVE_STD: float = 1
+@export var WAVE_DIRECTION_FACTOR: float = 25.0
 @export var WAVE_SIZE: float = 200
 var collapsed_state: bool = false
 var wave_rect: MeshInstance2D

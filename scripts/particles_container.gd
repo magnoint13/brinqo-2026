@@ -163,7 +163,7 @@ func reset():
 	particles.clear()
 	spawn_initial_particles()
 
-func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
+func apply_movement(direction: Vector2, speed: float):
 	# Store last movement direction for collapse mechanic
 	if direction != Vector2.ZERO:
 		last_movement_direction = direction
@@ -199,13 +199,15 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 			
 			
 func collapse_all():
-	var ref = particles[0]
+	var ref_index = randi_range(0, particles.size() - 1)
+	var ref = particles[ref_index]
 	var new_pos = ref.generate_random_pos(last_movement_direction)
 	var move_vector = ref.global_position - new_pos
 	ref.global_position = new_pos
 	ref.to_particle_animated()
 	
-	for i in range(1, particles.size()):
+	for i in range(particles.size()):
+		if i == ref_index: continue
 		particles[i].global_position += move_vector
 		particles[i].to_particle_animated()
 
@@ -257,7 +259,7 @@ func _find_particles_center(valid_particles: Array) -> Vector2:
 
 	return center
 
-func rotate_particles(delta: float, direction: int, rotation_speed: float, _walls: Node2D):
+func rotate_particles(delta: float, direction: int, rotation_speed: float):
 	var valid_particles = _valid_particles()
 	if not valid_particles:
 		return

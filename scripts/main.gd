@@ -1,7 +1,5 @@
 extends Node2D
 
-enum Zone {Green, Red, Neutral}
-
 const BALL_RADIUS = 8.0
 const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
@@ -12,9 +10,8 @@ const SCALE_SPEED = 5.0
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
 @onready var camera = $Camera2D
-@onready var walls = $Walls/TileMapLayer
 @onready var red_zones = $RedZone/TileMapLayer
-@onready var green_zones = $GreenZone/TileMapLayer
+@onready var green_zones = $GreenZone
 @onready var hud = $HUD
 
 # Simple state tracking
@@ -22,6 +19,7 @@ var game_over = false
 var game_won = false
 var is_processing_collapse = false
 var current_collapse_max_time: float = 15.0
+var total_green_zones: int = 0
 
 # Input tracking for button sync
 var c_key_was_pressed = false
@@ -33,6 +31,11 @@ func _ready():
 	start_collapse_timer()
 	hud.show_progress_bar()
 	hud.setup_action_buttons(self)
+	
+	if green_zones:
+		for zone in green_zones.get_children():
+			if zone is TileMapLayer:
+				total_green_zones += 1
 
 func _process(delta):
 	if game_over or game_won:
@@ -71,7 +74,7 @@ func handle_input(delta: float):
 			triangle_scale = -1  # smaller
 		
 		if rotation_direction != 0:
-			particles_node.rotate_particles(delta, rotation_direction, ROTATION_SPEED, walls)
+			particles_node.rotate_particles(delta, rotation_direction, ROTATION_SPEED)
 		elif triangle_scale != 0:
 			particles_node.scale_particles(delta, triangle_scale, SCALE_SPEED)
 	else:
@@ -89,7 +92,7 @@ func handle_input(delta: float):
 		
 		if direction != Vector2.ZERO:
 			direction = direction.normalized()
-			particles_node.apply_movement(direction, BALL_SPEED * delta, walls)
+			particles_node.apply_movement(direction, BALL_SPEED * delta)
 	
 	# Handle Collapse button (C key) - sync button state with key state
 	var is_c_pressed = Input.is_key_pressed(KEY_C) or Input.is_key_pressed(KEY_SPACE)
@@ -151,56 +154,54 @@ func trigger_collapse():
 	await get_tree().create_timer(0.25).timeout
 	screen_shake(2.0, 0.2)
 
-	var zone_result = Zone.Neutral
+	var used_green_zones = {} # dict used as set
 	for p in particles_node.particles:
 		var current_zone = check_zone(p.global_position)
+		
 		# Update zone_result with the following priorities:
-		# - RED if some particle is in a red zone
-		if current_zone == Zone.Red:
-			zone_result = current_zone
-		# - GREEN if all are in different green zones
-		elif zone_result == Zone.Green and current_zone == Zone.Green:
-			zone_result = current_zone
-		# - NEUTRAL otherwise
-		else:
-			zone_result = Zone.Neutral
-		
-	match zone_result:
-		Zone.Green:
-			game_won = true
-			hud.set_game_over()  # Prevent further pausing
-			hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
-			create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
-			#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
-			screen_shake(2.5, 0.4)
-			GameManager.complete_current_level()
-		
-		Zone.Red:
+		# - RED if some particle is in a red zone, looses inmediately
+		if current_zone < 0:
 			game_over = true
 			hud.set_game_over()  # Prevent further pausing
 			hud.set_status_text("COLLAPSED IN DANGER ZONE! GAME OVER!", Color(1, 0.2, 0.2))
 			create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
 			#VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
 			screen_shake(2.0, 0.3)
+			return
+			
+		# - GREEN if all the green zones are covered
+		#   mark the current zone ID
+		elif current_zone > 0:
+			used_green_zones[current_zone] = true
+
+	# If we didn't loose, but we didn't cover all the zones, is NEUTRAL
+	if used_green_zones.size() != total_green_zones:
+		# neutral - respawn
+		if used_green_zones.size() != 0:
+			hud.set_status_text("You must cover all green areas", Color(0.7, 0.7, 0.7))
+		else:
+			hud.set_status_text("The system survived!", Color(0.7, 0.7, 0.7))
 		
-		Zone.Neutral:
-			# Neutral collapse - respawn
-			hud.set_status_text("Particle survived! Respawning...", Color(0.7, 0.7, 0.7))
-			
-			# Clean up dissolved particles and respawn
-			#particles_node.respawn_after_collapse(survivor)
-			
-			# Fade in connection lines after respawn
-			particles_node.fade_in_lines(0.5)
-			
-			# Clear status after delay
-			await get_tree().create_timer(2.0).timeout
-			if not game_over and not game_won:
-				hud.clear_status()
-			
-			# Reset for next collapse
-			is_processing_collapse = false
-			start_collapse_timer()
+		# Fade in connection lines after respawn
+		particles_node.fade_in_lines(0.5)
+		
+		# Clear status after delay
+		await get_tree().create_timer(2.0).timeout
+		if not game_over and not game_won:
+			hud.clear_status()
+		
+		# Reset for next collapse
+		is_processing_collapse = false
+		start_collapse_timer()
+		
+	else: # green - win condition
+		game_won = true
+		hud.set_game_over()  # Prevent further pausing
+		hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
+		create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
+		#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
+		screen_shake(2.5, 0.4)
+		GameManager.complete_current_level()
 
 func dissolve_particle(particle):
 	if not is_instance_valid(particle):
@@ -215,18 +216,23 @@ func dissolve_particle(particle):
 	# Mark for cleanup after animation
 	tween.tween_callback(particle.queue_free)
 
-func check_zone(pos: Vector2) -> Zone:
+# positive: green, with the zone ID (kinda)
+# red: negative
+# neutral: 0
+func check_zone(pos: Vector2) -> int:
 	if green_zones:
-		var green_cell = green_zones.local_to_map(pos)
-		if green_zones.get_cell_source_id(green_cell) != -1:
-			return Zone.Green
-	
+		var i = 1
+		for zone in green_zones.get_children():
+			if zone is TileMapLayer and zone.get_cell_source_id(zone.local_to_map(pos)) != -1:
+				return i
+			i += 1
+		
 	if red_zones:
 		var red_cell = red_zones.local_to_map(pos)
 		if red_zones.get_cell_source_id(red_cell) != -1:
-			return Zone.Red
+			return -1
 	
-	return Zone.Neutral
+	return 0
 
 func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 	if camera == null:
