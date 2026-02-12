@@ -33,6 +33,9 @@ func _ready():
 	create_connection_lines()
 	spawn_initial_particles()
 	
+	## ADD WALLS AROUND VIEWPORT
+	_add_viewport_boundary_walls()
+	
 	collapseAudioStream = AudioStreamPlayer.new()	
 	collapseAudioStream.stream = collapseSoundStream
 	collapseAudioStream.volume_db = -7
@@ -175,17 +178,6 @@ func apply_movement(direction: Vector2, speed: float):
 			else:
 				var slide = collision.get_remainder().slide(collision.get_normal())
 				p.move_and_collide(slide)
-		
-		# Wrap around screen edges
-		if p.position.x < 0:
-			p.position.x = 800
-		elif p.position.x > 800:
-			p.position.x = 0
-		
-		if p.position.y < 0:
-			p.position.y = 600
-		elif p.position.y > 600:
-			p.position.y = 0
 
 func _valid_particles():
 	# Get valid particles
@@ -273,6 +265,41 @@ func scale_particles(delta: float, scale_dir: int, scale_speed: float):
 	
 	for p in valid_particles:
 		var move_vector = p.position - center
-		var movement = move_vector.normalized() * scale_speed * scale_dir
-		p.velocity = movement * delta
+		var movement = move_vector.normalized() * scale_speed * scale_dir * delta
+		p.velocity = movement / delta
 		p.move_and_collide(movement)
+
+## ADD WALLS AROUND VIEWPORT
+## Creates invisible StaticBody2D walls at viewport boundaries
+## Walls are positioned slightly outside (10px) so particles collide exactly at viewport edge
+func _add_viewport_boundary_walls():
+	var viewport_size = Vector2(800, 600)
+	var wall_thickness = 20.0  # Thick enough to prevent tunneling
+	
+	# Left wall - positioned so inner edge is at x=0
+	_create_invisible_wall("LeftWall", Vector2(-wall_thickness / 2, viewport_size.y / 2), Vector2(wall_thickness, viewport_size.y + wall_thickness * 2))
+	
+	# Right wall - positioned so inner edge is at x=800
+	_create_invisible_wall("RightWall", Vector2(viewport_size.x + wall_thickness / 2, viewport_size.y / 2), Vector2(wall_thickness, viewport_size.y + wall_thickness * 2))
+	
+	# Top wall - positioned so inner edge is at y=0
+	_create_invisible_wall("TopWall", Vector2(viewport_size.x / 2, -wall_thickness / 2), Vector2(viewport_size.x + wall_thickness * 2, wall_thickness))
+	
+	# Bottom wall - positioned so inner edge is at y=600
+	_create_invisible_wall("BottomWall", Vector2(viewport_size.x / 2, viewport_size.y + wall_thickness / 2), Vector2(viewport_size.x + wall_thickness * 2, wall_thickness))
+
+## Creates an invisible StaticBody2D wall with collision
+func _create_invisible_wall(wall_name: String, position: Vector2, size: Vector2):
+	var wall = StaticBody2D.new()
+	wall.name = wall_name
+	wall.collision_layer = 1  # Particles collide with layer 1
+	wall.collision_mask = 0   # Walls don't detect collisions themselves
+	
+	var collision_shape = CollisionShape2D.new()
+	var rectangle_shape = RectangleShape2D.new()
+	rectangle_shape.size = size
+	collision_shape.shape = rectangle_shape
+	
+	wall.add_child(collision_shape)
+	wall.position = position
+	add_child(wall)

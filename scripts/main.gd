@@ -6,6 +6,7 @@ const COLLAPSE_MIN_TIME = 7.0
 const COLLAPSE_MAX_TIME = 15.0
 const ROTATION_SPEED = 180.0
 const SCALE_SPEED = 300.0
+const RESTART_DELAY = 2.0
 
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
@@ -27,11 +28,23 @@ var total_green_zones: int = 0
 var c_key_was_pressed = false
 var r_key_was_pressed = false
 
+# Restart timer - runs even when paused
+var restart_timer: Timer
+
 func _ready():
 	randomize()
 	collapse_timer.timeout.connect(break_entanglement)
 	particles_node.level_main = self
 	hud.setup_action_buttons(self)
+	
+	# Setup restart timer - runs even when game is paused
+	restart_timer = Timer.new()
+	restart_timer.name = "RestartTimer"
+	restart_timer.wait_time = RESTART_DELAY
+	restart_timer.one_shot = true
+	restart_timer.process_mode = Node.PROCESS_MODE_ALWAYS
+	restart_timer.timeout.connect(_on_restart_timer_timeout)
+	add_child(restart_timer)
 	
 	if particles_node.particles.size() > 1:
 		var n_entangled: int = 0
@@ -189,6 +202,7 @@ func trigger_collapse(entanglement_broken: bool = false):
 			create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
 			#VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
 			screen_shake(2.0, 0.3)
+			restart_timer.start()
 			return
 			
 		# - GREEN if all the green zones are covered
@@ -199,11 +213,12 @@ func trigger_collapse(entanglement_broken: bool = false):
 	# If we didn't loose, but we didn't cover all the zones, is NEUTRAL
 	if used_green_zones.size() != total_green_zones:
 		# neutral - respawn
-		if used_green_zones.size() != 0:
-			hud.set_status_text(tr("GAME_HINT_COVERAGE"), Color(0.2, 0.1, 0.7))
-		elif entanglement_broken:
+		if entanglement_broken:
+			# Timer expired - always break entanglement regardless of coverage
 			hud.set_status_text(tr("ENTANGLE_BREAK"), Color(0.2, 0.1, 0.7))
 			particles_node.break_entanglement()
+		elif used_green_zones.size() != 0:
+			hud.set_status_text(tr("GAME_HINT_COVERAGE"), Color(0.2, 0.1, 0.7))
 		else:
 			hud.set_status_text(tr("GAME_NEUTRAL_SURVIVED"), Color(0.7, 0.7, 0.7))
 		
@@ -320,3 +335,7 @@ func restart_level():
 	hud.set_timer_text("Coherence time: --")
 	particles_node.reset()
 	start_collapse_timer()
+
+func _on_restart_timer_timeout():
+	if game_over:
+		get_tree().reload_current_scene()
