@@ -144,6 +144,66 @@ func collapse_all():
 	
 	collapseAudioStream.play()
 	
+	# Resolve any particles that got stuck inside walls after collapse
+	for p in valid_particles:
+		_resolve_wall_collision(p)
+
+
+#### COLLISION RESOLUTION ########################################################
+
+# Push particle out of walls if stuck after collapse
+# Uses raycasting to find the nearest valid position
+func _resolve_wall_collision(particle: Particle) -> void:
+	var space_state = get_world_2d().direct_space_state
+	var max_attempts = 10
+	var push_step = 8.0
+	
+	for attempt in range(max_attempts):
+		# Check if particle is currently colliding
+		var query = PhysicsShapeQueryParameters2D.new()
+		query.shape = particle.collision_shape.shape
+		query.transform = Transform2D(0, particle.global_position)
+		query.collision_mask = particle.collision_mask
+		
+		# If no collision, we're done
+		if space_state.intersect_shape(query).is_empty():
+			return
+		
+		# Particle is stuck - find escape direction using raycasts
+		var best_direction = Vector2.ZERO
+		var best_distance = 0.0
+		
+		# Check 8 directions to find the clearest path out
+		for angle in range(0, 360, 45):
+			var direction = Vector2.RIGHT.rotated(deg_to_rad(angle))
+			var ray_end = particle.global_position + direction * 100.0
+			
+			var ray_query = PhysicsRayQueryParameters2D.new()
+			ray_query.from = particle.global_position
+			ray_query.to = ray_end
+			ray_query.collision_mask = particle.collision_mask
+			
+			var result = space_state.intersect_ray(ray_query)
+			if result.is_empty():
+				# No wall in this direction - it's a clear escape route
+				best_direction = direction
+				best_distance = 100.0
+				break
+			else:
+				# Wall found, calculate distance to it
+				var distance = particle.global_position.distance_to(result.position)
+				# We want to move AWAY from walls, so larger distance is better
+				if distance > best_distance:
+					best_distance = distance
+					best_direction = -direction  # Opposite direction (away from wall)
+		
+		# Push particle in the best direction found
+		if best_direction != Vector2.ZERO:
+			particle.global_position += best_direction * push_step
+		else:
+			# Fallback: push upward if no clear direction found
+			particle.global_position.y -= push_step
+
 
 #### MOVEMENT LOGIC ############################################################
 

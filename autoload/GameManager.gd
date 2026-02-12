@@ -1,6 +1,6 @@
 extends Node
 
-const TOTAL_LEVELS: int = 5
+const TOTAL_LEVELS: int = 8
 
 var current_level: int = 1
 var unlocked_levels: Array[int] = [1]
