@@ -201,6 +201,15 @@ func trigger_collapse():
 		create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
 		#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
 		screen_shake(2.5, 0.4)
+		
+		# Play win sound
+		var player = AudioStreamPlayer.new()
+		player.stream = load("res://resources/sfx/sfx_win.wav")
+		player.bus = "SFX"
+		add_child(player)
+		player.play()
+		player.finished.connect(player.queue_free)
+		
 		GameManager.complete_current_level()
 
 func dissolve_particle(particle):

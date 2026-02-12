@@ -4,13 +4,13 @@ extends Node
 
 # Format: "scene_name": [music_path, volume_in_db]
 var scene_music = {
-	"MainMenu":   ["res://resources/music/menu_music.mp3",   0],
-	"LevelSelect": ["res://resources/music/menu_music.mp3",   0],
-	"Level01":    ["res://resources/music/01.mp3",           0],
-	"Level02":    ["res://resources/music/02.mp3",            0],
-	"Level03":    ["res://resources/music/03.mp3",           -12.0],
-	"Level04":    ["res://resources/music/04.mp3",            0],
-	"Level05":    ["res://resources/music/05.mp3",           0],
+	"MainMenu":   ["res://resources/music/menu_music.mp3",   -10],
+	"LevelSelect": ["res://resources/music/menu_music.mp3",   -10],
+	"Level01":    ["res://resources/music/01.mp3",           -10],
+	"Level02":    ["res://resources/music/02.mp3",            -10],
+	"Level03":    ["res://resources/music/03.mp3",           -10],
+	"Level04":    ["res://resources/music/04.mp3",            -10],
+	"Level05":    ["res://resources/music/05.mp3",           -10],
 }
 
 var current_music: String = ""
