@@ -2,33 +2,23 @@ extends CanvasLayer
 
 @onready var timer_label = $UI/TimerLabel
 @onready var status_label = $UI/StatusLabel
-#@onready var restart_button = $UI/RestartButton
 @onready var menu_button = $UI/MenuButton
 @onready var progress_bar = $UI/CollapseProgressBar
 @onready var pause_menu = $UI/PauseMenu
-@onready var resume_button = $UI/PauseMenu/ResumeButton
-@onready var pause_restart_button = $UI/PauseMenu/RestartButton
-@onready var level_select_button = $UI/PauseMenu/LevelSelectButton
-@onready var main_menu_button = $UI/PauseMenu/MainMenuButton
 @onready var rotate_button = $UI/RotateContainer/RotateButton
 @onready var collapse_button = $UI/CollapseContainer/CollapseButton
 
 var max_collapse_time: float = 15.0
 var is_paused: bool = false
-var can_pause: bool = true  # Prevent pausing when game is over
-var is_rotating: bool = false  # Track rotation button hold state
+var can_pause: bool = true
+var is_rotating: bool = false
 
-# Store original styles for visual state management
 var rotate_button_original_style: StyleBox = null
 var collapse_button_original_style: StyleBox = null
 
 func _ready():
-	#restart_button.pressed.connect(_on_restart_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
-	resume_button.pressed.connect(_on_resume_pressed)
-	pause_restart_button.pressed.connect(_on_pause_restart_pressed)
-	level_select_button.pressed.connect(_on_level_select_pressed)
-	main_menu_button.pressed.connect(_on_main_menu_pressed)
+	pause_menu.hide_pause_menu()
 	progress_bar.modulate = Color(1, 0.42, 0.42, 1)
 	
 	# Store original styles for buttons
@@ -49,29 +39,14 @@ func _input(event):
 
 func toggle_pause():
 	is_paused = !is_paused
-	pause_menu.visible = is_paused
+	if is_paused:
+		pause_menu.show_pause_menu()
+	else:
+		pause_menu.hide_pause_menu()
 	get_tree().paused = is_paused
-
-func _on_restart_pressed():
-	GameManager.restart_current_level()
 
 func _on_menu_pressed():
 	toggle_pause()
-
-func _on_resume_pressed():
-	toggle_pause()
-
-func _on_pause_restart_pressed():
-	get_tree().paused = false
-	GameManager.restart_current_level()
-
-func _on_level_select_pressed():
-	get_tree().paused = false
-	GameManager.go_to_level_select()
-
-func _on_main_menu_pressed():
-	get_tree().paused = false
-	GameManager.go_to_main_menu()
 
 func set_timer_text(text: String):
 	timer_label.text = text

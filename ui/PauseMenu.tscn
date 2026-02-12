@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://djof7vib23it1"]
 
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="1_theme"]
+[ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="2_ptdjk"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="2_theme2"]
+[ext_resource type="Script" uid="uid://ctnsy5owth8b5" path="res://ui/PauseMenu.gd" id="3_pause"]
+[ext_resource type="PackedScene" uid="uid://cn2p5rgw1d1tb" path="res://ui/SettingsMenu.tscn" id="4_settings"]
 
 [node name="PauseMenu" type="Control" unique_id=629610271]
 process_mode = 3
@@ -11,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_pause")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1223035694]
 layout_mode = 1
@@ -49,6 +53,7 @@ offset_right = 2.0
 offset_bottom = -164.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_ptdjk")
 theme_override_font_sizes/font_size = 36
 text = "PAUSED"
 horizontal_alignment = 1
@@ -62,12 +67,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = -30.0
+offset_top = -68.0
 offset_right = 80.0
-offset_bottom = 10.0
+offset_bottom = -28.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 15
 text = "Resume"
 
 [node name="RestartButton" type="Button" parent="." unique_id=1345967247]
@@ -78,12 +84,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = 25.0
+offset_top = -13.0
 offset_right = 80.0
-offset_bottom = 65.0
+offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 15
 text = "Restart Level"
 
 [node name="LevelSelectButton" type="Button" parent="." unique_id=1010783336]
@@ -94,13 +101,31 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = 80.0
+offset_top = 42.0
 offset_right = 80.0
-offset_bottom = 120.0
+offset_bottom = 82.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 15
+text = "Level Select"
+
+[node name="SettingsButton" type="Button" parent="." unique_id=1010783337]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = 97.0
+offset_right = 80.0
+offset_bottom = 137.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_theme2")
-text = "Level Select"
+theme_override_font_sizes/font_size = 15
+text = "Settings"
 
 [node name="MainMenuButton" type="Button" parent="." unique_id=1407791570]
 layout_mode = 1
@@ -110,10 +135,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = 135.0
+offset_top = 152.0
 offset_right = 80.0
-offset_bottom = 175.0
+offset_bottom = 192.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_theme")
+theme_override_font_sizes/font_size = 15
 text = "Main Menu"
+
+[node name="SettingsMenu" parent="." unique_id=403172008 instance=ExtResource("4_settings")]
+visible = false
+layout_mode = 1

@@ -2,13 +2,16 @@ extends Control
 
 @onready var start_button = $VBoxContainer/StartButton
 @onready var level_select_button = $VBoxContainer/LevelsButton
+@onready var settings_button = $VBoxContainer/SettingsButton
 @onready var quit_button = $VBoxContainer/QuitButton
 @onready var title_sprite = $Sprite2D
+@onready var settings_menu = $SettingsMenu
 
 
 func _ready():
 	start_button.pressed.connect(_on_start_pressed)
 	level_select_button.pressed.connect(_on_level_select_pressed)
+	settings_button.pressed.connect(_on_settings_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 	
 	if title_sprite:
@@ -28,3 +31,6 @@ func _on_level_select_pressed():
 
 func _on_quit_pressed():
 	get_tree().quit()
+
+func _on_settings_pressed():
+	settings_menu.open("main_menu")

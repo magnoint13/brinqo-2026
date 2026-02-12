@@ -21,6 +21,7 @@ GameManager="*res://autoload/GameManager.gd"
 VFXSpawner="*res://scripts/VFXSpawner.gd"
 AudioManager="*res://autoload/MusicManager.gd"
 ButtonSoundManager="*res://autoload/ButtonSoundManager.gd"
+SettingsManager="*res://autoload/SettingsManager.gd"
 
 [display]
 
