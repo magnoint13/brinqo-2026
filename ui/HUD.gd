@@ -19,7 +19,7 @@ var collapse_button_original_style: StyleBox = null
 func _ready():
 	menu_button.pressed.connect(_on_menu_pressed)
 	pause_menu.hide_pause_menu()
-	progress_bar.modulate = Color(1, 0.42, 0.42, 1)
+	# Note: Color is now handled by the shader gradient texture, not modulate
 	
 	# Store original styles for buttons
 	if rotate_button:
@@ -55,18 +55,12 @@ func set_collapse_progress(time_left: float, max_time: float):
 	# Update progress bar (1.0 = full, 0.0 = empty)
 	var progress = time_left / max_time
 	progress_bar.value = progress
-	
-	# Change color based on urgency
-	if progress > 0.5:
-		progress_bar.modulate = Color(0.3, 1, 0.3, 1)  # Green when plenty of time
-	elif progress > 0.25:
-		progress_bar.modulate = Color(1, 1, 0.3, 1)   # Yellow when getting close
-	else:
-		progress_bar.modulate = Color(1, 0.3, 0.3, 1)  # Red when urgent
+	# Note: Color gradient is now handled by the shader (gradient_x texture)
+	# which goes from red (left/low) to green (right/full)
 
 func reset_progress_bar():
 	progress_bar.value = 1.0
-	progress_bar.modulate = Color(0.3, 1, 0.3, 1)
+	# Note: Color is handled by the shader gradient
 
 func hide_progress_bar():
 	progress_bar.visible = false

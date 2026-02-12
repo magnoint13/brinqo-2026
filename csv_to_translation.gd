@@ -26,7 +26,7 @@ HUD_COLLAPSE,Force Collapse,Colapso forzado,Colapso forzado
 GAME_VICTORY,VICTORY!,¡VICTORIA!,¡VITORIA!
 GAME_OVER,GAME OVER,JUEGO TERMINADO,XOGO REMATADO
 GAME_COLLAPSING,COLLAPSING...,COLAPSANDO...,COLAPSANDO...
-GAME_TIMER_FORMAT,Coherence time: %.2fs,Tiempo de coherencia: %.2fs,Tempo de coherencia: %.2fs
+GAME_TIMER_FORMAT,Coherence time: %.1fs,Tiempo de coherencia: %.1fs,Tempo de coherencia: %.1fs
 GAME_DEATH_REDZONE,COLLAPSED IN DANGER ZONE! GAME OVER!,¡COLAPSADO EN ZONA PELIGROSA! ¡JUEGO TERMINADO!,¡COLAPSADO EN ZONA PERIGOSA! ¡XOGO REMATADO!
 GAME_HINT_COVERAGE,You must cover all green areas,Debes cubrir todas las áreas verdes,Debes cubrir todas as áreas verdes
 GAME_NEUTRAL_SURVIVED,The system survived!,¡El sistema sobrevivió!,¡O sistema sobreviveu!
