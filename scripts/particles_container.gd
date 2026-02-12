@@ -4,6 +4,9 @@ var particles: Array = []
 var level_main: Node2D = null
 var particle_scene = preload("res://scenes/particle.tscn")
 var connection_lines: Line2D
+var collapseSoundStream = preload("res://resources/sfx/collapse.wav")
+var collapseAudioStream : AudioStreamPlayer
+
 
 var spawn_positions: Array[Vector2] = []
 var spawn_is_entangled: Array[bool] = []
@@ -29,6 +32,11 @@ func _ready():
 		
 	create_connection_lines()
 	spawn_initial_particles()
+	
+	collapseAudioStream = AudioStreamPlayer.new()	
+	collapseAudioStream.stream = collapseSoundStream
+	collapseAudioStream.volume_db = -7
+	add_child(collapseAudioStream)
 
 func _process(_delta):
 	update_connection_lines()
@@ -112,6 +120,7 @@ func break_entanglement():
 		if i == new_player_index: continue
 		particles[i].is_entangled = false
 
+
 func collapse_all():
 	# ensure all are entangled and in wave form
 	var valid_particles = _valid_particles()
@@ -129,6 +138,9 @@ func collapse_all():
 		if not p.is_entangled: continue
 		p.global_position += move_vector
 		p.to_particle_animated()
+	
+	collapseAudioStream.play()
+	
 
 #### MOVEMENT LOGIC ############################################################
 
