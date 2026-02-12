@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://d0ei0humym7xm"]
 
-[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="Texture2D" uid="uid://4384i5erqknj" path="res://resources/backgrounds/01.png" id="3_qd5dk"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="VideoStream" path="res://resources/backgrounds/01.ogv" id="4_ke2w7"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
@@ -15,16 +15,13 @@ script = ExtResource("1_main")
 
 [node name="VFXManager" parent="." unique_id=1196971824 instance=ExtResource("6_vfxmanager")]
 
-[node name="Background" type="ColorRect" parent="." unique_id=1005203052]
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=1253311339]
 offset_right = 800.0
 offset_bottom = 600.0
-color = Color(0, 0, 0, 1)
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=567974841]
-modulate = Color(1, 1, 1, 0.39215687)
-offset_right = 800.0
-offset_bottom = 600.0
-texture = ExtResource("3_qd5dk")
+stream = ExtResource("4_ke2w7")
+autoplay = true
+expand = true
+loop = true
 
 [node name="Walls" type="Node2D" parent="." unique_id=1733820030]
 
