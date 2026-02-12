@@ -1,5 +1,7 @@
 extends Node2D
 
+enum Zone {Green, Red, Neutral}
+
 const BALL_RADIUS = 8.0
 const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
@@ -140,99 +142,59 @@ func trigger_collapse():
 		return
 	
 	is_processing_collapse = true
+	particles_node.collapse_all()
 	
 	# Fade out connection lines immediately
 	particles_node.fade_out_lines(0.2)
 	
-	# Get movement direction for wave collapse bias
-	var direction = particles_node.last_movement_direction
-	if direction == Vector2.ZERO:
-		direction = Vector2.RIGHT  # Default direction
-	
-	var all_particles = particles_node.particles.duplicate()
-	
-	# PHASE 1: Animate all particles to wave state
-	for particle in all_particles:
-		if is_instance_valid(particle):
-			particle.to_wave_animated()
-	
-	# Wait for wave animation
-	await get_tree().create_timer(0.25).timeout
-	
-	# PHASE 2: Pick survivor first, then only move the survivor
-	var survivor_index = randi() % all_particles.size()
-	var survivor = all_particles[survivor_index]
-	
-	# Only generate random position for the survivor particle
-	if is_instance_valid(survivor):
-		var new_pos = survivor.generate_random_pos(direction)
-		survivor.global_position = new_pos
-	# Non-survivor particles stay at their current positions (no movement)
-	
-	# PHASE 3: Animate all particles to particle state
-	for particle in all_particles:
-		if is_instance_valid(particle):
-			particle.to_particle_animated()
-	
 	# Wait for particle animation
 	await get_tree().create_timer(0.25).timeout
-	
-	# PHASE 4: Dissolve non-survivors
-	for i in range(all_particles.size()):
-		if i != survivor_index and is_instance_valid(all_particles[i]):
-			dissolve_particle(all_particles[i])
-	
-	# PHASE 5: Stabilize survivor and start auto-revert timer
-	if is_instance_valid(survivor):
-		stabilize_particle(survivor)
-		# Start auto-revert timer (2 seconds to revert to wave state)
-		var timer = survivor.get_node("CollapsedTimer")
-		if timer:
-			timer.start()
-		
-		# Spawn ripple effect at survivor's position
-		var ripple = preload("res://scripts/RippleEffect.gd").new()
-		ripple.position = survivor.global_position
-		add_child(ripple)
-	
 	screen_shake(2.0, 0.2)
-	
-	# Check result based on survivor's NEW position
-	var zone_result = check_zone(survivor.global_position)
-	
+
+	var zone_result = Zone.Neutral
+	for p in particles_node.particles:
+		var current_zone = check_zone(p.global_position)
+		# Update zone_result with the following priorities:
+		# - RED if some particle is in a red zone
+		if current_zone == Zone.Red:
+			zone_result = current_zone
+		# - GREEN if all are in different green zones
+		elif zone_result == Zone.Green and current_zone == Zone.Green:
+			zone_result = current_zone
+		# - NEUTRAL otherwise
+		else:
+			zone_result = Zone.Neutral
+		
 	match zone_result:
-		"green":
+		Zone.Green:
 			game_won = true
 			hud.set_game_over()  # Prevent further pausing
 			hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
 			create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
-			VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
+			#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
 			screen_shake(2.5, 0.4)
 			GameManager.complete_current_level()
 		
-		"red":
+		Zone.Red:
 			game_over = true
 			hud.set_game_over()  # Prevent further pausing
 			hud.set_status_text("COLLAPSED IN DANGER ZONE! GAME OVER!", Color(1, 0.2, 0.2))
 			create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
-			VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
+			#VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
 			screen_shake(2.0, 0.3)
 		
-		_:
+		Zone.Neutral:
 			# Neutral collapse - respawn
 			hud.set_status_text("Particle survived! Respawning...", Color(0.7, 0.7, 0.7))
 			
-			# Wait for dissolve animation to finish, then respawn
-			await get_tree().create_timer(0.5).timeout
-			
 			# Clean up dissolved particles and respawn
-			particles_node.respawn_after_collapse(survivor)
+			#particles_node.respawn_after_collapse(survivor)
 			
 			# Fade in connection lines after respawn
 			particles_node.fade_in_lines(0.5)
 			
 			# Clear status after delay
-			await get_tree().create_timer(1.0).timeout
+			await get_tree().create_timer(2.0).timeout
 			if not game_over and not game_won:
 				hud.clear_status()
 			
@@ -253,30 +215,18 @@ func dissolve_particle(particle):
 	# Mark for cleanup after animation
 	tween.tween_callback(particle.queue_free)
 
-func stabilize_particle(particle):
-	if not is_instance_valid(particle):
-		return
-	
-	particle.set_fade(1.0)
-	particle.scale = Vector2(1.0, 1.0)
-	
-	# Scale pulse
-	var scale_tween = create_tween()
-	scale_tween.tween_property(particle, "scale", Vector2(1.2, 1.2), 0.3)
-	scale_tween.tween_property(particle, "scale", Vector2(1.0, 1.0), 0.3)
-
-func check_zone(pos: Vector2) -> String:
+func check_zone(pos: Vector2) -> Zone:
 	if green_zones:
 		var green_cell = green_zones.local_to_map(pos)
 		if green_zones.get_cell_source_id(green_cell) != -1:
-			return "green"
+			return Zone.Green
 	
 	if red_zones:
 		var red_cell = red_zones.local_to_map(pos)
 		if red_zones.get_cell_source_id(red_cell) != -1:
-			return "red"
+			return Zone.Red
 	
-	return "neutral"
+	return Zone.Neutral
 
 func screen_shake(intensity: float = 3.0, duration: float = 0.3):
 	if camera == null:

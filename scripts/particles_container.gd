@@ -35,6 +35,29 @@ func create_connection_lines():
 	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)
 	connection_lines.antialiased = true
 	add_child(connection_lines)
+	
+func update_connection_lines():
+	if connection_lines == null:
+		return
+	
+	# Get valid particles with good visibility
+	var valid_particles = []
+	for p in particles:
+		if is_instance_valid(p) and p.fade_alpha > 0.1:
+			valid_particles.append(p)
+	
+	if valid_particles.size() < 2:
+		connection_lines.points = []
+		return
+	
+	# Build connection lines
+	var points = []
+	for i in range(valid_particles.size()):
+		for j in range(i + 1, valid_particles.size()):
+			points.append(valid_particles[i].position)
+			points.append(valid_particles[j].position)
+	
+	connection_lines.points = points
 
 func fade_out_lines(duration: float = 0.2):
 	if connection_lines:
@@ -173,6 +196,18 @@ func apply_movement(direction: Vector2, speed: float, _walls: Node2D):
 			p.position.y = 600
 		elif p.position.y > 600:
 			p.position.y = 0
+			
+			
+func collapse_all():
+	var ref = particles[0]
+	var new_pos = ref.generate_random_pos(last_movement_direction)
+	var move_vector = ref.global_position - new_pos
+	ref.global_position = new_pos
+	ref.to_particle_animated()
+	
+	for i in range(1, particles.size()):
+		particles[i].global_position += move_vector
+		particles[i].to_particle_animated()
 
 func _valid_particles():
 	# Get valid particles
@@ -259,26 +294,3 @@ func scale_particles(delta: float, scale_dir: int, scale_speed: float):
 		var movement = move_vector.normalized() * scale_speed * scale_dir
 		p.velocity = movement / delta
 		p.move_and_collide(movement)
-
-func update_connection_lines():
-	if connection_lines == null:
-		return
-	
-	# Get valid particles with good visibility
-	var valid_particles = []
-	for p in particles:
-		if is_instance_valid(p) and p.fade_alpha > 0.1:
-			valid_particles.append(p)
-	
-	if valid_particles.size() < 2:
-		connection_lines.points = []
-		return
-	
-	# Build connection lines
-	var points = []
-	for i in range(valid_particles.size()):
-		for j in range(i + 1, valid_particles.size()):
-			points.append(valid_particles[i].position)
-			points.append(valid_particles[j].position)
-	
-	connection_lines.points = points

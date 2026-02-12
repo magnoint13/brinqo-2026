@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var glow_light = $GlowLight
 @onready var trail_particles = $TrailParticles
 @onready var collision_shape = $CollisionShape2D
+@onready var collapsed_timer = $CollapsedTimer
 
 var is_survived: bool = false
 var fade_alpha: float = 1.0
@@ -13,6 +14,7 @@ const RADIUS: float = 8.0
 
 # Wave state variables
 const WAVE_SHADER = preload("res://resources/wave_shader.gdshader")
+const RIPPLE_SCENE = preload("res://scripts/RippleEffect.gd")
 @export var WAVE_STD: float = 25
 @export var WAVE_DIRECTION_FACTOR: float = 50.0
 @export var WAVE_SIZE: float = 200
@@ -25,6 +27,8 @@ func setup(is_new: bool = true):
 	fade_alpha = 0.0 if is_new else 1.0
 	collapsed_state = false
 	velocity = Vector2.ZERO
+	if trail_particles:
+		trail_particles.emitting = true
 	update_visuals()
 	queue_redraw()
 
@@ -43,21 +47,8 @@ func _ready():
 	add_child(wave_rect)
 	
 	move_and_slide()
-	if trail_particles:
-		trail_particles.emitting = true
-	queue_redraw()
+	setup()
 
-func set_survived(value: bool):
-	is_survived = value
-	fade_alpha = 1.0
-	update_visuals()
-	queue_redraw()
-
-func update_visuals():
-	if glow_light:
-		glow_light.color = base_color
-		# Scale light energy by fade_alpha so invisible particles have no glow
-		glow_light.energy = 0.8 * fade_alpha
 
 func _draw():
 	if collapsed_state:
@@ -82,11 +73,6 @@ func _draw():
 		glow_light.visible = false
 		trail_particles.visible = false
 
-func set_fade(value: float):
-	fade_alpha = value
-	update_visuals()
-	queue_redraw()
-
 func _process(_delta):
 	# Update trail emission based on movement
 	if trail_particles:
@@ -100,8 +86,26 @@ func _process(_delta):
 		wave_rect.mesh.size = Vector2(WAVE_SIZE, WAVE_SIZE)
 		queue_redraw()
 
-#### Wave Collapse Functions ####
+#### VFX Functions #############################################################
+func update_visuals():
+	if glow_light:
+		glow_light.color = base_color
+		# Scale light energy by fade_alpha so invisible particles have no glow
+		glow_light.energy = 0.8 * fade_alpha
 
+func set_fade(value: float):
+	fade_alpha = value
+	update_visuals()
+	queue_redraw()
+
+# TODO: remove?
+func set_survived(value: bool):
+	is_survived = value
+	fade_alpha = 1.0
+	update_visuals()
+	queue_redraw()
+
+#### Wave Collapse Functions ###################################################
 func generate_random_pos(direction: Vector2) -> Vector2:
 	# Generate random position using Gaussian distribution
 	# Favors the direction the particle is moving
@@ -136,6 +140,7 @@ func to_wave_animated():
 	# Animate from particle to wave state
 	if collapsed_state:
 		collapsed_state = false
+		collapsed_timer.stop()
 		scale = Vector2(0.2, 0.2)
 		var tween = get_tree().create_tween()
 		tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.2)
@@ -145,12 +150,24 @@ func to_particle_animated():
 	# Animate from wave to particle state
 	if not collapsed_state:
 		var tween = get_tree().create_tween()
-		tween.tween_property(self, "scale", Vector2(0.2, 0.2), 0.2)
+		
+		set_fade(1.0)
+		scale = Vector2(1.0, 1.0)
+		
+		# Scale pulse
+		var scale_tween = create_tween()
+		scale_tween.tween_property(self, "scale", Vector2(1.2, 1.2), 0.3)
+		scale_tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.3)
+		#tween.tween_property(self, "scale", Vector2(0.2, 0.2), 0.2)
 		tween.tween_callback(func():
 			collapsed_state = true
 			scale = Vector2(1.0, 1.0)
+			collapsed_timer.start()
 			queue_redraw()
 		)
+		
+		# Spawn ripple effect at particle's position
+		add_child(RIPPLE_SCENE.new())
 
 func _on_collapsed_timer_timeout():
 	to_wave_animated()
