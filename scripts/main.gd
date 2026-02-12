@@ -122,22 +122,23 @@ func update_timer_display():
 	var time_left = max(0, collapse_timer.time_left)
 	
 	if game_won:
-		hud.set_timer_text("VICTORY!")
+		hud.set_timer_text(tr("GAME_VICTORY"))
 		hud.hide_progress_bar()
 	elif game_over:
-		hud.set_timer_text("GAME OVER")
+		hud.set_timer_text(tr("GAME_OVER"))
 		hud.hide_progress_bar()
 	elif is_entanglement_broken:
-		hud.set_timer_text("ENTANGLEMENT BROKEN")
+		hud.set_timer_text(tr("ENTANGLE_BREAK"))
 		hud.hide_progress_bar()
 	elif is_reentanglement:
-		hud.set_timer_text("RE-ENTANGLEMENT!")
+		hud.set_timer_text(tr("RE_ENTANGLEMENT"))
 		hud.hide_progress_bar()
 	elif is_processing_collapse:
-		hud.set_timer_text("COLLAPSING...")
+		hud.set_timer_text(tr("GAME_COLLAPSING"))
 		hud.hide_progress_bar()
+
 	elif particles_node.particles.size() > 1:
-		hud.set_timer_text("Coherence time: %.1fs" % time_left)
+		hud.set_timer_text(tr("GAME_TIMER_FORMAT") % time_left)
 		hud.set_collapse_progress(time_left, current_collapse_max_time)
 	else:
 		hud.set_timer_text("")
@@ -184,7 +185,7 @@ func trigger_collapse(entanglement_broken: bool = false):
 		if current_zone < 0:
 			game_over = true
 			hud.set_game_over()  # Prevent further pausing
-			hud.set_status_text("COLLAPSED IN DANGER ZONE! GAME OVER!", Color(1, 0.2, 0.2))
+			hud.set_status_text(tr("GAME_DEATH_REDZONE"), Color(1, 0.2, 0.2))
 			create_flash_overlay(Color(1, 0, 0, 0.15), 0.8)
 			#VFXSpawner.spawn_burst(survivor.global_position, Color.RED)
 			screen_shake(2.0, 0.3)
@@ -199,12 +200,12 @@ func trigger_collapse(entanglement_broken: bool = false):
 	if used_green_zones.size() != total_green_zones:
 		# neutral - respawn
 		if used_green_zones.size() != 0:
-			hud.set_status_text("You must cover all green areas", Color(0.7, 0.7, 0.7))
+			hud.set_status_text(tr("GAME_HINT_COVERAGE"), Color(0.2, 0.1, 0.7))
 		elif entanglement_broken:
-			hud.set_status_text("Entanglement is broken!", Color(0.2, 0.1, 0.7))
+			hud.set_status_text(tr("ENTANGLE_BREAK"), Color(0.2, 0.1, 0.7))
 			particles_node.break_entanglement()
 		else:
-			hud.set_status_text("The system survived!", Color(0.7, 0.7, 0.7))
+			hud.set_status_text(tr("GAME_NEUTRAL_SURVIVED"), Color(0.7, 0.7, 0.7))
 		
 		# Fade in connection lines after respawn
 		particles_node.fade_in_lines(0.5)
@@ -224,7 +225,7 @@ func trigger_collapse(entanglement_broken: bool = false):
 	else: # green - win condition
 		game_won = true
 		hud.set_game_over()  # Prevent further pausing
-		hud.set_status_text("QUANTUM STATE STABILIZED! YOU WIN!", Color(0.31, 1, 0.4))
+		hud.set_status_text(tr("GAME_WIN_STABILIZED"), Color(0.31, 1, 0.4))
 		create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
 		#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
 		screen_shake(2.5, 0.4)

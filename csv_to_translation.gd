@@ -37,6 +37,8 @@ LEVEL_INSTRUCTION_03,Repeatedly collapse against walls to slip through,Colapsa r
 LEVEL_INSTRUCTION_04,Collapse one particle in each zone,Colapsa una partícula en cada zona,Colapsa unha partícula en cada zona
 LEVEL_INSTRUCTION_05,Hold R and use WASD to position and rotate,Mantén R y usa WASD para posicionar y rotar,Mantén R e usa WASD para posicionar e rotar
 TUNNEL_EFFECT,Tunnel Effect,Efecto túnel,Efeito túnel
+ENTANGLE_BREAK,Entanglement broke!,Entrelazamiento roto!,Entrelazamento quebrado!
+RE_ENTANGLEMENT,RE-ENTANGLEMENT!,ENTRELAZAMIENTO!,ENTRELAZAMENTO!
 """
 
 func _run():
