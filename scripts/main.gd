@@ -5,7 +5,7 @@ const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
 const COLLAPSE_MAX_TIME = 15.0
 const ROTATION_SPEED = 180.0
-const SCALE_SPEED = 5.0
+const SCALE_SPEED = 300.0
 
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
