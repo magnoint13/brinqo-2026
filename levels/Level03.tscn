@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://cm6ea2cwgig8c"]
 
-[ext_resource type="Script" uid="uid://bbbndiexay33u" path="res://scripts/main.gd" id="1_t2y2l"]
+[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_t2y2l"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_3y4yy"]
-[ext_resource type="Texture2D" uid="uid://c7nssp223k280" path="res://resources/backgrounds/01.png" id="3_3y4yy"]
+[ext_resource type="Texture2D" uid="uid://4384i5erqknj" path="res://resources/backgrounds/01.png" id="3_3y4yy"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_ix6a1"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_1maa1"]
 [ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="5_dmbef"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_0i110"]
-[ext_resource type="Script" uid="uid://dxerblwxrhx4o" path="res://scripts/particles_container.gd" id="7_gxcc8"]
+[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="7_gxcc8"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_ssyml"]
 
 [node name="Level03" type="Node2D" unique_id=1763550653]
@@ -41,7 +41,15 @@ tile_set = ExtResource("4_1maa1")
 [node name="GreenZone" type="Node2D" parent="." unique_id=1310053346]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="GreenZone" unique_id=1937446300]
-tile_map_data = PackedByteArray("AAAoAAoAAQAAAAAAAAAoAAsAAQAAAAAAAAAoAAwAAQAAAAAAAAAoAA0AAQAAAAAAAAAoAA4AAQAAAAAAAAApAAoAAQAAAAAAAAApAAsAAQAAAAAAAAApAAwAAQAAAAAAAAApAA0AAQAAAAAAAAApAA4AAQAAAAAAAAAqAAoAAQAAAAAAAAAqAAsAAQAAAAAAAAAqAAwAAQAAAAAAAAAqAA0AAQAAAAAAAAAqAA4AAQAAAAAAAAAoABAAAQAAAAAAAAAoABEAAQAAAAAAAAAoABIAAQAAAAAAAAAoABMAAQAAAAAAAAAoABQAAQAAAAAAAAApABAAAQAAAAAAAAApABEAAQAAAAAAAAApABIAAQAAAAAAAAApABMAAQAAAAAAAAApABQAAQAAAAAAAAAqABAAAQAAAAAAAAAqABEAAQAAAAAAAAAqABIAAQAAAAAAAAAqABMAAQAAAAAAAAAqABQAAQAAAAAAAAAoABYAAQAAAAAAAAAoABcAAQAAAAAAAAAoABgAAQAAAAAAAAAoABkAAQAAAAAAAAAoABoAAQAAAAAAAAApABYAAQAAAAAAAAApABcAAQAAAAAAAAApABgAAQAAAAAAAAApABkAAQAAAAAAAAApABoAAQAAAAAAAAAqABYAAQAAAAAAAAAqABcAAQAAAAAAAAAqABgAAQAAAAAAAAAqABkAAQAAAAAAAAAqABoAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAoAAoAAQAAAAAAAAAoAAsAAQAAAAAAAAAoAAwAAQAAAAAAAAAoAA0AAQAAAAAAAAApAAoAAQAAAAAAAAApAAsAAQAAAAAAAAApAAwAAQAAAAAAAAApAA0AAQAAAAAAAAAqAAoAAQAAAAAAAAAqAAsAAQAAAAAAAAAqAAwAAQAAAAAAAAAqAA0AAQAAAAAAAAAqAA4AAQAAAAAAAAApAA4AAQAAAAAAAAAoAA4AAQAAAAAAAAArAAoAAQAAAAAAAAArAAsAAQAAAAAAAAArAAwAAQAAAAAAAAArAA0AAQAAAAAAAAArAA4AAQAAAAAAAAAsAAoAAQAAAAAAAAAsAAsAAQAAAAAAAAAsAAwAAQAAAAAAAAAsAA0AAQAAAAAAAAAsAA4AAQAAAAAAAAA=")
+tile_set = ExtResource("5_dmbef")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="GreenZone" unique_id=654493169]
+tile_map_data = PackedByteArray("AAAoABAAAQAAAAAAAAAoABEAAQAAAAAAAAAoABIAAQAAAAAAAAAoABMAAQAAAAAAAAAoABQAAQAAAAAAAAApABAAAQAAAAAAAAApABEAAQAAAAAAAAApABIAAQAAAAAAAAApABMAAQAAAAAAAAApABQAAQAAAAAAAAAqABAAAQAAAAAAAAAqABEAAQAAAAAAAAAqABIAAQAAAAAAAAAqABMAAQAAAAAAAAAqABQAAQAAAAAAAAArABAAAQAAAAAAAAArABEAAQAAAAAAAAArABIAAQAAAAAAAAArABMAAQAAAAAAAAArABQAAQAAAAAAAAAsABAAAQAAAAAAAAAsABEAAQAAAAAAAAAsABIAAQAAAAAAAAAsABQAAQAAAAAAAAAsABMAAQAAAAAAAAA=")
+tile_set = ExtResource("5_dmbef")
+
+[node name="TileMapLayer3" type="TileMapLayer" parent="GreenZone" unique_id=589653346]
+tile_map_data = PackedByteArray("AAAoABYAAQAAAAAAAAAoABcAAQAAAAAAAAAoABgAAQAAAAAAAAAoABkAAQAAAAAAAAAoABoAAQAAAAAAAAApABYAAQAAAAAAAAApABcAAQAAAAAAAAApABgAAQAAAAAAAAApABkAAQAAAAAAAAApABoAAQAAAAAAAAAqABYAAQAAAAAAAAAqABcAAQAAAAAAAAAqABgAAQAAAAAAAAAqABkAAQAAAAAAAAAqABoAAQAAAAAAAAArABYAAQAAAAAAAAArABcAAQAAAAAAAAArABgAAQAAAAAAAAArABkAAQAAAAAAAAArABoAAQAAAAAAAAAsABYAAQAAAAAAAAAsABcAAQAAAAAAAAAsABgAAQAAAAAAAAAsABkAAQAAAAAAAAAsABoAAQAAAAAAAAA=")
 tile_set = ExtResource("5_dmbef")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=78126081]
