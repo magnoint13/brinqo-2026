@@ -18,7 +18,8 @@ func _ready():
 	var spawnPointContainer = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
 	
 	for spawnPoint in spawnPointContainer:
-		spawn_positions.append(spawnPoint.position)
+		if spawnPoint.enabled:
+			spawn_positions.append(spawnPoint.position)
 	
 	if spawn_positions.is_empty():
 		print("ERROR: Missing spawnpoints")
@@ -220,14 +221,18 @@ func _valid_particles():
 		if is_instance_valid(p) and p.fade_alpha > 0.1:
 			valid_particles.append(p)
 	
-	if valid_particles.size() < 2:
-		return null
-		
 	return valid_particles
 
 func _find_particles_center(valid_particles: Array) -> Vector2:
 	# Calculate rotation center
 	var center: Vector2
+	if valid_particles.size() == 1:
+		return valid_particles[0].position
+		
+	if valid_particles.size() == 2:
+		var v = (valid_particles[0].position - valid_particles[1].position) / 2
+		center = valid_particles[1].position + v
+		
 	if valid_particles.size() == 3:
 		# Check if particles form a line (colinear)
 		var p0 = valid_particles[0].position
@@ -261,7 +266,7 @@ func _find_particles_center(valid_particles: Array) -> Vector2:
 
 func rotate_particles(delta: float, direction: int, rotation_speed: float):
 	var valid_particles = _valid_particles()
-	if not valid_particles:
+	if not valid_particles or valid_particles.size() == 1:
 		return
 	var center = _find_particles_center(valid_particles)
 	
@@ -287,7 +292,7 @@ func rotate_particles(delta: float, direction: int, rotation_speed: float):
 			
 func scale_particles(delta: float, scale_dir: int, scale_speed: float):
 	var valid_particles = _valid_particles()
-	if not valid_particles:
+	if not valid_particles or valid_particles.size() == 1:
 		return
 	var center = _find_particles_center(valid_particles)
 	

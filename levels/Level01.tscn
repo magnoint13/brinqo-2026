@@ -54,6 +54,7 @@ position = Vector2(100, 200)
 
 [node name="SpawnPoint2" parent="SpawnPoints" unique_id=175133623 instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 300)
+enabled = false
 
 [node name="SpawnPoint3" parent="SpawnPoints" unique_id=1238434456 instance=ExtResource("7_spawnpoint")]
 position = Vector2(100, 400)
