@@ -87,12 +87,12 @@ func set_game_over(disabled: bool = true):
 # Setup connections between buttons and game logic
 func setup_action_buttons(main_node: Node):
 	# Collapse button triggers collapse in main
-	collapse_button.pressed.connect(main_node.trigger_collapse_manual)
+	collapse_button.pressed.connect(main_node.trigger_collapse)
 	# Rotation state is read directly from button in main.handle_input()
 
 func _on_collapse_pressed():
 	# Visual state is handled by button's own pressed state
-	# Action is handled by connection to main.trigger_collapse_manual
+	# Action is handled by connection to main.trigger_collapse
 	pass
 
 func _on_rotate_down():

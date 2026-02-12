@@ -15,9 +15,11 @@ const SCALE_SPEED = 5.0
 @onready var hud = $HUD
 
 # Simple state tracking
-var game_over = false
-var game_won = false
-var is_processing_collapse = false
+var game_over: bool = false
+var game_won: bool = false
+var is_processing_collapse: bool = false
+var is_entanglement_broken: bool = false
+var is_reentanglement: bool = false
 var current_collapse_max_time: float = 15.0
 var total_green_zones: int = 0
 
@@ -27,10 +29,20 @@ var r_key_was_pressed = false
 
 func _ready():
 	randomize()
-	collapse_timer.timeout.connect(trigger_collapse)
-	start_collapse_timer()
-	hud.show_progress_bar()
+	collapse_timer.timeout.connect(break_entanglement)
+	particles_node.level_main = self
 	hud.setup_action_buttons(self)
+	
+	if particles_node.particles.size() > 1:
+		var n_entangled: int = 0
+		for p in particles_node.particles:
+			if p.is_entangled:
+				n_entangled += 1
+		if n_entangled > 1:
+			start_collapse_timer()
+			hud.show_progress_bar()
+		else:
+			is_entanglement_broken = true
 	
 	if green_zones:
 		for zone in green_zones.get_children():
@@ -115,36 +127,45 @@ func update_timer_display():
 	elif game_over:
 		hud.set_timer_text("GAME OVER")
 		hud.hide_progress_bar()
+	elif is_entanglement_broken:
+		hud.set_timer_text("ENTANGLEMENT BROKEN")
+		hud.hide_progress_bar()
+	elif is_reentanglement:
+		hud.set_timer_text("RE-ENTANGLEMENT!")
+		hud.hide_progress_bar()
 	elif is_processing_collapse:
 		hud.set_timer_text("COLLAPSING...")
 		hud.hide_progress_bar()
-	else:
+	elif particles_node.particles.size() > 1:
 		hud.set_timer_text("Coherence time: %.1fs" % time_left)
 		hud.set_collapse_progress(time_left, current_collapse_max_time)
+	else:
+		hud.set_timer_text("")
+		hud.hide_progress_bar()
 
 func start_collapse_timer():
+	# Entanglement timer does not happen when there only is one particle
+	if particles_node.particles.size() <= 1:
+		return
 	var random_time = randf_range(COLLAPSE_MIN_TIME, COLLAPSE_MAX_TIME)
 	current_collapse_max_time = random_time
+	collapse_timer.one_shot = true
 	collapse_timer.start(random_time)
 	hud.show_progress_bar()
 	hud.reset_progress_bar()
 
-# Called by collapse button (both keyboard and mouse)
-func trigger_collapse_manual():
-	if is_processing_collapse or game_over or game_won:
+func break_entanglement():
+	if is_entanglement_broken:
 		return
-	collapse_timer.stop()
-	trigger_collapse()
+	trigger_collapse(true)
 
-func trigger_collapse():
+func trigger_collapse(entanglement_broken: bool = false):
 	# Prevent re-entry
-	if is_processing_collapse or game_over or game_won:
+	if is_processing_collapse or game_over or game_won or particles_node.particles.size() == 0:
 		return
-	
-	if particles_node.particles.size() == 0:
-		return
-	
+		
 	is_processing_collapse = true
+	collapse_timer.stop()
 	particles_node.collapse_all()
 	
 	# Fade out connection lines immediately
@@ -179,6 +200,9 @@ func trigger_collapse():
 		# neutral - respawn
 		if used_green_zones.size() != 0:
 			hud.set_status_text("You must cover all green areas", Color(0.7, 0.7, 0.7))
+		elif entanglement_broken:
+			hud.set_status_text("Entanglement is broken!", Color(0.2, 0.1, 0.7))
+			particles_node.break_entanglement()
 		else:
 			hud.set_status_text("The system survived!", Color(0.7, 0.7, 0.7))
 		
@@ -192,7 +216,10 @@ func trigger_collapse():
 		
 		# Reset for next collapse
 		is_processing_collapse = false
-		start_collapse_timer()
+		if entanglement_broken:
+			is_entanglement_broken = true
+		elif not is_entanglement_broken:
+			start_collapse_timer()
 		
 	else: # green - win condition
 		game_won = true
@@ -212,6 +239,7 @@ func trigger_collapse():
 		
 		GameManager.complete_current_level()
 
+# NOTE: not currently used
 func dissolve_particle(particle):
 	if not is_instance_valid(particle):
 		return
@@ -272,10 +300,20 @@ func create_flash_overlay(color: Color, duration: float = 0.5):
 	tween.tween_property(flash, "modulate:a", 0.0, duration)
 	tween.tween_callback(func(): flash.queue_free())
 
+func reentangle():
+	is_entanglement_broken = false
+	is_reentanglement = true
+	hud.set_timer_text("RE-ENTANGLEMENT!")
+	get_tree().create_timer(1.0).timeout.connect(func():
+		is_reentanglement = false
+		start_collapse_timer()
+	)
+
 func restart_level():
 	game_over = false
 	game_won = false
 	is_processing_collapse = false
+	is_entanglement_broken = false
 	hud.clear_status()
 	hud.set_game_over(false)  # Re-enable pausing
 	hud.set_timer_text("Coherence time: --")

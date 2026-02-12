@@ -1,10 +1,12 @@
 extends CharacterBody2D
+class_name Particle
 
 @onready var glow_light = $GlowLight
 @onready var trail_particles = $TrailParticles
 @onready var collision_shape = $CollisionShape2D
 @onready var collapsed_timer = $CollapsedTimer
 
+var is_entangled: bool
 var is_survived: bool = false
 var fade_alpha: float = 1.0
 var base_color: Color = Color(0.39, 0.59, 1.0)
@@ -22,7 +24,8 @@ var collapsed_state: bool = false
 var wave_rect: MeshInstance2D
 var rng: RandomNumberGenerator
 
-func setup(is_new: bool = true):
+func setup(is_new: bool = true, entangled: bool = true):
+	is_entangled = entangled
 	is_survived = not is_new
 	fade_alpha = 0.0 if is_new else 1.0
 	collapsed_state = false
@@ -98,7 +101,6 @@ func set_fade(value: float):
 	update_visuals()
 	queue_redraw()
 
-# TODO: remove?
 func set_survived(value: bool):
 	is_survived = value
 	fade_alpha = 1.0

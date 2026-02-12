@@ -1,12 +1,13 @@
 extends Node2D
 
 var particles: Array = []
+var level_main: Node2D = null
 var particle_scene = preload("res://scenes/particle.tscn")
 var connection_lines: Line2D
 
-var spawn_positions : Array[Vector2] = []
+var spawn_positions: Array[Vector2] = []
+var spawn_is_entangled: Array[bool] = []
 var last_movement_direction: Vector2 = Vector2.ZERO
-#@onready var spawnPointContainer : Array[SpawnPoint] = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
 # Fallback spawn positions if no SpawnPoint nodes are found
 const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 	Vector2(100, 200),
@@ -16,10 +17,12 @@ const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 
 func _ready():
 	var spawnPointContainer = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
-	
 	for spawnPoint in spawnPointContainer:
 		if spawnPoint.enabled:
 			spawn_positions.append(spawnPoint.position)
+			print(spawnPoint.entangled)
+			spawn_is_entangled.append(spawnPoint.entangled)
+	print(spawn_is_entangled)
 	
 	if spawn_positions.is_empty():
 		print("ERROR: Missing spawnpoints")
@@ -41,10 +44,12 @@ func update_connection_lines():
 	if connection_lines == null:
 		return
 	
+	connection_lines.visible = true
+	
 	# Get valid particles with good visibility
 	var valid_particles = []
 	for p in particles:
-		if is_instance_valid(p) and p.fade_alpha > 0.1:
+		if is_instance_valid(p) and p.fade_alpha > 0.1 and p.is_entangled:
 			valid_particles.append(p)
 	
 	if valid_particles.size() < 2:
@@ -79,83 +84,16 @@ func _set_lines_alpha(alpha: float):
 func spawn_initial_particles():
 	for i in range(spawn_positions.size()):
 		var p = particle_scene.instantiate()
+		add_child(p)
+		particles.append(p)
 		p.spawn_index = i  # Store which spawnpoint this particle came from
 		p.position = spawn_positions[i]
-		p.setup(true)  # Starts invisible
-		add_child(p)
-		particles.append(p)
+		p.setup(true, spawn_is_entangled[i])  # Starts invisible
+		p.is_entangled = spawn_is_entangled[i]
 		
 		# Fade in
 		var tween = create_tween()
 		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
-
-func respawn_after_collapse(survivor: Node2D):
-	# Remove all particles except the survivor from the array
-	var new_particles = []
-	for p in particles:
-		if p == survivor and is_instance_valid(p):
-			new_particles.append(p)
-		else:
-			# Already fading out and will be freed by tween callback
-			pass
-	particles = new_particles
-	
-	# Get all spawn positions
-	#var spawn_positions = get_spawn_positions()
-	
-	# Get the spawn index of the survivor (ID-based association)
-	var occupied_spawn_index = survivor.spawn_index
-	
-	# Create list of available spawn indices (excluding the survivor's spawn)
-	var available_indices = []
-	for i in range(spawn_positions.size()):
-		if i != occupied_spawn_index:
-			available_indices.append(i)
-	
-	# Shuffle available indices
-	available_indices.shuffle()
-	
-	# Spawn new particles to fill all available spawnpoints (excluding survivor's)
-	var target_particle_count = spawn_positions.size() - 1
-	var spawned_count = 0
-	for i in range(min(target_particle_count, available_indices.size())):
-		var spawn_index = available_indices[i]
-		var spawn_pos = spawn_positions[spawn_index]
-		var p = particle_scene.instantiate()
-		p.spawn_index = spawn_index  # Store spawn index for this new particle
-		p.global_position = spawn_pos
-		p.setup(true)  # Starts invisible
-		add_child(p)
-		particles.append(p)
-		spawned_count += 1
-		
-		# Fade in
-		var tween = create_tween()
-		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
-	
-	# Safety: if we couldn't spawn enough, spawn at any available position
-	while spawned_count < target_particle_count and spawn_positions.size() > spawned_count:
-		var spawn_idx = spawned_count % spawn_positions.size()
-		var spawn_pos = spawn_positions[spawn_idx]
-		# Skip if this is the occupied spawn
-		if spawn_idx == occupied_spawn_index:
-			spawned_count += 1
-			continue
-			
-		var p = particle_scene.instantiate()
-		p.spawn_index = spawn_idx  # Store spawn index
-		p.global_position = spawn_pos
-		p.setup(true)
-		add_child(p)
-		particles.append(p)
-		spawned_count += 1
-		
-		var tween = create_tween()
-		tween.tween_method(p.set_fade, 0.0, 1.0, 0.5)
-		
-	# Ensure everyone is in wave form
-	for p in particles:
-		p.to_wave_animated()
 
 func reset():
 	for p in particles:
@@ -164,13 +102,43 @@ func reset():
 	particles.clear()
 	spawn_initial_particles()
 
+#### COLLAPSE LOGIC ############################################################
+
+func break_entanglement():
+	# Select new player
+	var new_player_index = randi_range(0, particles.size() - 1)
+	
+	for i in range(particles.size()):
+		if i == new_player_index: continue
+		particles[i].is_entangled = false
+
+func collapse_all():
+	# ensure all are entangled and in wave form
+	var valid_particles = _valid_particles()
+	
+	var ref_index = randi_range(0, valid_particles.size() - 1)
+	var ref = valid_particles[ref_index]
+	var new_pos = ref.generate_random_pos(last_movement_direction)
+	var move_vector = ref.global_position - new_pos
+	ref.global_position = new_pos
+	ref.to_particle_animated()
+	
+	for i in range(valid_particles.size()):
+		var p = valid_particles[i]
+		if i == ref_index: continue
+		if not p.is_entangled: continue
+		p.global_position += move_vector
+		p.to_particle_animated()
+
+#### MOVEMENT LOGIC ############################################################
+
 func apply_movement(direction: Vector2, speed: float):
 	# Store last movement direction for collapse mechanic
 	if direction != Vector2.ZERO:
 		last_movement_direction = direction
 	
 	for p in particles:
-		if not is_instance_valid(p) or p.collapsed_state:
+		if not is_instance_valid(p) or p.collapsed_state or not p.is_entangled:
 			continue
 		
 		p.velocity = direction * speed
@@ -180,6 +148,15 @@ func apply_movement(direction: Vector2, speed: float):
 			var collider = collision.get_collider()
 			
 			if collider is CharacterBody2D and collider != p:
+				# If colliding with other untangled particle, create system
+				if collider is Particle and \
+					(p.is_entangled and not p.collapsed_state) and \
+					(not collider.is_entangled and not collider.collapsed_state):
+					collider.is_entangled = true
+					# notify to level
+					if level_main:
+						level_main.reentangle()
+				# handle collision
 				var bounce_dir = (p.position - collider.position).normalized()
 				p.velocity = bounce_dir * speed * 0.5
 				p.move_and_collide(p.velocity)
@@ -197,20 +174,6 @@ func apply_movement(direction: Vector2, speed: float):
 			p.position.y = 600
 		elif p.position.y > 600:
 			p.position.y = 0
-			
-			
-func collapse_all():
-	var ref_index = randi_range(0, particles.size() - 1)
-	var ref = particles[ref_index]
-	var new_pos = ref.generate_random_pos(last_movement_direction)
-	var move_vector = ref.global_position - new_pos
-	ref.global_position = new_pos
-	ref.to_particle_animated()
-	
-	for i in range(particles.size()):
-		if i == ref_index: continue
-		particles[i].global_position += move_vector
-		particles[i].to_particle_animated()
 
 func _valid_particles():
 	# Get valid particles
@@ -218,7 +181,7 @@ func _valid_particles():
 	for p in particles:
 		if p.collapsed_state:
 			return null
-		if is_instance_valid(p) and p.fade_alpha > 0.1:
+		if is_instance_valid(p) and p.fade_alpha > 0.1 and p.is_entangled:
 			valid_particles.append(p)
 	
 	return valid_particles
