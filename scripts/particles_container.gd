@@ -240,7 +240,7 @@ func rotate_particles(delta: float, direction: int, rotation_speed: float):
 		# Calculate offset from center
 		var offset = p.position - center
 		
-		# Rotate the offset
+		# Rotate the offsetz
 		var rotated_offset = offset.rotated(rotation_angle)
 		
 		# Calculate new position
@@ -262,5 +262,5 @@ func scale_particles(delta: float, scale_dir: int, scale_speed: float):
 	for p in valid_particles:
 		var move_vector = p.position - center
 		var movement = move_vector.normalized() * scale_speed * scale_dir
-		p.velocity = movement / delta
+		p.velocity = movement * delta
 		p.move_and_collide(movement)
