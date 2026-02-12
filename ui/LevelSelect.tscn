@@ -34,7 +34,7 @@ offset_bottom = 140.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_droh6")
 theme_override_font_sizes/font_size = 36
-text = "Select Level"
+text = "LEVEL_SELECT_TITLE"
 horizontal_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=1548603207]
@@ -65,4 +65,4 @@ offset_right = 140.0
 offset_bottom = -40.0
 grow_vertical = 0
 theme = ExtResource("3_jbleg")
-text = "Back"
+text = "BACK"

@@ -12,7 +12,7 @@ func _ready():
 func create_level_buttons():
 	for level_num in range(1, TOTAL_LEVELS + 1):
 		var button = Button.new()
-		button.text = "Level " + str(level_num)
+		button.text = tr("LEVEL_BUTTON_PREFIX") + " " + str(level_num)
 		button.custom_minimum_size = Vector2(150, 60)
 		
 		if GameManager.is_level_unlocked(level_num):

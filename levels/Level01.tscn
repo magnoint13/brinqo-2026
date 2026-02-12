@@ -52,7 +52,7 @@ offset_right = 569.0
 offset_bottom = 219.0
 theme_override_fonts/normal_font = ExtResource("8_ke2w7")
 theme_override_font_sizes/normal_font_size = 32
-text = "Collapse on the green zone"
+text = "LEVEL_INSTRUCTION_01"
 tab_size = 9
 horizontal_alignment = 1
 

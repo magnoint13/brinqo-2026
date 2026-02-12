@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://mainmenu001"]
 
-[ext_resource type="Script" uid="uid://bt7swmxvm2m6" path="res://ui/MainMenu.gd" id="1_mainmenu"]
-[ext_resource type="Shader" uid="uid://cwgwhy8l3p2hq" path="res://resources/lava_shader.gdshader" id="2_lavashader"]
+[ext_resource type="Script" uid="uid://dlfpln2bxeoqa" path="res://ui/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Shader" uid="uid://dbi6ocwr1phqr" path="res://resources/lava_shader.gdshader" id="2_lavashader"]
 [ext_resource type="Shader" uid="uid://bqlpdi5400r1p" path="res://resources/sparkle_shader.gdshader" id="3_sparkle"]
 [ext_resource type="Texture2D" uid="uid://cm4x58plccq78" path="res://resources/GAME_TITLE.png" id="4_8v85u"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="5_x262b"]
@@ -69,37 +69,45 @@ size_flags_horizontal = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=806442175]
 layout_mode = 0
-offset_left = 303.00003
-offset_top = 226.00002
-offset_right = 413.07004
+offset_left = 285.00003
+offset_top = 226.0
+offset_right = 421.00003
 offset_bottom = 422.0
 scale = Vector2(1.745, 1.745)
 theme_override_constants/separation = 12
+alignment = 1
 
 [node name="StartButton" type="Button" parent="VBoxContainer" unique_id=1623604955]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+size_flags_horizontal = 5
 theme = ExtResource("5_x262b")
-text = "Start"
+theme_override_font_sizes/font_size = 11
+text = "MENU_START"
 
 [node name="LevelsButton" type="Button" parent="VBoxContainer" unique_id=1671708383]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+size_flags_horizontal = 5
 theme = ExtResource("5_x262b")
-text = "Level select"
+theme_override_font_sizes/font_size = 11
+text = "MENU_LEVEL_SELECT"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer" unique_id=1671708384]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+size_flags_horizontal = 5
 theme = ExtResource("6_qo3sn")
-text = "Settings"
+theme_override_font_sizes/font_size = 11
+text = "MENU_SETTINGS"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer" unique_id=691657892]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+size_flags_horizontal = 5
 theme = ExtResource("5_x262b")
-text = "Quit
-"
+theme_override_font_sizes/font_size = 11
+text = "MENU_QUIT"
 
 [node name="SettingsMenu" parent="." unique_id=710267982 instance=ExtResource("7_settings")]
 visible = false

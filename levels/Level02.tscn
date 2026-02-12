@@ -1,8 +1,8 @@
-[gd_scene format=4 uid="uid://rr2h85p1apsi"]
+[gd_scene format=4 uid="uid://level02"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="VideoStream" path="res://resources/backgrounds/01.ogv" id="3_n3538"]
+[ext_resource type="Script" uid="uid://cx2y5msot30g0" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://che3dlyua5wy4" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="VideoStream" uid="uid://bp26wjy37fi6o" path="res://resources/backgrounds/01.ogv" id="3_n3538"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
@@ -47,13 +47,14 @@ tile_set = ExtResource("10_green_tileset")
 position = Vector2(100, 300)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=563170275]
-offset_left = 218.0
-offset_top = 130.0
-offset_right = 577.0
-offset_bottom = 219.0
+offset_left = 238.0
+offset_top = 119.0
+offset_right = 720.0
+offset_bottom = 208.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 32
-text = "Don't collapse on the red zone!"
+text = "LEVEL_INSTRUCTION_02"
+scroll_active = false
 tab_size = 9
 horizontal_alignment = 1
 

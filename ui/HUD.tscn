@@ -79,7 +79,7 @@ offset_top = 20.0
 offset_right = 100.0
 offset_bottom = 60.0
 theme = ExtResource("2_jd13s")
-text = "Menu"
+text = "HUD_MENU"
 
 [node name="RotateContainer" type="HBoxContainer" parent="UI" unique_id=1256765927]
 layout_mode = 0
@@ -100,7 +100,7 @@ text = "R
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("4_wxbmk")
-text = "Rotate"
+text = "HUD_ROTATE"
 scroll_active = false
 vertical_alignment = 1
 
@@ -122,7 +122,7 @@ text = "C"
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("4_wxbmk")
-text = "Force Collapse"
+text = "HUD_COLLAPSE"
 scroll_active = false
 vertical_alignment = 1
 
