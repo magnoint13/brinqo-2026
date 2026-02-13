@@ -5,10 +5,14 @@ extends Control
 @onready var main_menu_button: Button = $CenterContainer/VBoxContainer/MainMenuButton
 @onready var next_level_button: Button = $CenterContainer/VBoxContainer/NextLevelButton
 @onready var restart_level_button: Button = $CenterContainer/VBoxContainer/RestartLevelButton
+@onready var confetti1 = $GPUParticles2D
+@onready var confetti2 = $GPUParticles2D2
 
 var current_level: int = 1
 
 func _ready():
+	confetti1.emitting = false
+	confetti2.emitting = true
 	visible = false
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 	next_level_button.pressed.connect(_on_next_level_pressed)
@@ -37,6 +41,10 @@ func show_win_popup(level_number: int):
 	
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 1, 0.6)
+	tween.tween_callback(func():
+		confetti1.emitting = true
+		confetti2.emitting = true
+	)
 
 func hide_win_popup():
 	visible = false

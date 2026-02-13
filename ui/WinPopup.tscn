@@ -5,6 +5,42 @@
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="3_font"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_gu8hs"]
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_gu8hs"]
+lifetime_randomness = 0.58
+particle_flag_disable_z = true
+direction = Vector3(4.479, -8.44, 0)
+spread = 16.494
+initial_velocity_min = 174.59
+initial_velocity_max = 617.01996
+orbit_velocity_min = -0.29999992
+orbit_velocity_max = 0.034000095
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 204.32997
+gravity = Vector3(0, 98, 0)
+scale_max = 12.9
+scale_over_velocity_min = 80.509995
+scale_over_velocity_max = 163.73
+hue_variation_min = -1.0
+hue_variation_max = 0.99999994
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_omnc6"]
+lifetime_randomness = 0.58
+particle_flag_disable_z = true
+direction = Vector3(-7.845, -8.44, 0)
+spread = 16.494
+initial_velocity_min = 174.59
+initial_velocity_max = 617.01996
+orbit_velocity_min = 0.012000095
+orbit_velocity_max = 0.1600001
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 204.32997
+gravity = Vector3(0, 98, 0)
+scale_max = 12.9
+scale_over_velocity_min = 80.509995
+scale_over_velocity_max = 163.73
+hue_variation_min = -1.0
+hue_variation_max = 0.99999994
+
 [node name="WinPopup" type="Control" unique_id=987654321]
 process_mode = 3
 layout_mode = 3
@@ -77,3 +113,21 @@ size_flags_horizontal = 4
 theme = ExtResource("2_theme")
 theme_override_font_sizes/font_size = 20
 text = "MAIN_MENU"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=377786814]
+position = Vector2(-41, 564)
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_gu8hs")
+
+[node name="GPUParticles2D2" type="GPUParticles2D" parent="." unique_id=1023448845]
+position = Vector2(883, 555)
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 1.0
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_omnc6")
