@@ -1,17 +1,63 @@
-[gd_scene format=3 uid="uid://level02"]
+[gd_scene format=4 uid="uid://level02"]
 
 [ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Texture2D" uid="uid://ccklecrtpggt2" path="res://resources/atlas2d.png" id="3_n3538"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="6_rrqju"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_abtce"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
-[ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_g5dnp"]
+[ext_resource type="AudioStream" uid="uid://xxbeu7l7i0du" path="res://resources/Music/02.mp3" id="10_n3538"]
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_g5dnp"]
 file = "res://resources/Backgrounds/02.ogv"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g5dnp"]
+texture = ExtResource("3_n3538")
+0:0/0 = 0
+0:0/0/modulate = Color(1, 0.54969823, 0.46310747, 1)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+
+[sub_resource type="TileSet" id="TileSet_rrqju"]
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 1
+sources/4 = SubResource("TileSetAtlasSource_g5dnp")
 
 [sub_resource type="Shader" id="Shader_n3538"]
 code = "shader_type canvas_item;
@@ -251,7 +297,8 @@ loop = true
 [node name="Walls" type="Node2D" parent="." unique_id=1733820030]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=221808540]
-tile_set = ExtResource("8_wall_tileset")
+tile_map_data = PackedByteArray("AAAdAAsABAAAAAAAAAAdAAwABAAAAAAAAAAdAA0ABAAAAAAAAAAdAA4ABAAAAAAAAAAdAA8ABAAAAAAAAAAdABAABAAAAAAAAAAdABEABAAAAAAAAAAdABIABAAAAAAAAAAdABUABAAAAAAAAAAdABYABAAAAAAAAAAdABcABAAAAAAAAAAdABgABAAAAAAAAAAdABkABAAAAAAAAAAdABoABAAAAAAAAAAdABsABAAAAAAAAAAdABwABAAAAAAAAAA=")
+tile_set = SubResource("TileSet_rrqju")
 
 [node name="RedZone" type="Node2D" parent="." unique_id=391515538]
 
@@ -259,7 +306,7 @@ tile_set = ExtResource("8_wall_tileset")
 material = SubResource("ShaderMaterial_8pjc3")
 position = Vector2(50, 30)
 scale = Vector2(12, 12)
-tile_map_data = PackedByteArray(0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray("AAABAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_qjpw8")
 
 [node name="GreenZone" type="Node2D" parent="." unique_id=1210511327]
@@ -268,7 +315,7 @@ tile_set = SubResource("TileSet_qjpw8")
 material = SubResource("ShaderMaterial_dwda4")
 position = Vector2(130, 30)
 scale = Vector2(12, 12)
-tile_map_data = PackedByteArray(0, 0, 31, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 44, 0, 25, 0, 1, 0, 0, 0, 0, 0, 0, 0, 32, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAACAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_oa868")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=967650454]
@@ -277,10 +324,10 @@ tile_set = SubResource("TileSet_oa868")
 position = Vector2(100, 300)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=563170275]
-offset_left = 238.0
-offset_top = 119.0
-offset_right = 720.0
-offset_bottom = 208.0
+offset_left = 6.0
+offset_top = 92.0
+offset_right = 326.0
+offset_bottom = 204.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 32
 text = "LEVEL_INSTRUCTION_02"
@@ -304,3 +351,8 @@ one_shot = true
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=276751292]
 one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1441172079]
+stream = ExtResource("10_n3538")
+volume_db = -4.0
+autoplay = true
