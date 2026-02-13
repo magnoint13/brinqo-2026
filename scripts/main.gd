@@ -215,10 +215,10 @@ func trigger_collapse(entanglement_broken: bool = false):
 		# neutral - respawn
 		if entanglement_broken:
 			# Timer expired - always break entanglement regardless of coverage
-			hud.set_status_text(tr("ENTANGLE_BREAK"), Color(0.2, 0.1, 0.7))
+			hud.set_status_text(tr("ENTANGLE_BREAK"), Color(1.0, 1.0, 0.0))
 			particles_node.break_entanglement()
 		elif used_green_zones.size() != 0:
-			hud.set_status_text(tr("GAME_HINT_COVERAGE"), Color(0.2, 0.1, 0.7))
+			hud.set_status_text(tr("GAME_HINT_COVERAGE"), Color(1.0, 1.0, 0.0))
 		else:
 			hud.set_status_text(tr("GAME_NEUTRAL_SURVIVED"), Color(0.7, 0.7, 0.7))
 		
@@ -290,9 +290,6 @@ func check_zone(pos: Vector2) -> int:
 				var red_cell = zone.local_to_map(zone.to_local(pos))
 				if zone.get_cell_source_id(red_cell) != -1:
 					return -1
-			
-			
-	
 	return 0
 
 func screen_shake(intensity: float = 3.0, duration: float = 0.3):

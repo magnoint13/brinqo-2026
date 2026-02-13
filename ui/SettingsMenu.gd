@@ -19,6 +19,11 @@ func open(previous_scene: String = "", is_paused: bool = false):
 	_load_settings()
 	visible = true
 
+func close(previous_scene: String = "", is_paused: bool = false):
+	_previous_scene = previous_scene
+	_is_paused = is_paused
+	visible = false
+
 func _load_settings():
 	master_slider.value = SettingsManager.get_master_volume()
 	music_slider.value = SettingsManager.get_music_volume()

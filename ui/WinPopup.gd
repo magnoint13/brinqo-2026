@@ -4,6 +4,7 @@ extends Control
 @onready var level_label: Label = $CenterContainer/VBoxContainer/LevelLabel
 @onready var main_menu_button: Button = $CenterContainer/VBoxContainer/MainMenuButton
 @onready var next_level_button: Button = $CenterContainer/VBoxContainer/NextLevelButton
+@onready var restart_level_button: Button = $CenterContainer/VBoxContainer/RestartLevelButton
 
 var current_level: int = 1
 
@@ -11,11 +12,13 @@ func _ready():
 	visible = false
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 	next_level_button.pressed.connect(_on_next_level_pressed)
+	restart_level_button.pressed.connect(_on_restart_level_pressed)
 
 func show_win_popup(level_number: int):
-	current_level = level_number
+	modulate.a = 0
 	visible = true
-	
+	current_level = level_number
+		
 	# Update level text
 	level_label.text = tr("LEVEL_BUTTON_PREFIX") + " " + str(current_level)
 	
@@ -31,6 +34,9 @@ func show_win_popup(level_number: int):
 	
 	# Pause the game
 	get_tree().paused = true
+	
+	var tween = create_tween()
+	tween.tween_property(self, "modulate:a", 1, 0.6)
 
 func hide_win_popup():
 	visible = false
@@ -46,3 +52,8 @@ func _on_next_level_pressed():
 	var next_level = current_level + 1
 	if next_level <= GameManager.TOTAL_LEVELS:
 		GameManager.start_level(next_level)
+		
+func _on_restart_level_pressed():
+	hide_win_popup()
+	get_tree().paused = false
+	GameManager.restart_current_level()

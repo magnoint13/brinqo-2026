@@ -2,7 +2,7 @@ extends Control
 
 @onready var start_button = $VBoxContainer/StartButton
 @onready var level_select_button = $VBoxContainer/LevelsButton
-@onready var settings_button = $VBoxContainer/SettingsButton
+@onready var settings_button = $SettingsButton
 @onready var quit_button = $VBoxContainer/QuitButton
 @onready var title_sprite = $Sprite2D
 @onready var settings_menu = $SettingsMenu
@@ -11,6 +11,8 @@ extends Control
 @onready var english_button = $FlagPopup/LanguageContainer/English
 @onready var galician_button = $FlagPopup/LanguageContainer/Galician
 @onready var spanish_button = $FlagPopup/LanguageContainer/Spanish
+
+var settings_open: bool = false
 
 func _ready():
 	start_button.pressed.connect(_on_start_pressed)
@@ -42,7 +44,12 @@ func _on_quit_pressed():
 	get_tree().quit()
 
 func _on_settings_pressed():
-	settings_menu.open("main_menu")
+	if settings_open:
+		settings_menu.close("main_menu")
+		settings_open = false
+	else:
+		settings_menu.open("main_menu")
+		settings_open = true
 
 func _on_language_button_pressed():
 	flag_popup.visible = !flag_popup.visible

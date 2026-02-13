@@ -1,6 +1,6 @@
 keys,en,es,gl
 MENU_START,Start,Iniciar,Iniciar
-MENU_LEVEL_SELECT,Level select,Seleccionar nivel,Seleccionar nivel
+MENU_LEVEL_SELECT,Level selection,Seleccionar nivel,Seleccionar nivel
 MENU_SETTINGS,Settings,Configuración,Configuración
 MENU_QUIT,Quit,Salir,Saír
 PAUSE_TITLE,PAUSED,PAUSA,PAUSA
@@ -19,7 +19,7 @@ LEVEL_BUTTON_PREFIX,Level,Nivel,Nivel
 BACK,Back,Volver,Volver
 HUD_MENU,Menu,Menú,Menú
 HUD_ROTATE,Rotate,Rotar,Rotar
-HUD_COLLAPSE,Force Collapse,Colapso forzado,Colapso forzado
+HUD_COLLAPSE,Force collapse,Forzar colapso,Forzar colapso
 GAME_VICTORY,VICTORY!,¡VICTORIA!,¡VITORIA!
 GAME_OVER,GAME OVER,JUEGO TERMINADO,XOGO REMATADO
 GAME_COLLAPSING,COLLAPSING...,COLAPSANDO...,COLAPSANDO...

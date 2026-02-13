@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://bvub7wg5m18cq"]
 
-[ext_resource type="Script" uid="uid://0xlxdphor2b7" path="res://ui/WinPopup.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bga8yqdlw3oic" path="res://ui/WinPopup.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_theme"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="3_font"]
+[ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_gu8hs"]
 
 [node name="WinPopup" type="Control" unique_id=987654321]
 process_mode = 3
@@ -53,6 +54,22 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
+[node name="NextLevelButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=888888888]
+custom_minimum_size = Vector2(210, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_gu8hs")
+theme_override_font_sizes/font_size = 20
+text = "NEXT_LEVEL"
+
+[node name="RestartLevelButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=512156364]
+custom_minimum_size = Vector2(210, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_theme")
+theme_override_font_sizes/font_size = 20
+text = "PAUSE_RESTART"
+
 [node name="MainMenuButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=777777777]
 custom_minimum_size = Vector2(210, 50)
 layout_mode = 2
@@ -60,11 +77,3 @@ size_flags_horizontal = 4
 theme = ExtResource("2_theme")
 theme_override_font_sizes/font_size = 20
 text = "MAIN_MENU"
-
-[node name="NextLevelButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=888888888]
-custom_minimum_size = Vector2(210, 50)
-layout_mode = 2
-size_flags_horizontal = 4
-theme = ExtResource("2_theme")
-theme_override_font_sizes/font_size = 20
-text = "NEXT_LEVEL"
