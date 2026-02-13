@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://cm6ea2cwgig8c"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/Backgrounds/02.ogv" id="3_n3538"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/backgrounds/02.ogv" id="3_n3538"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="5_1maa1"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
@@ -174,12 +174,24 @@ position = Vector2(100, 300)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=718373554]
 offset_left = 273.0
-offset_top = 484.0
+offset_top = 437.0
 offset_right = 796.0
-offset_bottom = 568.0
+offset_bottom = 521.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 28
 text = "TUNNEL_EFFECT"
+scroll_active = false
+tab_size = 9
+horizontal_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=240881407]
+offset_left = 273.0
+offset_top = 474.0
+offset_right = 796.0
+offset_bottom = 558.0
+theme_override_fonts/normal_font = ExtResource("9_g5dnp")
+theme_override_font_sizes/normal_font_size = 19
+text = "TUNNEL_TIP"
 scroll_active = false
 tab_size = 9
 horizontal_alignment = 1
