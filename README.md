@@ -86,3 +86,4 @@ gracias a Tomás del grupo Bell del Discord de la Jam por asesorarnos.
 
 - [Efecto de la función de onda](https://www.shadertoy.com/view/MlBGDw) (adaptado)
 - [Efecto blur](https://www.shadertoy.com/view/4tSyzy) (adaptado)
+- [Fuente de letra](https://fontmeme.com/fonts/monocraft-font/)
