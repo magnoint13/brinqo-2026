@@ -17,6 +17,7 @@ const DEFAULT_SPAWN_POSITIONS: Array[Vector2] = [
 	Vector2(100, 300),
 	Vector2(100, 400)
 ]
+const RIPPLE_SCENE = preload("res://scripts/RippleEffect.gd")
 
 func _ready():
 	var spawnPointContainer = get_parent().get_node("SpawnPoints").get_children() as Array[SpawnPoint] 
@@ -44,7 +45,7 @@ func _process(_delta):
 
 func create_connection_lines():
 	connection_lines = Line2D.new()
-	connection_lines.width = 2.0
+	connection_lines.width = 5.0
 	connection_lines.default_color = Color(0.3, 0.6, 1.0, 0.4)
 	connection_lines.antialiased = true
 	add_child(connection_lines)
@@ -131,6 +132,31 @@ func collapse_all():
 		p.to_particle_animated()
 	
 	collapseAudioStream.play()
+	
+func entanglement_animation(entangle_position: Vector2):
+	# Animation
+	var ripple_efect = RIPPLE_SCENE.new()
+	ripple_efect.position = entangle_position
+	ripple_efect.z_index = 5
+	ripple_efect.ring_color = Color(1, 1, 0, 0.4)
+	add_child(ripple_efect)
+	level_main.screen_shake(5.0, 1.0)
+
+	for p in particles:
+		if p.is_entangled:
+			var mat = p.wave_rect.material as ShaderMaterial
+			if not mat: continue
+			
+			var tween = create_tween()
+			tween.tween_property(mat, "shader_parameter/color_tint", Color(2.5, 2.5, 0.5), 0.1)
+			
+			for i in range(3):
+				tween.tween_property(mat, "shader_parameter/color_tint", Color(0.5, 0.0, 0.5), 0.05)
+				tween.tween_property(mat, "shader_parameter/color_tint", Color(2.5, 0.2, 2.5), 0.05)
+			tween.tween_property(mat, "shader_parameter/color_tint", Color(0.0, 0.8, 1.5), 0.3)
+			tween.tween_property(mat, "shader_parameter/color_tint", Color(1.0, 1.0, 1.0), 1.0)
+	
+	# TODO: play sound
 
 #### MOVEMENT LOGIC ############################################################
 
@@ -152,12 +178,16 @@ func apply_movement(direction: Vector2, speed: float):
 			if collider is CharacterBody2D and collider != p:
 				# If colliding with other untangled particle, create system
 				if collider is Particle and \
-					(p.is_entangled and not p.collapsed_state) and \
-					(not collider.is_entangled and not collider.collapsed_state):
+						(p.is_entangled and not p.collapsed_state) and \
+						(not collider.is_entangled and not collider.collapsed_state):
+					# update state
 					collider.is_entangled = true
-					# notify to level
+					# play animation+sounds
+					entanglement_animation(p.position)
+					# notify to level to update UI
 					if level_main:
 						level_main.reentangle()
+					
 				# handle collision
 				var bounce_dir = (p.position - collider.position).normalized()
 				p.velocity = bounce_dir * speed * 0.5

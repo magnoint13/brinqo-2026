@@ -4,7 +4,8 @@ render_mode blend_add;
 void vertex() {
 }
 
-uniform float time_offset;
+uniform float time_offset : hint_range(0.0f, 10.0f, 0.1f) = 0.0f;
+uniform vec3 color_tint : source_color = vec3(1.0f);
 
 // Adapted from: https://www.shadertoy.com/view/MlBGDw
 
@@ -128,6 +129,7 @@ void fragment() {
   vec3 total = vec3(intensity.x + intensity.y);
   vec3 hue = vec3(intensity, 0.0);
   vec3 final_rgb = (total + hue * 0.23) / 1.23;
+  final_rgb *= color_tint;
   float alpha = max(final_rgb.r, max(final_rgb.g, final_rgb.b));
   alpha = clamp(alpha * 2.0, 0.0, 1.0);
   COLOR = vec4(final_rgb, alpha);

@@ -47,6 +47,7 @@ func _ready():
 	mat.shader = WAVE_SHADER
 	wave_rect.material = mat
 	wave_rect.material.set_shader_parameter("time_offset", rng.randf_range(0, 5))
+	wave_rect.material.set_shader_parameter("color_tint", Color(1.0, 1.0, 1.0))
 	add_child(wave_rect)
 	
 	move_and_slide()
