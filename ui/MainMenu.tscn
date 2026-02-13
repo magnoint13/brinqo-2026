@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://bt7swmxvm2m6" path="res://ui/MainMenu.gd" id="1_mainmenu"]
 [ext_resource type="Shader" uid="uid://cwgwhy8l3p2hq" path="res://resources/lava_shader.gdshader" id="2_lavashader"]
-[ext_resource type="Shader" uid="uid://bqlpdi5400r1p" path="res://resources/sparkle_shader.gdshader" id="3_sparkle"]
+[ext_resource type="Shader" uid="uid://cbdt388eoo5mj" path="res://resources/sparkle_shader.gdshader" id="3_sparkle"]
 [ext_resource type="Texture2D" uid="uid://cm4x58plccq78" path="res://resources/GAME_TITLE.png" id="4_8v85u"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="5_x262b"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="6_qo3sn"]
 [ext_resource type="PackedScene" uid="uid://cn2p5rgw1d1tb" path="res://ui/SettingsMenu.tscn" id="7_settings"]
 [ext_resource type="Texture2D" uid="uid://basbbbs20yjh3" path="res://resources/flags/es.png" id="8_youui"]
 [ext_resource type="Texture2D" uid="uid://b8vth0y33v2d2" path="res://resources/flags/en.png" id="9_58pe3"]
-[ext_resource type="Texture2D" uid="uid://cvshrqqoaonxm" path="res://resources/settings.png" id="9_g6r01"]
+[ext_resource type="Texture2D" uid="uid://dfd2sryutqesr" path="res://resources/settings.png" id="9_g6r01"]
 [ext_resource type="Texture2D" uid="uid://dludlu6ayf1e8" path="res://resources/flags/gl.png" id="10_g6r01"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lava"]

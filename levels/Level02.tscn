@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://level02"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Texture2D" uid="uid://ccklecrtpggt2" path="res://resources/atlas2d.png" id="3_n3538"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="6_rrqju"]
@@ -9,10 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_abtce"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_g5dnp"]
-[ext_resource type="AudioStream" uid="uid://xxbeu7l7i0du" path="res://resources/Music/02.mp3" id="10_n3538"]
+[ext_resource type="AudioStream" uid="uid://xxbeu7l7i0du" path="res://resources/music/02.mp3" id="10_n3538"]
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_g5dnp"]
-file = "res://resources/Backgrounds/02.ogv"
+file = "res://resources/backgrounds/02.ogv"
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g5dnp"]
 texture = ExtResource("3_n3538")

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dys6kwfxj74iu"]
 
-[ext_resource type="Script" path="res://ui/LevelSelect.gd" id="1_levelselect"]
+[ext_resource type="Script" uid="uid://g6a0b3phvsli" path="res://ui/LevelSelect.gd" id="1_levelselect"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="2_droh6"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_jbleg"]
 

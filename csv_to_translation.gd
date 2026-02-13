@@ -31,8 +31,8 @@ func _run():
 			continue
 		
 		var parts = line.split(",", false)
-		if parts.size() < 2:
-			print('WARN: line %d with only %d parts. Ignoring line...' % [i, parts.size()])
+		if parts.size() < 2 or parts.size() > headers.size():
+			print('WARN: line %d with %d columns, expected %d columns. Ignoring line...' % [i + 1, parts.size(), headers.size()])
 			continue
 		
 		var key = parts[0]

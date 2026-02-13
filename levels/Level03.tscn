@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://cm6ea2cwgig8c"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="5_1maa1"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
@@ -10,10 +10,10 @@
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_g5dnp"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="9_red_tileset"]
-[ext_resource type="AudioStream" uid="uid://dvyfkj371tw2u" path="res://resources/Music/03.mp3" id="11_1maa1"]
+[ext_resource type="AudioStream" uid="uid://dvyfkj371tw2u" path="res://resources/music/03.mp3" id="11_1maa1"]
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_dmbef"]
-file = "res://resources/Backgrounds/03.ogv"
+file = "res://resources/backgrounds/03.ogv"
 
 [sub_resource type="Shader" id="Shader_ke2w7"]
 code = "shader_type canvas_item;

@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://cqlk0sutgsral"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_xy2ny"]
+[ext_resource type="Script" uid="uid://c5naeruglmxfy" path="res://scripts/main.gd" id="1_xy2ny"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_4r3jr"]
 [ext_resource type="VideoStream" uid="uid://df8c88mo4vgj2" path="res://resources/backgrounds/08.ogv" id="3_jvggd"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_jvggd"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="6_14wqy"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_ljfkf"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_14wqy"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_c88o2"]
+[ext_resource type="Script" uid="uid://6elhxn4y4ue1" path="res://scripts/particles_container.gd" id="7_c88o2"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_h5kw6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c88o2"]
@@ -373,14 +373,14 @@ tile_set = SubResource("TileSet_ljfkf")
 material = SubResource("ShaderMaterial_yvsc2")
 position = Vector2(228, 307.5)
 scale = Vector2(3.5, 3)
-tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAACAAEAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAACAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_c88o2")
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="GreenZone" unique_id=50140912]
 material = SubResource("ShaderMaterial_yvsc2")
 position = Vector2(228, 365)
 scale = Vector2(3.5, 3)
-tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAACAAEAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAACAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_c88o2")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=225218304]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bcogndalqan6w"]
 
-[ext_resource type="Script" uid="uid://cgpwnos8qd1dc" path="res://scripts/CollapseEffect.gd" id="1_collapseeffect"]
+[ext_resource type="Script" uid="uid://bq4ig47t2l2sq" path="res://scripts/CollapseEffect.gd" id="1_collapseeffect"]
 
 [sub_resource type="Gradient" id="Gradient_ring"]
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
