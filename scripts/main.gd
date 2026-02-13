@@ -281,9 +281,11 @@ func check_zone(pos: Vector2) -> int:
 			i += 1
 		
 	if red_zones:
-		var red_cell = red_zones.local_to_map(pos)
+		var red_cell = red_zones.local_to_map(red_zones.to_local(pos))
 		if red_zones.get_cell_source_id(red_cell) != -1:
 			return -1
+			
+			
 	
 	return 0
 
