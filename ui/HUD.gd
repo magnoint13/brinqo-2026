@@ -7,6 +7,7 @@ extends CanvasLayer
 @onready var pause_menu = $UI/PauseMenu
 @onready var rotate_button = $UI/RotateContainer/RotateButton
 @onready var collapse_button = $UI/CollapseContainer/CollapseButton
+@onready var level_label = $UI/LevelLabel
 
 var max_collapse_time: float = 15.0
 var is_paused: bool = false
@@ -20,6 +21,8 @@ func _ready():
 	menu_button.pressed.connect(_on_menu_pressed)
 	pause_menu.hide_pause_menu()
 	# Note: Color is now handled by the shader gradient texture, not modulate
+	
+	level_label.text = tr('LEVEL_BUTTON_PREFIX') + ': %d' % GameManager.current_level
 	
 	# Store original styles for buttons
 	if rotate_button:

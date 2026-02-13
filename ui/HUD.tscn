@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hud001"]
 
-[ext_resource type="Script" uid="uid://21nrx2ddicn7" path="res://ui/HUD.gd" id="1_hud"]
+[ext_resource type="Script" uid="uid://ctdt1mk02vrdo" path="res://ui/HUD.gd" id="1_hud"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_jd13s"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_wxbmk"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="4_wxbmk"]
@@ -8,7 +8,7 @@
 [ext_resource type="Shader" uid="uid://1xewyc46i2fe" path="res://resources/shaders/collapse_progress_bar.gdshader" id="6_shader"]
 [ext_resource type="Texture2D" uid="uid://bo50a78qof8ki" path="res://resources/gradient_x.tres" id="7_gradx"]
 [ext_resource type="Texture2D" uid="uid://cm8o3pxbenr20" path="res://resources/gradient_y.tres" id="8_grady"]
-[ext_resource type="Script" uid="uid://dlxr0fbhd3v2l" path="res://ui/collapse_progress_bar.gd" id="9_script"]
+[ext_resource type="Script" uid="uid://bj4ixeyf11kt6" path="res://ui/collapse_progress_bar.gd" id="9_script"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_progress"]
 shader = ExtResource("6_shader")
@@ -63,10 +63,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -776.0
-offset_top = 550.0
-offset_right = -689.0
-offset_bottom = 580.0
+offset_left = -129.0
+offset_top = 23.0
+offset_right = -22.0
+offset_bottom = 53.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 20
 text = "Level: 1"
@@ -95,10 +95,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -200.0
-offset_top = 500.0
-offset_right = 200.0
-offset_bottom = 540.0
+offset_left = -401.0
+offset_top = 538.0
+offset_right = 400.0
+offset_bottom = 578.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
