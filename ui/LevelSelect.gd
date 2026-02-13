@@ -1,6 +1,6 @@
 extends Control
 
-const TOTAL_LEVELS: int = 5
+const TOTAL_LEVELS = GameManager.TOTAL_LEVELS
 
 @onready var grid_container = $GridContainer
 @onready var back_button = $BackButton
