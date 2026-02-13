@@ -1,14 +1,276 @@
 [gd_scene format=4 uid="uid://bntrgmbrk27bg"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_p14ef"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_p14ef"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_jsyj0"]
-[ext_resource type="VideoStream" uid="uid://davknn8she1kf" path="res://resources/Backgrounds/03.ogv" id="3_jsyj0"]
-[ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="4_8prvg"]
-[ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="5_h4ayy"]
+[ext_resource type="Texture2D" uid="uid://ccklecrtpggt2" path="res://resources/atlas2d.png" id="3_jsyj0"]
+[ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="5_8prvg"]
+[ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="5_jsyj0"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_jy4r7"]
-[ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="6_w0ar6"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="7_5xgqa"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_5xgqa"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_0bwp2"]
+
+[sub_resource type="VideoStreamTheora" id="VideoStreamTheora_8prvg"]
+file = "res://resources/Backgrounds/06.ogv"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8prvg"]
+texture = ExtResource("3_jsyj0")
+0:0/0 = 0
+0:0/0/modulate = Color(0.97969097, 0, 0.17562294, 1)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+
+[sub_resource type="TileSet" id="TileSet_h4ayy"]
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 1
+sources/4 = SubResource("TileSetAtlasSource_8prvg")
+
+[sub_resource type="Shader" id="Shader_n3538"]
+code = "shader_type canvas_item;
+
+// Liquid Glass UI Shader v2 - by sentinelcmd
+
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+
+uniform float blur : hint_range(0.0, 8.0) = 5.85;
+uniform float warp_intensity : hint_range(0.0, 1.0) = 1.0;
+uniform float strength_x : hint_range(0.0, 50.0) = 29.06;
+uniform float strength_y : hint_range(0.0, 50.0) = 34.69;
+uniform float offset_x : hint_range(-1.0, 1.0) = -0.05;
+uniform float offset_y : hint_range(-1.0, 1.0) = -0.33;
+
+uniform float corner_radius : hint_range(0.0, 1.0) = 0.2;
+uniform float edge_smoothness : hint_range(0.5, 3.0) = 3.0;
+
+uniform vec4 tint : source_color = vec4(0.95, 0.97, 1.0, 0.12);
+uniform vec4 edge_highlight : source_color = vec4(1.0, 1.0, 1.0, 0.3);
+uniform float edge_width : hint_range(0.0, 10.0) = 6.3;
+uniform float chromatic_strength : hint_range(0.0, 5.0) = 4.11;
+
+float rounded_box(vec2 p, vec2 b, float r) {
+    vec2 q = abs(p) - b + r;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
+}
+
+void fragment() {
+    float dx = dFdx(UV.x);
+    float dy = dFdy(UV.y);
+
+    dx = sign(dx) * max(abs(dx), 0.0001);
+    dy = sign(dy) * max(abs(dy), 0.0001);
+
+    vec2 size = abs(vec2(1.0 / dx, 1.0 / dy));
+
+    size = clamp(size, vec2(1.0), vec2(4096.0));
+
+    vec2 half_size = size * 0.5;
+    vec2 pixel = UV * size;
+    vec2 centered = pixel - half_size;
+
+    float max_r = min(half_size.x, half_size.y);
+    float r = corner_radius * max_r;
+
+    float sdf = rounded_box(centered, half_size, r);
+    float alpha = 1.0 - smoothstep(-edge_smoothness, edge_smoothness, sdf);
+
+    if (alpha < 0.001) {
+        discard;
+    }
+
+    float max_dist = min(half_size.x, half_size.y) * 0.5;
+    float w = clamp(-sdf / max_dist, 0.0, 1.0);
+
+    vec2 uv_dir = length(centered) > 0.001 ? normalize(centered) : vec2(0.0, 1.0);
+
+    float exp_x = exp(-strength_x * pow(w + offset_x, 2.0));
+    float exp_y = exp(-strength_y * pow(w + offset_y, 2.0));
+    vec2 warp_offset = uv_dir * vec2(exp_x, exp_y) * warp_intensity / 10.0;
+    vec2 warped_uv = SCREEN_UV - warp_offset;
+
+    float edge_proximity = 1.0 - w;
+    vec2 chroma_offset = uv_dir * edge_proximity * chromatic_strength * SCREEN_PIXEL_SIZE;
+
+    float bg_r = textureLod(screen_texture, warped_uv - chroma_offset, blur).r;
+    float bg_g = textureLod(screen_texture, warped_uv, blur).g;
+    float bg_b = textureLod(screen_texture, warped_uv + chroma_offset, blur).b;
+    vec3 bg = vec3(bg_r, bg_g, bg_b);
+
+    vec3 color = mix(bg, tint.rgb, tint.a);
+
+    float edge = 1.0 - smoothstep(0.0, edge_width, -sdf);
+    edge *= step(sdf, 0.0);
+    color = mix(color, edge_highlight.rgb, edge * edge_highlight.a);
+
+    color += vec3(smoothstep(0.4, 0.0, UV.y) * 0.08 * w);
+
+    COLOR = vec4(color, alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h4ayy"]
+shader = SubResource("Shader_n3538")
+shader_parameter/blur = 1.0000000475
+shader_parameter/warp_intensity = 0.50000002375
+shader_parameter/strength_x = 10.000000475
+shader_parameter/strength_y = 10.000000475
+shader_parameter/offset_x = 4.7499999933364734e-08
+shader_parameter/offset_y = 4.7499999933364734e-08
+shader_parameter/corner_radius = 0.550000026125
+shader_parameter/edge_smoothness = 3.0
+shader_parameter/tint = Color(0.9490196, 0, 0, 0.39607844)
+shader_parameter/edge_highlight = Color(1, 1, 1, 0.15294118)
+shader_parameter/edge_width = 10.0
+shader_parameter/chromatic_strength = 2.50000011875
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w0ar6"]
+texture = ExtResource("5_8prvg")
+use_texture_padding = false
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_jy4r7"]
+custom_data_layer_0/name = "zone_type"
+custom_data_layer_0/type = 2
+sources/1 = SubResource("TileSetAtlasSource_w0ar6")
+
+[sub_resource type="Shader" id="Shader_jvggd"]
+code = "shader_type canvas_item;
+
+// Liquid Glass UI Shader v2 - by sentinelcmd
+
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
+
+uniform float blur : hint_range(0.0, 8.0) = 5.85;
+uniform float warp_intensity : hint_range(0.0, 1.0) = 1.0;
+uniform float strength_x : hint_range(0.0, 50.0) = 29.06;
+uniform float strength_y : hint_range(0.0, 50.0) = 34.69;
+uniform float offset_x : hint_range(-1.0, 1.0) = -0.05;
+uniform float offset_y : hint_range(-1.0, 1.0) = -0.33;
+
+uniform float corner_radius : hint_range(0.0, 1.0) = 0.2;
+uniform float edge_smoothness : hint_range(0.5, 3.0) = 3.0;
+
+uniform vec4 tint : source_color = vec4(0.95, 0.97, 1.0, 0.12);
+uniform vec4 edge_highlight : source_color = vec4(1.0, 1.0, 1.0, 0.3);
+uniform float edge_width : hint_range(0.0, 10.0) = 6.3;
+uniform float chromatic_strength : hint_range(0.0, 5.0) = 4.11;
+
+float rounded_box(vec2 p, vec2 b, float r) {
+    vec2 q = abs(p) - b + r;
+    return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r;
+}
+
+void fragment() {
+    float dx = dFdx(UV.x);
+    float dy = dFdy(UV.y);
+
+    dx = sign(dx) * max(abs(dx), 0.0001);
+    dy = sign(dy) * max(abs(dy), 0.0001);
+
+    vec2 size = abs(vec2(1.0 / dx, 1.0 / dy));
+
+    size = clamp(size, vec2(1.0), vec2(4096.0));
+
+    vec2 half_size = size * 0.5;
+    vec2 pixel = UV * size;
+    vec2 centered = pixel - half_size;
+
+    float max_r = min(half_size.x, half_size.y);
+    float r = corner_radius * max_r;
+
+    float sdf = rounded_box(centered, half_size, r);
+    float alpha = 1.0 - smoothstep(-edge_smoothness, edge_smoothness, sdf);
+
+    if (alpha < 0.001) {
+        discard;
+    }
+
+    float max_dist = min(half_size.x, half_size.y) * 0.5;
+    float w = clamp(-sdf / max_dist, 0.0, 1.0);
+
+    vec2 uv_dir = length(centered) > 0.001 ? normalize(centered) : vec2(0.0, 1.0);
+
+    float exp_x = exp(-strength_x * pow(w + offset_x, 2.0));
+    float exp_y = exp(-strength_y * pow(w + offset_y, 2.0));
+    vec2 warp_offset = uv_dir * vec2(exp_x, exp_y) * warp_intensity / 10.0;
+    vec2 warped_uv = SCREEN_UV - warp_offset;
+
+    float edge_proximity = 1.0 - w;
+    vec2 chroma_offset = uv_dir * edge_proximity * chromatic_strength * SCREEN_PIXEL_SIZE;
+
+    float bg_r = textureLod(screen_texture, warped_uv - chroma_offset, blur).r;
+    float bg_g = textureLod(screen_texture, warped_uv, blur).g;
+    float bg_b = textureLod(screen_texture, warped_uv + chroma_offset, blur).b;
+    vec3 bg = vec3(bg_r, bg_g, bg_b);
+
+    vec3 color = mix(bg, tint.rgb, tint.a);
+
+    float edge = 1.0 - smoothstep(0.0, edge_width, -sdf);
+    edge *= step(sdf, 0.0);
+    color = mix(color, edge_highlight.rgb, edge * edge_highlight.a);
+
+    color += vec3(smoothstep(0.4, 0.0, UV.y) * 0.08 * w);
+
+    COLOR = vec4(color, alpha);
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8prvg"]
+shader = SubResource("Shader_jvggd")
+shader_parameter/blur = 1.0000000475
+shader_parameter/warp_intensity = 0.50000002375
+shader_parameter/strength_x = 10.000000475
+shader_parameter/strength_y = 10.000000475
+shader_parameter/offset_x = 4.7499999933364734e-08
+shader_parameter/offset_y = 4.7499999933364734e-08
+shader_parameter/corner_radius = 0.550000026125
+shader_parameter/edge_smoothness = 3.0
+shader_parameter/tint = Color(0.101960786, 0.96862745, 0, 0.35686275)
+shader_parameter/edge_highlight = Color(1, 1, 1, 0.18039216)
+shader_parameter/edge_width = 10.0
+shader_parameter/chromatic_strength = 2.50000011875
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h4ayy"]
+texture = ExtResource("5_jsyj0")
+use_texture_padding = false
+0:0/0 = 0
+0:0/0/modulate = Color(0.28627452, 0.77254903, 0.13725491, 1)
+
+[sub_resource type="TileSet" id="TileSet_w0ar6"]
+custom_data_layer_0/name = "zone_type"
+custom_data_layer_0/type = 2
+sources/1 = SubResource("TileSetAtlasSource_h4ayy")
 
 [node name="Level06" type="Node2D" unique_id=1763550653]
 script = ExtResource("1_p14ef")
@@ -16,38 +278,78 @@ script = ExtResource("1_p14ef")
 [node name="VFXManager" parent="." unique_id=1992750976 instance=ExtResource("2_jsyj0")]
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=1756319274]
-offset_right = 800.0
-offset_bottom = 600.0
-stream = ExtResource("3_jsyj0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -172.0
+offset_top = -27.0
+offset_right = 1748.0
+offset_bottom = 1053.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+stream = SubResource("VideoStreamTheora_8prvg")
 autoplay = true
-expand = true
 loop = true
 
 [node name="Walls" type="Node2D" parent="." unique_id=913404183]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=709617387]
 tile_map_data = PackedByteArray("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AAAOABUABAAAAAAAAAANABUABAAAAAAAAAAMABUABAAAAAAAAAALABUABAAAAAAAAAAKABUABAAAAAAAAAAJABUABAAAAAAAAAAIABUABAAAAAAAAAAHABUABAAAAAAAAAAGABUABAAAAAAAAAAFABUABAAAAAAAAAAEABUABAAAAAAAAAADABUABAAAAAAAAAACABUABAAAAAAAAAABABUABAAAAAAAAAAAABUABAAAAAAAAAAAABQABAAAAAAAAAAAABMABAAAAAAAAAAAABIABAAAAAAAAAAAABEABAAAAAAAAAAAABAABAAAAAAAAAAAABYABAAAAAAAAAAAABcABAAAAAAAAAAAABgABAAAAAAAAAAAABkABAAAAAAAAAAAABoABAAAAAAAAAAAABsABAAAAAAAAAABABsABAAAAAAAAAACABsABAAAAAAAAAADABsABAAAAAAAAAAEABsABAAAAAAAAAAFABsABAAAAAAAAAAGABsABAAAAAAAAAAHABsABAAAAAAAAAAIABsABAAAAAAAAAAJABsABAAAAAAAAAAKABsABAAAAAAAAAALABsABAAAAAAAAAAMABsABAAAAAAAAAANABsABAAAAAAAAAAOABsABAAAAAAAAAAPABsABAAAAAAAAAAQABsABAAAAAAAAAARABsABAAAAAAAAAASABsABAAAAAAAAAATABsABAAAAAAAAAAUABsABAAAAAAAAAAVABsABAAAAAAAAAAWABsABAAAAAAAAAAXABsABAAAAAAAAAAYABsABAAAAAAAAAAZABsABAAAAAAAAAAaABsABAAAAAAAAAAbABsABAAAAAAAAAAcABsABAAAAAAAAAAdABsABAAAAAAAAAAeABsABAAAAAAAAAAfABsABAAAAAAAAAAgABsABAAAAAAAAAAhABsABAAAAAAAAAAiABsABAAAAAAAAAAjABsABAAAAAAAAAAkABsABAAAAAAAAAAlABsABAAAAAAAAAAmABsABAAAAAAAAAAnABsABAAAAAAAAAAoABsABAAAAAAAAAApABsABAAAAAAAAAAqABsABAAAAAAAAAArABsABAAAAAAAAAAsABsABAAAAAAAAAAtABsABAAAAAAAAAAuABsABAAAAAAAAAAvABsABAAAAAAAAAAwABsABAAAAAAAAAAxABsABAAAAAAAAAAxABoABAAAAAAAAAAxABkABAAAAAAAAAAxABgABAAAAAAAAAAxABcABAAAAAAAAAAxABYABAAAAAAAAAAjAAwABAAAAAAAAAAjAA0ABAAAAAAAAAAjAA4ABAAAAAAAAAAjABIABAAAAAAAAAAjABMABAAAAAAAAAAjABQABAAAAAAAAAAmABAABAAAAAAAAAAmABEABAAAAAAAAAAjABgABAAAAAAAAAAjABkABAAAAAAAAAAjABoABAAAAAAAAAAAAAcABAAAAAAAAAAAAAgABAAAAAAAAAABAAcABAAAAAAAAAABAAgABAAAAAAAAAACAAcABAAAAAAAAAACAAgABAAAAAAAAAADAAcABAAAAAAAAAADAAgABAAAAAAAAAAEAAcABAAAAAAAAAAEAAgABAAAAAAAAAAFAAcABAAAAAAAAAAFAAgABAAAAAAAAAAGAAcABAAAAAAAAAAGAAgABAAAAAAAAAAHAAcABAAAAAAAAAAHAAgABAAAAAAAAAAIAAcABAAAAAAAAAAIAAgABAAAAAAAAAAJAAcABAAAAAAAAAAJAAgABAAAAAAAAAAKAAcABAAAAAAAAAAKAAgABAAAAAAAAAALAAcABAAAAAAAAAALAAgABAAAAAAAAAAMAAcABAAAAAAAAAAMAAgABAAAAAAAAAANAAcABAAAAAAAAAANAAgABAAAAAAAAAAOAAcABAAAAAAAAAAOAAgABAAAAAAAAAAPAAcABAAAAAAAAAAPAAgABAAAAAAAAAAQAAcABAAAAAAAAAAQAAgABAAAAAAAAAARAAcABAAAAAAAAAARAAgABAAAAAAAAAASAAcABAAAAAAAAAASAAgABAAAAAAAAAATAAcABAAAAAAAAAATAAgABAAAAAAAAAAUAAcABAAAAAAAAAAUAAgABAAAAAAAAAAVAAcABAAAAAAAAAAVAAgABAAAAAAAAAAWAAcABAAAAAAAAAAWAAgABAAAAAAAAAAXAAcABAAAAAAAAAAXAAgABAAAAAAAAAAYAAcABAAAAAAAAAAYAAgABAAAAAAAAAAZAAcABAAAAAAAAAAZAAgABAAAAAAAAAAaAAcABAAAAAAAAAAaAAgABAAAAAAAAAAbAAcABAAAAAAAAAAbAAgABAAAAAAAAAAcAAcABAAAAAAAAAAcAAgABAAAAAAAAAAdAAcABAAAAAAAAAAdAAgABAAAAAAAAAAeAAcABAAAAAAAAAAeAAgABAAAAAAAAAAfAAcABAAAAAAAAAAfAAgABAAAAAAAAAAgAAcABAAAAAAAAAAgAAgABAAAAAAAAAAhAAcABAAAAAAAAAAhAAgABAAAAAAAAAAiAAcABAAAAAAAAAAiAAgABAAAAAAAAAAjAAcABAAAAAAAAAAjAAgABAAAAAAAAAAkAAcABAAAAAAAAAAkAAgABAAAAAAAAAAlAAcABAAAAAAAAAAlAAgABAAAAAAAAAAmAAcABAAAAAAAAAAmAAgABAAAAAAAAAAnAAcABAAAAAAAAAAnAAgABAAAAAAAAAAoAAcABAAAAAAAAAAoAAgABAAAAAAAAAApAAcABAAAAAAAAAApAAgABAAAAAAAAAAqAAcABAAAAAAAAAAqAAgABAAAAAAAAAArAAcABAAAAAAAAAArAAgABAAAAAAAAAAsAAcABAAAAAAAAAAsAAgABAAAAAAAAAAtAAcABAAAAAAAAAAtAAgABAAAAAAAAAAuAAcABAAAAAAAAAAuAAgABAAAAAAAAAAvAAcABAAAAAAAAAAvAAgABAAAAAAAAAAwAAcABAAAAAAAAAAwAAgABAAAAAAAAAAxAAcABAAAAAAAAAAxAAgABAAAAAAAAAAAAAYABAAAAAAAAAABAAYABAAAAAAAAAACAAYABAAAAAAAAAADAAYABAAAAAAAAAAEAAYABAAAAAAAAAAFAAYABAAAAAAAAAAGAAYABAAAAAAAAAAHAAYABAAAAAAAAAAIAAYABAAAAAAAAAAJAAYABAAAAAAAAAAKAAYABAAAAAAAAAALAAYABAAAAAAAAAAMAAYABAAAAAAAAAANAAYABAAAAAAAAAAOAAYABAAAAAAAAAAPAAYABAAAAAAAAAAQAAYABAAAAAAAAAARAAYABAAAAAAAAAASAAYABAAAAAAAAAATAAYABAAAAAAAAAAUAAYABAAAAAAAAAAVAAYABAAAAAAAAAAWAAYABAAAAAAAAAAXAAYABAAAAAAAAAAYAAYABAAAAAAAAAAZAAYABAAAAAAAAAAaAAYABAAAAAAAAAAbAAYABAAAAAAAAAAcAAYABAAAAAAAAAAdAAYABAAAAAAAAAAeAAYABAAAAAAAAAAfAAYABAAAAAAAAAAgAAYABAAAAAAAAAAhAAYABAAAAAAAAAAiAAYABAAAAAAAAAAjAAYABAAAAAAAAAAkAAYABAAAAAAAAAAlAAYABAAAAAAAAAAmAAYABAAAAAAAAAAnAAYABAAAAAAAAAAoAAYABAAAAAAAAAApAAYABAAAAAAAAAAqAAYABAAAAAAAAAArAAYABAAAAAAAAAAsAAYABAAAAAAAAAAtAAYABAAAAAAAAAAuAAYABAAAAAAAAAAvAAYABAAAAAAAAAAwAAYABAAAAAAAAAAxAAYABAAAAAAAAAAAABwABAAAAAAAAAAAAB0ABAAAAAAAAAAAAB4ABAAAAAAAAAAAAB8ABAAAAAAAAAABABwABAAAAAAAAAABAB0ABAAAAAAAAAABAB4ABAAAAAAAAAABAB8ABAAAAAAAAAACABwABAAAAAAAAAACAB0ABAAAAAAAAAACAB4ABAAAAAAAAAACAB8ABAAAAAAAAAADABwABAAAAAAAAAADAB0ABAAAAAAAAAADAB4ABAAAAAAAAAADAB8ABAAAAAAAAAAEABwABAAAAAAAAAAEAB0ABAAAAAAAAAAEAB4ABAAAAAAAAAAEAB8ABAAAAAAAAAAFABwABAAAAAAAAAAFAB0ABAAAAAAAAAAFAB4ABAAAAAAAAAAFAB8ABAAAAAAAAAAGABwABAAAAAAAAAAGAB0ABAAAAAAAAAAGAB4ABAAAAAAAAAAGAB8ABAAAAAAAAAAHABwABAAAAAAAAAAHAB0ABAAAAAAAAAAHAB4ABAAAAAAAAAAHAB8ABAAAAAAAAAAIABwABAAAAAAAAAAIAB0ABAAAAAAAAAAIAB4ABAAAAAAAAAAIAB8ABAAAAAAAAAAJABwABAAAAAAAAAAJAB0ABAAAAAAAAAAJAB4ABAAAAAAAAAAJAB8ABAAAAAAAAAAKABwABAAAAAAAAAAKAB0ABAAAAAAAAAAKAB4ABAAAAAAAAAAKAB8ABAAAAAAAAAALABwABAAAAAAAAAALAB0ABAAAAAAAAAALAB4ABAAAAAAAAAALAB8ABAAAAAAAAAAMABwABAAAAAAAAAAMAB0ABAAAAAAAAAAMAB4ABAAAAAAAAAAMAB8ABAAAAAAAAAANABwABAAAAAAAAAANAB0ABAAAAAAAAAANAB4ABAAAAAAAAAANAB8ABAAAAAAAAAAOABwABAAAAAAAAAAOAB0ABAAAAAAAAAAOAB4ABAAAAAAAAAAOAB8ABAAAAAAAAAAPABwABAAAAAAAAAAPAB0ABAAAAAAAAAAPAB4ABAAAAAAAAAAPAB8ABAAAAAAAAAAQABwABAAAAAAAAAAQAB0ABAAAAAAAAAAQAB4ABAAAAAAAAAAQAB8ABAAAAAAAAAARABwABAAAAAAAAAARAB0ABAAAAAAAAAARAB4ABAAAAAAAAAARAB8ABAAAAAAAAAASABwABAAAAAAAAAASAB0ABAAAAAAAAAASAB4ABAAAAAAAAAASAB8ABAAAAAAAAAATABwABAAAAAAAAAATAB0ABAAAAAAAAAATAB4ABAAAAAAAAAATAB8ABAAAAAAAAAAUABwABAAAAAAAAAAUAB0ABAAAAAAAAAAUAB4ABAAAAAAAAAAUAB8ABAAAAAAAAAAVABwABAAAAAAAAAAVAB0ABAAAAAAAAAAVAB4ABAAAAAAAAAAVAB8ABAAAAAAAAAAWABwABAAAAAAAAAAWAB0ABAAAAAAAAAAWAB4ABAAAAAAAAAAWAB8ABAAAAAAAAAAXABwABAAAAAAAAAAXAB0ABAAAAAAAAAAXAB4ABAAAAAAAAAAXAB8ABAAAAAAAAAAYABwABAAAAAAAAAAYAB0ABAAAAAAAAAAYAB4ABAAAAAAAAAAYAB8ABAAAAAAAAAAZABwABAAAAAAAAAAZAB0ABAAAAAAAAAAZAB4ABAAAAAAAAAAZAB8ABAAAAAAAAAAaABwABAAAAAAAAAAaAB0ABAAAAAAAAAAaAB4ABAAAAAAAAAAaAB8ABAAAAAAAAAAbABwABAAAAAAAAAAbAB0ABAAAAAAAAAAbAB4ABAAAAAAAAAAbAB8ABAAAAAAAAAAcABwABAAAAAAAAAAcAB0ABAAAAAAAAAAcAB4ABAAAAAAAAAAcAB8ABAAAAAAAAAAdABwABAAAAAAAAAAdAB0ABAAAAAAAAAAdAB4ABAAAAAAAAAAdAB8ABAAAAAAAAAAeABwABAAAAAAAAAAeAB0ABAAAAAAAAAAeAB4ABAAAAAAAAAAeAB8ABAAAAAAAAAAfABwABAAAAAAAAAAfAB0ABAAAAAAAAAAfAB4ABAAAAAAAAAAfAB8ABAAAAAAAAAAgABwABAAAAAAAAAAgAB0ABAAAAAAAAAAgAB4ABAAAAAAAAAAgAB8ABAAAAAAAAAAhABwABAAAAAAAAAAhAB0ABAAAAAAAAAAhAB4ABAAAAAAAAAAhAB8ABAAAAAAAAAAiABwABAAAAAAAAAAiAB0ABAAAAAAAAAAiAB4ABAAAAAAAAAAiAB8ABAAAAAAAAAAjABwABAAAAAAAAAAjAB0ABAAAAAAAAAAjAB4ABAAAAAAAAAAjAB8ABAAAAAAAAAAkABwABAAAAAAAAAAkAB0ABAAAAAAAAAAkAB4ABAAAAAAAAAAkAB8ABAAAAAAAAAAlABwABAAAAAAAAAAlAB0ABAAAAAAAAAAlAB4ABAAAAAAAAAAlAB8ABAAAAAAAAAAmABwABAAAAAAAAAAmAB0ABAAAAAAAAAAmAB4ABAAAAAAAAAAmAB8ABAAAAAAAAAAnABwABAAAAAAAAAAnAB0ABAAAAAAAAAAnAB4ABAAAAAAAAAAnAB8ABAAAAAAAAAAoABwABAAAAAAAAAAoAB0ABAAAAAAAAAAoAB4ABAAAAAAAAAAoAB8ABAAAAAAAAAApABwABAAAAAAAAAApAB0ABAAAAAAAAAApAB4ABAAAAAAAAAApAB8ABAAAAAAAAAAqABwABAAAAAAAAAAqAB0ABAAAAAAAAAAqAB4ABAAAAAAAAAAqAB8ABAAAAAAAAAArABwABAAAAAAAAAArAB0ABAAAAAAAAAArAB4ABAAAAAAAAAArAB8ABAAAAAAAAAAsABwABAAAAAAAAAAsAB0ABAAAAAAAAAAsAB4ABAAAAAAAAAAsAB8ABAAAAAAAAAAtABwABAAAAAAAAAAtAB0ABAAAAAAAAAAtAB4ABAAAAAAAAAAtAB8ABAAAAAAAAAAuABwABAAAAAAAAAAuAB0ABAAAAAAAAAAuAB4ABAAAAAAAAAAuAB8ABAAAAAAAAAAvABwABAAAAAAAAAAvAB0ABAAAAAAAAAAvAB4ABAAAAAAAAAAvAB8ABAAAAAAAAAAwABwABAAAAAAAAAAwAB0ABAAAAAAAAAAwAB4ABAAAAAAAAAAwAB8ABAAAAAAAAAAxABwABAAAAAAAAAAxAB0ABAAAAAAAAAAxAB4ABAAAAAAAAAAxAB8ABAAAAAAAAAAAAAUABAAAAAAAAAABAAUABAAAAAAAAAACAAUABAAAAAAAAAADAAUABAAAAAAAAAAEAAUABAAAAAAAAAAFAAUABAAAAAAAAAAGAAUABAAAAAAAAAAHAAUABAAAAAAAAAAIAAUABAAAAAAAAAAJAAUABAAAAAAAAAAKAAUABAAAAAAAAAALAAUABAAAAAAAAAAMAAUABAAAAAAAAAANAAUABAAAAAAAAAAOAAUABAAAAAAAAAAPAAUABAAAAAAAAAAQAAUABAAAAAAAAAARAAUABAAAAAAAAAASAAUABAAAAAAAAAATAAUABAAAAAAAAAAUAAUABAAAAAAAAAAVAAUABAAAAAAAAAAWAAUABAAAAAAAAAAXAAUABAAAAAAAAAAYAAUABAAAAAAAAAAZAAUABAAAAAAAAAAaAAUABAAAAAAAAAAbAAUABAAAAAAAAAAcAAUABAAAAAAAAAAdAAUABAAAAAAAAAAeAAUABAAAAAAAAAAfAAUABAAAAAAAAAAgAAUABAAAAAAAAAAhAAUABAAAAAAAAAAiAAUABAAAAAAAAAAjAAUABAAAAAAAAAAkAAUABAAAAAAAAAAlAAUABAAAAAAAAAAmAAUABAAAAAAAAAAnAAUABAAAAAAAAAAoAAUABAAAAAAAAAApAAUABAAAAAAAAAAqAAUABAAAAAAAAAArAAUABAAAAAAAAAAsAAUABAAAAAAAAAAtAAUABAAAAAAAAAAuAAUABAAAAAAAAAAvAAUABAAAAAAAAAAwAAUABAAAAAAAAAAxAAUABAAAAAAAAAA=")
-tile_set = ExtResource("4_8prvg")
+tile_set = SubResource("TileSet_h4ayy")
 
 [node name="RedZone" type="Node2D" parent="." unique_id=1524737333]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="RedZone" unique_id=1000345070]
-tile_map_data = PackedByteArray("AAAgABcAAQAAAAAAAAAgABgAAQAAAAAAAAAgABkAAQAAAAAAAAAhABcAAQAAAAAAAAAhABgAAQAAAAAAAAAhABkAAQAAAAAAAAAiABcAAQAAAAAAAAAiABgAAQAAAAAAAAAiABkAAQAAAAAAAAAgABAAAQAAAAAAAAAgABEAAQAAAAAAAAAgABIAAQAAAAAAAAAgABMAAQAAAAAAAAAgABQAAQAAAAAAAAAhABAAAQAAAAAAAAAhABEAAQAAAAAAAAAhABIAAQAAAAAAAAAhABMAAQAAAAAAAAAhABQAAQAAAAAAAAAiABAAAQAAAAAAAAAiABEAAQAAAAAAAAAiABIAAQAAAAAAAAAiABMAAQAAAAAAAAAiABQAAQAAAAAAAAAjABAAAQAAAAAAAAAjABEAAQAAAAAAAAAkABAAAQAAAAAAAAAkABEAAQAAAAAAAAAgAAoAAQAAAAAAAAAgAAsAAQAAAAAAAAAgAAwAAQAAAAAAAAAgAA0AAQAAAAAAAAAgAA4AAQAAAAAAAAAhAAoAAQAAAAAAAAAhAAsAAQAAAAAAAAAhAAwAAQAAAAAAAAAhAA0AAQAAAAAAAAAhAA4AAQAAAAAAAAAiAAoAAQAAAAAAAAAiAAsAAQAAAAAAAAAiAAwAAQAAAAAAAAAiAA0AAQAAAAAAAAAiAA4AAQAAAAAAAAAlABAAAQAAAAAAAAAlABEAAQAAAAAAAAA=")
-tile_set = ExtResource("5_h4ayy")
+[node name="TileMapLayer3" type="TileMapLayer" parent="RedZone" unique_id=1368337815]
+material = SubResource("ShaderMaterial_h4ayy")
+position = Vector2(690, -219)
+scale = Vector2(2.75, 4.75)
+tile_map_data = PackedByteArray("AAD8/wUAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_jy4r7")
+
+[node name="TileMapLayer4" type="TileMapLayer" parent="RedZone" unique_id=1190555314]
+material = SubResource("ShaderMaterial_h4ayy")
+position = Vector2(690, -20)
+scale = Vector2(2.75, 2.75)
+tile_map_data = PackedByteArray("AAD8/wcAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_jy4r7")
+
+[node name="TileMapLayer5" type="TileMapLayer" parent="RedZone" unique_id=1804671227]
+material = SubResource("ShaderMaterial_h4ayy")
+position = Vector2(882.5, 90)
+scale = Vector2(5.75, 1.75)
+tile_map_data = PackedByteArray("AAD8/wYAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_jy4r7")
+
+[node name="TileMapLayer6" type="TileMapLayer" parent="RedZone" unique_id=954425857]
+material = SubResource("ShaderMaterial_h4ayy")
+position = Vector2(704, -75)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAD8/wkAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_jy4r7")
 
 [node name="GreenZone" type="Node2D" parent="." unique_id=1310053346]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="GreenZone" unique_id=1937446300]
-tile_map_data = PackedByteArray("AAAoAAoAAQAAAAAAAAAoAAsAAQAAAAAAAAAoAAwAAQAAAAAAAAAoAA0AAQAAAAAAAAApAAoAAQAAAAAAAAApAAsAAQAAAAAAAAApAAwAAQAAAAAAAAApAA0AAQAAAAAAAAAqAAoAAQAAAAAAAAAqAAsAAQAAAAAAAAAqAAwAAQAAAAAAAAAqAA0AAQAAAAAAAAAqAA4AAQAAAAAAAAApAA4AAQAAAAAAAAAoAA4AAQAAAAAAAAArAAoAAQAAAAAAAAArAAsAAQAAAAAAAAArAAwAAQAAAAAAAAArAA0AAQAAAAAAAAArAA4AAQAAAAAAAAAsAAoAAQAAAAAAAAAsAAsAAQAAAAAAAAAsAAwAAQAAAAAAAAAsAA0AAQAAAAAAAAAsAA4AAQAAAAAAAAA=")
-tile_set = ExtResource("6_w0ar6")
+[node name="TileMapLayer4" type="TileMapLayer" parent="GreenZone" unique_id=1903856239]
+material = SubResource("ShaderMaterial_8prvg")
+position = Vector2(-65, 5)
+scale = Vector2(4.9, 4.9)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAAJAAIAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_w0ar6")
 
-[node name="TileMapLayer2" type="TileMapLayer" parent="GreenZone" unique_id=654493169]
-tile_map_data = PackedByteArray("AAAoABAAAQAAAAAAAAAoABEAAQAAAAAAAAAoABIAAQAAAAAAAAAoABMAAQAAAAAAAAAoABQAAQAAAAAAAAApABAAAQAAAAAAAAApABEAAQAAAAAAAAApABIAAQAAAAAAAAApABMAAQAAAAAAAAApABQAAQAAAAAAAAAqABAAAQAAAAAAAAAqABEAAQAAAAAAAAAqABIAAQAAAAAAAAAqABMAAQAAAAAAAAAqABQAAQAAAAAAAAArABAAAQAAAAAAAAArABEAAQAAAAAAAAArABIAAQAAAAAAAAArABMAAQAAAAAAAAArABQAAQAAAAAAAAAsABAAAQAAAAAAAAAsABEAAQAAAAAAAAAsABIAAQAAAAAAAAAsABQAAQAAAAAAAAAsABMAAQAAAAAAAAA=")
-tile_set = ExtResource("6_w0ar6")
+[node name="TileMapLayer5" type="TileMapLayer" parent="GreenZone" unique_id=494865702]
+material = SubResource("ShaderMaterial_8prvg")
+position = Vector2(-65, -57.5)
+scale = Vector2(4.9, 4.9)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAAJAAQAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_w0ar6")
 
-[node name="TileMapLayer3" type="TileMapLayer" parent="GreenZone" unique_id=589653346]
-tile_map_data = PackedByteArray("AAAoABYAAQAAAAAAAAAoABcAAQAAAAAAAAAoABgAAQAAAAAAAAAoABkAAQAAAAAAAAAoABoAAQAAAAAAAAApABYAAQAAAAAAAAApABcAAQAAAAAAAAApABgAAQAAAAAAAAApABkAAQAAAAAAAAApABoAAQAAAAAAAAAqABYAAQAAAAAAAAAqABcAAQAAAAAAAAAqABgAAQAAAAAAAAAqABkAAQAAAAAAAAAqABoAAQAAAAAAAAArABYAAQAAAAAAAAArABcAAQAAAAAAAAArABgAAQAAAAAAAAArABkAAQAAAAAAAAArABoAAQAAAAAAAAAsABYAAQAAAAAAAAAsABcAAQAAAAAAAAAsABgAAQAAAAAAAAAsABkAAQAAAAAAAAAsABoAAQAAAAAAAAA=")
-tile_set = ExtResource("6_w0ar6")
+[node name="TileMapLayer6" type="TileMapLayer" parent="GreenZone" unique_id=373735519]
+material = SubResource("ShaderMaterial_8prvg")
+position = Vector2(-65, -41)
+scale = Vector2(4.9, 4.9)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAAJAAUAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_w0ar6")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=78126081]
 

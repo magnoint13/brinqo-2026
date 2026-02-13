@@ -33,6 +33,9 @@ func _ready():
 		var tween = create_tween().set_loops().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(title_sprite, "position:y", original_y - 15.0, 1.5)
 		tween.tween_property(title_sprite, "position:y", original_y, 1.5)
+	
+	_setup_settings_button()
+	_setup_language_button()
 
 func _on_start_pressed():
 	GameManager.start_level(1)
@@ -72,3 +75,34 @@ func _on_spanish_selected():
 func _update_language_button_flag():
 	var flag_texture = load(LanguageManager.get_flag_path(LanguageManager.current_locale))
 	language_button.texture_normal = flag_texture
+
+func _setup_settings_button():
+	settings_button.pivot_offset = settings_button.size / 2
+	
+	var rotation_tween = create_tween().set_loops()
+	rotation_tween.tween_property(settings_button, "rotation", 2 * PI, 20.0).from(0)
+	
+	settings_button.mouse_entered.connect(_on_settings_button_hover)
+	settings_button.mouse_exited.connect(_on_settings_button_unhover)
+
+func _on_settings_button_hover():
+	var hover_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	hover_tween.tween_property(settings_button, "scale", Vector2(1.2, 1.2), 0.15)
+
+func _on_settings_button_unhover():
+	var unhover_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	unhover_tween.tween_property(settings_button, "scale", Vector2(1.0, 1.0), 0.15)
+
+func _setup_language_button():
+	language_button.pivot_offset = language_button.size / 2
+	
+	language_button.mouse_entered.connect(_on_language_button_hover)
+	language_button.mouse_exited.connect(_on_language_button_unhover)
+
+func _on_language_button_hover():
+	var hover_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	hover_tween.tween_property(language_button, "scale", Vector2(1.2, 1.2), 0.15)
+
+func _on_language_button_unhover():
+	var unhover_tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	unhover_tween.tween_property(language_button, "scale", Vector2(1.0, 1.0), 0.15)

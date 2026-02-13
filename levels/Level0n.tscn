@@ -1,13 +1,13 @@
-[gd_scene format=4 uid="uid://bntrgmbrk27bg"]
+[gd_scene format=4 uid="uid://bwacl0nmfdllo"]
 
-[ext_resource type="Script" uid="uid://cx2y5msot30g0" path="res://scripts/main.gd" id="1_t2y2l"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_t2y2l"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_3y4yy"]
 [ext_resource type="VideoStream" uid="uid://davknn8she1kf" path="res://resources/backgrounds/03.ogv" id="3_3y4yy"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_ix6a1"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_1maa1"]
 [ext_resource type="TileSet" uid="uid://c5h4dmpywcb58" path="res://resources/green_zone_tiles.tres" id="5_dmbef"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_0i110"]
-[ext_resource type="Script" uid="uid://che3dlyua5wy4" path="res://scripts/particles_container.gd" id="7_gxcc8"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_gxcc8"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_ssyml"]
 
 [node name="Level03" type="Node2D" unique_id=1763550653]

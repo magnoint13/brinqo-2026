@@ -1,16 +1,18 @@
 [gd_scene format=3 uid="uid://doxaejmwie2o6"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_t2y2l"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_t2y2l"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_3y4yy"]
-[ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/backgrounds/02.ogv" id="3_1maa1"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_ix6a1"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_1maa1"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="4_2kaya"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_0i110"]
 [ext_resource type="Script" uid="uid://cfvw76gewxle1" path="res://levels/spawn_points.gd" id="7_dmbef"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="7_gxcc8"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_gxcc8"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_ssyml"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_0i110"]
+
+[sub_resource type="VideoStreamTheora" id="VideoStreamTheora_ko0ar"]
+file = "res://resources/Backgrounds/04.ogv"
 
 [sub_resource type="Shader" id="Shader_g5dnp"]
 code = "shader_type canvas_item;
@@ -126,11 +128,18 @@ script = ExtResource("1_t2y2l")
 [node name="VFXManager" parent="." unique_id=1937102369 instance=ExtResource("2_3y4yy")]
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=890624477]
-offset_right = 800.0
-offset_bottom = 600.0
-stream = ExtResource("3_1maa1")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -169.0
+offset_top = -23.0
+offset_right = 1751.0
+offset_bottom = 1057.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+stream = SubResource("VideoStreamTheora_ko0ar")
 autoplay = true
-expand = true
 loop = true
 
 [node name="GreenZone" type="Node2D" parent="." unique_id=668904911]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d0ei0humym7xm"]
 
-[ext_resource type="Script" uid="uid://dkc7esyr3coot" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://cyumxs3xlax8d" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="VideoStream" uid="uid://bp26wjy37fi6o" path="res://resources/backgrounds/01.ogv" id="4_ke2w7"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
@@ -125,11 +125,18 @@ script = ExtResource("1_main")
 [node name="VFXManager" parent="." unique_id=1196971824 instance=ExtResource("6_vfxmanager")]
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=1253311339]
-offset_right = 800.0
-offset_bottom = 600.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -180.00006
+offset_top = -21.0
+offset_right = 1740.0
+offset_bottom = 1059.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
 stream = ExtResource("4_ke2w7")
 autoplay = true
-expand = true
 loop = true
 
 [node name="Walls" type="Node2D" parent="." unique_id=1733820030]

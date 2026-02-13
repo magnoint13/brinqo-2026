@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/backgrounds/02.ogv" id="3_n3538"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="5_1maa1"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
@@ -11,6 +10,9 @@
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_g5dnp"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="9_red_tileset"]
+
+[sub_resource type="VideoStreamTheora" id="VideoStreamTheora_dmbef"]
+file = "res://resources/Backgrounds/03.ogv"
 
 [sub_resource type="Shader" id="Shader_ke2w7"]
 code = "shader_type canvas_item;
@@ -126,19 +128,27 @@ script = ExtResource("1_main")
 [node name="VFXManager" parent="." unique_id=1937102369 instance=ExtResource("6_vfxmanager")]
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=890624477]
-offset_right = 800.0
-offset_bottom = 600.0
-stream = ExtResource("3_n3538")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -171.00006
+offset_top = -21.0
+offset_right = 1749.0
+offset_bottom = 1059.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+stream = SubResource("VideoStreamTheora_dmbef")
+volume_db = -3.9999995
 autoplay = true
-expand = true
 loop = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VideoStreamPlayer" unique_id=955161660]
 layout_mode = 0
-offset_left = 282.0
-offset_top = 61.0
-offset_right = 805.0
-offset_bottom = 145.0
+offset_left = 291.66675
+offset_top = 186.66666
+offset_right = 706.66675
+offset_bottom = 330.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 28
 text = "LEVEL_INSTRUCTION_03"
@@ -158,7 +168,7 @@ tile_set = SubResource("TileSet_gxcc8")
 [node name="Walls" type="Node2D" parent="." unique_id=181971116]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=681864083]
-tile_map_data = PackedByteArray("AAAQAAAABAABAAAAAAAQAAEABAABAAAAAAAQAAIABAABAAAAAAAQAAMABAABAAAAAAAQAAQABAABAAAAAAAQAAUABAABAAAAAAAQAAYABAABAAAAAAAQAAcABAABAAAAAAAQAAgABAABAAAAAAAQAAkABAABAAAAAAAQAAoABAABAAAAAAAQAAsABAABAAAAAAAQAAwABAABAAAAAAAQAA0ABAABAAAAAAAQAA4ABAABAAAAAAAQAA8ABAABAAAAAAAQABAABAABAAAAAAAQABEABAABAAAAAAAQABIABAABAAAAAAAQABMABAABAAAAAAAQABQABAABAAAAAAAQABUABAABAAAAAAAQABYABAABAAAAAAAQABcABAABAAAAAAAQABgABAABAAAAAAAQABkABAABAAAAAAAQABoABAABAAAAAAAQABsABAABAAAAAAAQABwABAABAAAAAAAQAB0ABAABAAAAAAAQAB4ABAABAAAAAAAQAB8ABAABAAAAAAAQACAABAABAAAAAAAQACEABAABAAAAAAAQACIABAABAAAAAAAQACMABAABAAAAAAAQACQABAABAAAAAAAQACUABAABAAAAAAA=")
+tile_map_data = PackedByteArray("AAAQAAYABAACAAEAAAAQAAcABAACAAEAAAAQAAgABAACAAEAAAAQAAkABAACAAEAAAAQAAoABAACAAEAAAAQAAsABAACAAEAAAAQAAwABAACAAEAAAAQAA0ABAACAAEAAAAQAA4ABAACAAEAAAAQAA8ABAACAAEAAAAQABAABAACAAEAAAAQABEABAACAAEAAAAQABIABAACAAEAAAAQABMABAACAAEAAAAQABQABAACAAEAAAAQABUABAACAAEAAAAQABYABAACAAEAAAAQABcABAACAAEAAAAQABgABAACAAEAAAAQABkABAACAAEAAAAQABoABAACAAEAAAAQABsABAACAAEAAAAQABwABAACAAEAAAAQAB0ABAACAAEAAAAQAB4ABAACAAEAAAAQAB8ABAACAAEAAAAQACAABAACAAEAAAAQACEABAACAAEAAAAQACIABAACAAEAAAAQACMABAACAAEAAAAQACQABAACAAEAAAAQACUABAACAAEAAAAQAAAABAACAAEAAAAQAAEABAACAAEAAAAQAAIABAACAAEAAAAQAAMABAACAAEAAAAQAAQABAACAAEAAAAQAAUABAACAAEAAAA=")
 tile_set = ExtResource("8_wall_tileset")
 
 [node name="RedZone" type="Node2D" parent="." unique_id=686021094]
@@ -174,9 +184,9 @@ position = Vector2(100, 300)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=718373554]
 offset_left = 273.0
-offset_top = 437.0
+offset_top = 123.0
 offset_right = 796.0
-offset_bottom = 521.0
+offset_bottom = 207.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 28
 text = "TUNNEL_EFFECT"
@@ -184,11 +194,11 @@ scroll_active = false
 tab_size = 9
 horizontal_alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=240881407]
-offset_left = 273.0
-offset_top = 474.0
-offset_right = 796.0
-offset_bottom = 558.0
+[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=1840473368]
+offset_left = 289.0
+offset_top = 470.0
+offset_right = 776.0
+offset_bottom = 554.0
 theme_override_fonts/normal_font = ExtResource("9_g5dnp")
 theme_override_font_sizes/normal_font_size = 19
 text = "TUNNEL_TIP"

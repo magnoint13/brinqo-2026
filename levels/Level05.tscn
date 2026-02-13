@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://cb04v0sm0dw7t"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/backgrounds/02.ogv" id="3_2ado2"]
+[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="4_2ado2"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
@@ -11,6 +10,9 @@
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="8_wall_tileset"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="9_red_tileset"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_ya3pt"]
+
+[sub_resource type="VideoStreamTheora" id="VideoStreamTheora_18tlo"]
+file = "res://resources/Backgrounds/05.ogv"
 
 [sub_resource type="Shader" id="Shader_18tlo"]
 code = "shader_type canvas_item;
@@ -126,11 +128,18 @@ script = ExtResource("1_main")
 [node name="VFXManager" parent="." unique_id=1937102369 instance=ExtResource("6_vfxmanager")]
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=890624477]
-offset_right = 800.0
-offset_bottom = 600.0
-stream = ExtResource("3_2ado2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -168.00006
+offset_top = -26.0
+offset_right = 1752.0
+offset_bottom = 1054.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+stream = SubResource("VideoStreamTheora_18tlo")
 autoplay = true
-expand = true
 loop = true
 
 [node name="GreenZone" type="Node2D" parent="." unique_id=668904911]

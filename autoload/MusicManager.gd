@@ -9,8 +9,13 @@ var scene_music = {
 	"Level01":    ["res://resources/music/01.mp3",           -10],
 	"Level02":    ["res://resources/music/02.mp3",            -10],
 	"Level03":    ["res://resources/music/03.mp3",           -14],
-	"Level04":    ["res://resources/music/04.mp3",            -10],
-	"Level05":    ["res://resources/music/05.mp3",           -10],
+	"Level04":    ["res://resources/music/04.mp3",            -14],
+	"Level05":    ["res://resources/music/05.mp3",           -14],
+	"Level06":    ["res://resources/music/10.mp3",           -14],
+	"Level07":    ["res://resources/music/07.mp3",           -12],
+	"Level08":    ["res://resources/music/08.mp3",           -16],
+	"Level09":    ["res://resources/music/09.mp3",           -12],
+	"Level10":    ["res://resources/music/10.mp3",           -14],
 }
 
 var current_music: String = ""
