@@ -6,6 +6,8 @@ var particle_scene = preload("res://scenes/particle.tscn")
 var connection_lines: Line2D
 var collapseSoundStream = preload("res://resources/sfx/collapse.wav")
 var collapseAudioStream : AudioStreamPlayer
+var reentangleSoundStream = preload("res://resources/sfx/sfx_reentanglement.wav")
+var reentangleAudioStream : AudioStreamPlayer
 
 
 var spawn_positions: Array[Vector2] = []
@@ -39,6 +41,11 @@ func _ready():
 	collapseAudioStream.stream = collapseSoundStream
 	collapseAudioStream.volume_db = -7
 	add_child(collapseAudioStream)
+	
+	reentangleAudioStream = AudioStreamPlayer.new()
+	reentangleAudioStream.stream = reentangleSoundStream
+	reentangleAudioStream.volume_db = -7
+	add_child(reentangleAudioStream)
 
 func _process(_delta):
 	update_connection_lines()
@@ -156,7 +163,7 @@ func entanglement_animation(entangle_position: Vector2):
 			tween.tween_property(mat, "shader_parameter/color_tint", Color(0.0, 0.8, 1.5), 0.3)
 			tween.tween_property(mat, "shader_parameter/color_tint", Color(1.0, 1.0, 1.0), 1.0)
 	
-	# TODO: play sound
+	reentangleAudioStream.play()
 
 #### MOVEMENT LOGIC ############################################################
 
