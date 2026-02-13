@@ -3,9 +3,6 @@
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://ck156u516iapm" path="res://ui/SettingsMenu.gd" id="3_settings"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_j5hgc"]
-font_size = 24
-
 [node name="SettingsMenu" type="Control" unique_id=1329980281]
 process_mode = 3
 layout_mode = 3
@@ -25,45 +22,38 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.8)
 
-[node name="TitleLabel" type="Label" parent="." unique_id=1057681561]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -100.0
-offset_top = 50.0
-offset_right = 100.0
-offset_bottom = 85.0
-grow_horizontal = 2
+[node name="TitleLabel" type="RichTextLabel" parent="." unique_id=1327651788]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 92.0
+offset_right = 799.0
+offset_bottom = 193.0
+theme_override_font_sizes/normal_font_size = 40
 text = "SETTINGS_TITLE"
-label_settings = SubResource("LabelSettings_j5hgc")
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1470613615]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -100.0
-offset_right = 200.0
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=518713449]
+layout_mode = 0
+offset_top = 106.0
+offset_right = 797.0
+offset_bottom = 601.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1470613615]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
 theme_override_constants/separation = 25
 
-[node name="MasterVolume" type="HBoxContainer" parent="VBoxContainer" unique_id=2111693020]
+[node name="MasterVolume" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=2111693020]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="VBoxContainer/MasterVolume" unique_id=2046517003]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/MasterVolume" unique_id=2046517003]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "SETTINGS_MASTER"
 
-[node name="Slider" type="HSlider" parent="VBoxContainer/MasterVolume" unique_id=11860378]
+[node name="Slider" type="HSlider" parent="CenterContainer/VBoxContainer/MasterVolume" unique_id=11860378]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -71,22 +61,22 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="ValueLabel" type="Label" parent="VBoxContainer/MasterVolume" unique_id=1801724175]
+[node name="ValueLabel" type="Label" parent="CenterContainer/VBoxContainer/MasterVolume" unique_id=1801724175]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 2
 
-[node name="MusicVolume" type="HBoxContainer" parent="VBoxContainer" unique_id=828642849]
+[node name="MusicVolume" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=828642849]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="VBoxContainer/MusicVolume" unique_id=1127660494]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/MusicVolume" unique_id=1127660494]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "SETTINGS_MUSIC"
 
-[node name="Slider" type="HSlider" parent="VBoxContainer/MusicVolume" unique_id=1690954382]
+[node name="Slider" type="HSlider" parent="CenterContainer/VBoxContainer/MusicVolume" unique_id=1690954382]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -94,22 +84,22 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="ValueLabel" type="Label" parent="VBoxContainer/MusicVolume" unique_id=1379539394]
+[node name="ValueLabel" type="Label" parent="CenterContainer/VBoxContainer/MusicVolume" unique_id=1379539394]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 2
 
-[node name="SFXVolume" type="HBoxContainer" parent="VBoxContainer" unique_id=1277368518]
+[node name="SFXVolume" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1277368518]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Label" type="Label" parent="VBoxContainer/SFXVolume" unique_id=772621491]
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/SFXVolume" unique_id=772621491]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "SETTINGS_SFX"
 
-[node name="Slider" type="HSlider" parent="VBoxContainer/SFXVolume" unique_id=614356833]
+[node name="Slider" type="HSlider" parent="CenterContainer/VBoxContainer/SFXVolume" unique_id=614356833]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -117,20 +107,20 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="ValueLabel" type="Label" parent="VBoxContainer/SFXVolume" unique_id=910927283]
+[node name="ValueLabel" type="Label" parent="CenterContainer/VBoxContainer/SFXVolume" unique_id=910927283]
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "100%"
 horizontal_alignment = 2
 
-[node name="BackButton" type="Button" parent="VBoxContainer" unique_id=1487501611]
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1487501611]
 custom_minimum_size = Vector2(60, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("1_theme")
 text = "SETTINGS_BACK"
 
-[connection signal="value_changed" from="VBoxContainer/MasterVolume/Slider" to="." method="_on_master_slider_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/MusicVolume/Slider" to="." method="_on_music_slider_value_changed"]
-[connection signal="value_changed" from="VBoxContainer/SFXVolume/Slider" to="." method="_on_sfx_slider_value_changed"]
-[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/MasterVolume/Slider" to="." method="_on_master_slider_value_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/MusicVolume/Slider" to="." method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="CenterContainer/VBoxContainer/SFXVolume/Slider" to="." method="_on_sfx_slider_value_changed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

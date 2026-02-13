@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://particle001"]
 
-[ext_resource type="Script" path="res://scripts/particle.gd" id="1_particle"]
+[ext_resource type="Script" uid="uid://datumcqkxvpnq" path="res://scripts/particle.gd" id="1_particle"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jw3tu"]
 

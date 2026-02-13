@@ -1,11 +1,11 @@
 extends Control
 
-@onready var master_slider: HSlider = $VBoxContainer/MasterVolume/Slider
-@onready var master_value: Label = $VBoxContainer/MasterVolume/ValueLabel
-@onready var music_slider: HSlider = $VBoxContainer/MusicVolume/Slider
-@onready var music_value: Label = $VBoxContainer/MusicVolume/ValueLabel
-@onready var sfx_slider: HSlider = $VBoxContainer/SFXVolume/Slider
-@onready var sfx_value: Label = $VBoxContainer/SFXVolume/ValueLabel
+@onready var master_slider: HSlider = $CenterContainer/VBoxContainer/MasterVolume/Slider
+@onready var master_value: Label = $CenterContainer/VBoxContainer/MasterVolume/ValueLabel
+@onready var music_slider: HSlider = $CenterContainer/VBoxContainer/MusicVolume/Slider
+@onready var music_value: Label = $CenterContainer/VBoxContainer/MusicVolume/ValueLabel
+@onready var sfx_slider: HSlider = $CenterContainer/VBoxContainer/SFXVolume/Slider
+@onready var sfx_value: Label = $CenterContainer/VBoxContainer/SFXVolume/ValueLabel
 
 var _previous_scene: String = ""
 var _is_paused: bool = false
