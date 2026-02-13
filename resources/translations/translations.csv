@@ -27,12 +27,12 @@ GAME_TIMER_FORMAT,Coherence time: %.1fs,Tiempo de coherencia: %.1fs,Tempo de coh
 GAME_DEATH_REDZONE,COLLAPSED IN DANGER ZONE! GAME OVER!,¡COLAPSADO EN ZONA PELIGROSA! ¡JUEGO TERMINADO!,¡COLAPSADO EN ZONA PERIGOSA! ¡XOGO REMATADO!
 GAME_HINT_COVERAGE,You must cover all green areas,Debes cubrir todas las áreas verdes,Debes cubrir todas as áreas verdes
 GAME_NEUTRAL_SURVIVED,The system survived!,¡El sistema sobrevivió!,¡O sistema sobreviveu!
-GAME_WIN_STABILIZED,QUANTUM STATE STABILIZED! YOU WIN!,¡ESTADO CUÁNTICO ESTABILIZADO! ¡GANASTE!,¡ESTADO CUÁNTICO ESTABILIZADO! ¡GANACHE!
+GAME_WIN_STABILIZED,QUANTUM STATE STABILIZED! YOU WIN!,¡ESTADO CUÁNTICO ESTABILIZADO! ¡GANASTE!,¡ESTADO CUÁNTICO ESTABILIZADO! ¡GAÑACHES!
 LEVEL_INSTRUCTION_01,Collapse on the green zone,Colapsa en la zona verde,Colapsa na zona verde
 LEVEL_INSTRUCTION_02,Don't collapse on the red zone!,¡No colapses en la zona roja!,¡Non colapses na zona vermella!
 LEVEL_INSTRUCTION_03,Repeatedly collapse against walls to slip through,Colapsa repetidamente contra las paredes para pasar,Colapsa repetidamente contra as paredes para pasar
 LEVEL_INSTRUCTION_04,Collapse one particle in each zone,Colapsa una partícula en cada zona,Colapsa unha partícula en cada zona
 LEVEL_INSTRUCTION_05,Hold R and use WASD to position and rotate,Mantén R y usa WASD para posicionar y rotar,Mantén R e usa WASD para posicionar e rotar
 TUNNEL_EFFECT,Tunnel Effect!,Efecto túnel!,Efecto túnel!
-ENTANGLE_BREAK,Entanglement broke!,Entrelazamiento roto!,Entrelazamento quebrado!
-RE_ENTANGLEMENT,RE-ENTANGLEMENT!,ENTRELAZAMIENTO!,ENTRELAZAMENTO!
+ENTANGLE_BREAK,Entanglement broke!,¡Entrelazamiento roto!,¡Entrelazamento roto!
+RE_ENTANGLEMENT,RE-ENTANGLEMENT!,¡ENTRELAZAMIENTO!,¡ENTRELAZAMENTO!
