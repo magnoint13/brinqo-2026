@@ -32,9 +32,11 @@ func show_win_popup(level_number: int):
 		# This is the final level
 		next_level_button.text = tr("GAME_COMPLETE")
 		next_level_button.disabled = true
+		title_label.text = tr("GAME_COMPLETE_TITLE")
 	else:
 		next_level_button.text = tr("NEXT_LEVEL")
 		next_level_button.disabled = false
+		title_label.text = tr("LEVEL_COMPLETE")
 	
 	# Pause the game
 	get_tree().paused = true
