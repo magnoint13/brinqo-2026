@@ -276,7 +276,7 @@ func check_zone(pos: Vector2) -> int:
 	if green_zones:
 		var i = 1
 		for zone in green_zones.get_children():
-			if zone is TileMapLayer and zone.get_cell_source_id(zone.local_to_map(pos)) != -1:
+			if zone is TileMapLayer and zone.get_cell_source_id(zone.local_to_map(zone.to_local(pos))) != -1:
 				return i
 			i += 1
 		
