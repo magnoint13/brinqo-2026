@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://bvub7wg5m18cq"]
+
+[ext_resource type="Script" uid="uid://0xlxdphor2b7" path="res://ui/WinPopup.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_theme"]
+[ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="3_font"]
+
+[node name="WinPopup" type="Control" unique_id=987654321]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=111111111]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=222222222]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=333333333]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=444444444]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 48
+text = "LEVEL_COMPLETE"
+horizontal_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=555555555]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 24
+text = "Level 1"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="CenterContainer/VBoxContainer" unique_id=666666666]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=777777777]
+custom_minimum_size = Vector2(210, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_theme")
+theme_override_font_sizes/font_size = 20
+text = "MAIN_MENU"
+
+[node name="NextLevelButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=888888888]
+custom_minimum_size = Vector2(210, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_theme")
+theme_override_font_sizes/font_size = 20
+text = "NEXT_LEVEL"

@@ -1,14 +1,14 @@
 [gd_scene format=4 uid="uid://cqlk0sutgsral"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_xy2ny"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_xy2ny"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_4r3jr"]
-[ext_resource type="Texture2D" uid="uid://d2xcusyp1vlv6" path="res://resources/backgrounds/07.png" id="3_4r3jr"]
+[ext_resource type="Texture2D" path="res://resources/backgrounds/07.png" id="3_4r3jr"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_14wqy"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_jvggd"]
 [ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="6_14wqy"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_ljfkf"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_14wqy"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_c88o2"]
+[ext_resource type="Script" path="res://scripts/particles_container.gd" id="7_c88o2"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_h5kw6"]
 
 [sub_resource type="Shader" id="Shader_n3538"]

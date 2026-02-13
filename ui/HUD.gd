@@ -8,6 +8,7 @@ extends CanvasLayer
 @onready var rotate_button = $UI/RotateContainer/RotateButton
 @onready var collapse_button = $UI/CollapseContainer/CollapseButton
 @onready var level_label = $UI/LevelLabel
+@onready var win_popup = $UI/WinPopup
 
 var max_collapse_time: float = 15.0
 var is_paused: bool = false
@@ -126,3 +127,11 @@ func set_collapse_button_visual_pressed(pressed: bool):
 
 func set_rotate_button_visual_pressed(pressed: bool):
 	_set_button_pressed_style(rotate_button, pressed)
+
+# Show win popup with level completion
+func show_win_popup(level_number: int):
+	win_popup.show_win_popup(level_number)
+
+# Hide win popup
+func hide_win_popup():
+	win_popup.hide_win_popup()

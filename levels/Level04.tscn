@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://doxaejmwie2o6"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_t2y2l"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_t2y2l"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_3y4yy"]
 [ext_resource type="VideoStream" uid="uid://6vkw1ul0klrl" path="res://resources/backgrounds/02.ogv" id="3_1maa1"]
 [ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_ix6a1"]
@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="4_2kaya"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_0i110"]
 [ext_resource type="Script" uid="uid://cfvw76gewxle1" path="res://levels/spawn_points.gd" id="7_dmbef"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_gxcc8"]
+[ext_resource type="Script" path="res://scripts/particles_container.gd" id="7_gxcc8"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_ssyml"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_0i110"]
 

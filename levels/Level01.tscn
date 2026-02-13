@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://d0ei0humym7xm"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
-[ext_resource type="VideoStream" uid="uid://bp26wjy37fi6o" path="res://resources/Backgrounds/01.ogv" id="4_ke2w7"]
+[ext_resource type="Script" uid="uid://dkc7esyr3coot" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://cyumxs3xlax8d" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="VideoStream" uid="uid://bp26wjy37fi6o" path="res://resources/backgrounds/01.ogv" id="4_ke2w7"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="6_vfxmanager"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_j3ln7"]

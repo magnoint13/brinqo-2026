@@ -11,7 +11,7 @@ const RESTART_DELAY = 2.0
 @onready var particles_node = $Particles
 @onready var collapse_timer = $CollapseTimer
 @onready var camera = $Camera2D
-@onready var red_zones = $RedZone/TileMapLayer
+@onready var red_zones = $RedZone
 @onready var green_zones = $GreenZone
 @onready var hud = $HUD
 
@@ -240,7 +240,6 @@ func trigger_collapse(entanglement_broken: bool = false):
 	else: # green - win condition
 		game_won = true
 		hud.set_game_over()  # Prevent further pausing
-		hud.set_status_text(tr("GAME_WIN_STABILIZED"), Color(0.31, 1, 0.4))
 		create_flash_overlay(Color(0, 1, 0, 0.15), 0.8)
 		#VFXSpawner.spawn_burst(survivor.global_position, Color.GREEN)
 		screen_shake(2.5, 0.4)
@@ -253,7 +252,12 @@ func trigger_collapse(entanglement_broken: bool = false):
 		player.play()
 		player.finished.connect(player.queue_free)
 		
-		GameManager.complete_current_level()
+		# Wait for win sound to play (1 second delay)
+		await get_tree().create_timer(1.0).timeout
+		
+		# Show win popup instead of auto-redirecting
+		GameManager.mark_level_complete()
+		hud.show_win_popup(GameManager.current_level)
 
 # NOTE: not currently used
 func dissolve_particle(particle):
@@ -281,9 +285,11 @@ func check_zone(pos: Vector2) -> int:
 			i += 1
 		
 	if red_zones:
-		var red_cell = red_zones.local_to_map(red_zones.to_local(pos))
-		if red_zones.get_cell_source_id(red_cell) != -1:
-			return -1
+		for zone in red_zones.get_children():
+			if zone is TileMapLayer:
+				var red_cell = zone.local_to_map(zone.to_local(pos))
+				if zone.get_cell_source_id(red_cell) != -1:
+					return -1
 			
 			
 	

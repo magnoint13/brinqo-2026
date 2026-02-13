@@ -21,6 +21,15 @@ func start_level(level_number: int):
 	get_tree().change_scene_to_file(level_path)
 
 func complete_current_level():
+	mark_level_complete()
+	
+	var next_level = current_level + 1
+	if next_level <= TOTAL_LEVELS:
+		show_level_complete_screen()
+	else:
+		show_game_complete_screen()
+
+func mark_level_complete():
 	level_completed.emit(current_level)
 	
 	var next_level = current_level + 1
@@ -28,19 +37,14 @@ func complete_current_level():
 		unlocked_levels.append(next_level)
 		level_unlocked.emit(next_level)
 		save_progress()
-	
-	if next_level <= TOTAL_LEVELS:
-		show_level_complete_screen()
-	else:
-		show_game_complete_screen()
 
 func show_level_complete_screen():
-	await get_tree().create_timer(2.0).timeout
-	go_to_level_select()
+	# This is now handled by the WinPopup in the game scene
+	pass
 
 func show_game_complete_screen():
-	await get_tree().create_timer(2.0).timeout
-	go_to_main_menu()
+	# This is now handled by the WinPopup in the game scene
+	pass
 
 func restart_current_level():
 	start_level(current_level)

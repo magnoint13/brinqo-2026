@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://hud001"]
 
-[ext_resource type="Script" uid="uid://ctdt1mk02vrdo" path="res://ui/HUD.gd" id="1_hud"]
+[ext_resource type="Script" path="res://ui/HUD.gd" id="1_hud"]
 [ext_resource type="Theme" uid="uid://d4m4ag7b1ij46" path="res://resources/Default.tres" id="2_jd13s"]
 [ext_resource type="Theme" uid="uid://h1h8pvvenlnw" path="res://resources/Default2.tres" id="3_wxbmk"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="4_wxbmk"]
 [ext_resource type="PackedScene" uid="uid://djof7vib23it1" path="res://ui/PauseMenu.tscn" id="5_pausemenu"]
+[ext_resource type="PackedScene" uid="uid://bvub7wg5m18cq" path="res://ui/WinPopup.tscn" id="6_winpopup"]
 [ext_resource type="Shader" uid="uid://1xewyc46i2fe" path="res://resources/shaders/collapse_progress_bar.gdshader" id="6_shader"]
 [ext_resource type="Texture2D" uid="uid://bo50a78qof8ki" path="res://resources/gradient_x.tres" id="7_gradx"]
 [ext_resource type="Texture2D" uid="uid://cm8o3pxbenr20" path="res://resources/gradient_y.tres" id="8_grady"]
@@ -158,5 +159,9 @@ scroll_active = false
 vertical_alignment = 1
 
 [node name="PauseMenu" parent="UI" unique_id=275002152 instance=ExtResource("5_pausemenu")]
+visible = false
+layout_mode = 1
+
+[node name="WinPopup" parent="UI" unique_id=999999999 instance=ExtResource("6_winpopup")]
 visible = false
 layout_mode = 1

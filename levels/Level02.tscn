@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://level02"]
 
-[ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="2_container"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/particles_container.gd" id="2_container"]
 [ext_resource type="VideoStream" uid="uid://bp26wjy37fi6o" path="res://resources/Backgrounds/01.ogv" id="3_n3538"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="5_hud"]
 [ext_resource type="Texture2D" uid="uid://bfd8jvdpmms62" path="res://resources/red_zone_tile.png" id="6_rrqju"]
