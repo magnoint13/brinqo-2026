@@ -40,9 +40,10 @@ Medir es decidir el resultado del cálculo.
   superposición para definir su posición según su función de onda.
   En este caso, se usa una distribución normal.
 
-- Al realizar una medición, el jugador no podrá moverse ya que en ese instante
-  de tiempo se conoce su posición con exactitud, pero solo en ese instante. Para
-  poder continuar sería necesario volver a preparar el estado.
+- **Principio de incertidumbre**: Al realizar una medición, el jugador no podrá
+  moverse ya que en ese instante de tiempo se conoce su posición con exactitud,
+  pero solo en ese instante. Para poder continuar sería necesario volver a
+  preparar el estado.
 
 - **Efecto túnel**: Como consecuencia del colapso de la función de onda, el
   qubit puede atravesar paredes finas al colapsar al otro lado.
@@ -85,10 +86,10 @@ no se trata de una simulación física:
   pueda gestionar el riesgo, simplificando la naturaleza del ruido cuántico.
 
 El resto de mecánicas se ha intentado que sean lo más coherente posible. Muchas
-gracias a Tomás del grupo Bell del Discord de la Jam por asesorarnos.
+gracias a Tomás y a Javi del grupo Bell del Discord de la Jam por asesorarnos.
 
 
 # Fuentes
 
 - [Efecto de la función de onda](https://www.shadertoy.com/view/MlBGDw) (adaptado)
-- ...
+- [Efecto blur](https://www.shadertoy.com/view/4tSyzy) (adaptado)
