@@ -1,15 +1,16 @@
-[gd_scene format=3 uid="uid://doxaejmwie2o6"]
+[gd_scene format=4 uid="uid://doxaejmwie2o6"]
 
 [ext_resource type="Script" uid="uid://ct2w8kj0h5k3n" path="res://scripts/main.gd" id="1_t2y2l"]
 [ext_resource type="PackedScene" uid="uid://b3wacdn6krm77" path="res://scenes/VFXManager.tscn" id="2_3y4yy"]
-[ext_resource type="TileSet" uid="uid://ctu6s445hjyxa" path="res://resources/wall_tiles.tres" id="3_ix6a1"]
 [ext_resource type="TileSet" uid="uid://dooahvpks1so5" path="res://resources/red_zone_tiles.tres" id="4_1maa1"]
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="4_2kaya"]
+[ext_resource type="Texture2D" uid="uid://ccklecrtpggt2" path="res://resources/atlas2d.png" id="4_ko0ar"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="6_0i110"]
 [ext_resource type="Script" uid="uid://cfvw76gewxle1" path="res://levels/spawn_points.gd" id="7_dmbef"]
 [ext_resource type="Script" uid="uid://h6k4g2dkqdyw" path="res://scripts/particles_container.gd" id="7_gxcc8"]
 [ext_resource type="PackedScene" uid="uid://hud001" path="res://ui/HUD.tscn" id="8_ssyml"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_0i110"]
+[ext_resource type="AudioStream" uid="uid://cy06kxrdo60jx" path="res://resources/Music/04.mp3" id="11_2kaya"]
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_ko0ar"]
 file = "res://resources/Backgrounds/04.ogv"
@@ -122,6 +123,51 @@ custom_data_layer_0/name = "zone_type"
 custom_data_layer_0/type = 2
 sources/1 = SubResource("TileSetAtlasSource_2cvhv")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_13kno"]
+texture = ExtResource("4_ko0ar")
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:0/0 = 0
+4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:0/0 = 0
+5:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:1/0 = 0
+4:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:1/0 = 0
+5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+4:2/0 = 0
+4:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+5:2/0 = 0
+5:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+0:0/0 = 0
+0:0/0/modulate = Color(1, 0.69803923, 0.6039216, 1)
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+
+[sub_resource type="TileSet" id="TileSet_c1sif"]
+physics_layer_0/collision_layer = 1
+physics_layer_1/collision_layer = 1
+sources/4 = SubResource("TileSetAtlasSource_13kno")
+
 [node name="Level04" type="Node2D" unique_id=1625279327]
 script = ExtResource("1_t2y2l")
 
@@ -148,20 +194,21 @@ loop = true
 material = SubResource("ShaderMaterial_ko0ar")
 position = Vector2(250, 60)
 scale = Vector2(7, 7)
-tile_map_data = PackedByteArray(0, 0, 31, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 44, 0, 25, 0, 1, 0, 0, 0, 0, 0, 0, 0, 32, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAADAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_13kno")
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="GreenZone" unique_id=645701949]
 material = SubResource("ShaderMaterial_ko0ar")
 position = Vector2(250, 220)
 scale = Vector2(7, 7)
-tile_map_data = PackedByteArray(0, 0, 31, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 44, 0, 25, 0, 1, 0, 0, 0, 0, 0, 0, 0, 32, 0, 14, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_map_data = PackedByteArray("AAAfAA4AAQAAAAAAAAAsABkAAQAAAAAAAAAgAA4AAQAAAAAAAAACAAEAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_13kno")
 
 [node name="Walls" type="Node2D" parent="." unique_id=181971116]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Walls" unique_id=681864083]
-tile_set = ExtResource("3_ix6a1")
+tile_map_data = PackedByteArray("AAAAABEABAAAAAAAAAAAABIABAAAAAAAAAAAABMABAAAAAAAAAABABEABAAAAAAAAAABABIABAAAAAAAAAABABMABAAAAAAAAAACABEABAAAAAAAAAACABIABAAAAAAAAAACABMABAAAAAAAAAADABEABAAAAAAAAAADABIABAAAAAAAAAADABMABAAAAAAAAAAEABEABAAAAAAAAAAEABIABAAAAAAAAAAEABMABAAAAAAAAAAFABEABAAAAAAAAAAFABIABAAAAAAAAAAFABMABAAAAAAAAAAGABEABAAAAAAAAAAGABIABAAAAAAAAAAGABMABAAAAAAAAAAHABEABAAAAAAAAAAHABIABAAAAAAAAAAHABMABAAAAAAAAAAIABEABAAAAAAAAAAIABIABAAAAAAAAAAIABMABAAAAAAAAAAJABEABAAAAAAAAAAJABIABAAAAAAAAAAJABMABAAAAAAAAAAKABEABAAAAAAAAAAKABIABAAAAAAAAAAKABMABAAAAAAAAAALABEABAAAAAAAAAALABIABAAAAAAAAAALABMABAAAAAAAAAAMABEABAAAAAAAAAAMABIABAAAAAAAAAAMABMABAAAAAAAAAANABEABAAAAAAAAAANABIABAAAAAAAAAANABMABAAAAAAAAAAOABEABAAAAAAAAAAOABIABAAAAAAAAAAOABMABAAAAAAAAAAPABEABAAAAAAAAAAPABIABAAAAAAAAAAPABMABAAAAAAAAAAQABEABAAAAAAAAAAQABIABAAAAAAAAAAQABMABAAAAAAAAAARABEABAAAAAAAAAARABIABAAAAAAAAAARABMABAAAAAAAAAASABEABAAAAAAAAAASABIABAAAAAAAAAASABMABAAAAAAAAAATABEABAAAAAAAAAATABIABAAAAAAAAAATABMABAAAAAAAAAAUABEABAAAAAAAAAAUABIABAAAAAAAAAAUABMABAAAAAAAAAAVABEABAAAAAAAAAAVABIABAAAAAAAAAAVABMABAAAAAAAAAAWABEABAAAAAAAAAAWABIABAAAAAAAAAAWABMABAAAAAAAAAAXABEABAAAAAAAAAAXABIABAAAAAAAAAAXABMABAAAAAAAAAAAABQABAAAAAAAAAABABQABAAAAAAAAAACABQABAAAAAAAAAADABQABAAAAAAAAAAEABQABAAAAAAAAAAFABQABAAAAAAAAAAGABQABAAAAAAAAAAHABQABAAAAAAAAAAIABQABAAAAAAAAAAJABQABAAAAAAAAAAKABQABAAAAAAAAAALABQABAAAAAAAAAAMABQABAAAAAAAAAANABQABAAAAAAAAAAOABQABAAAAAAAAAAPABQABAAAAAAAAAAQABQABAAAAAAAAAARABQABAAAAAAAAAASABQABAAAAAAAAAATABQABAAAAAAAAAAUABQABAAAAAAAAAAVABQABAAAAAAAAAAWABQABAAAAAAAAAAXABAABAAAAAAAAAAYAA8ABAAAAAAAAAAZAA8ABAAAAAAAAAAaAA4ABAAAAAAAAAAbAA4ABAAAAAAAAAAcAA0ABAAAAAAAAAAdAAwABAAAAAAAAAAeAAwABAAAAAAAAAAfAAsABAAAAAAAAAAgAAsABAAAAAAAAAAhAAoABAAAAAAAAAAiAAkABAAAAAAAAAAjAAkABAAAAAAAAAAkAAgABAAAAAAAAAAlAAgABAAAAAAAAAAmAAcABAAAAAAAAAAYABEABAAAAAAAAAAZABAABAAAAAAAAAAaABAABAAAAAAAAAAbAA8ABAAAAAAAAAAcAA4ABAAAAAAAAAAdAA4ABAAAAAAAAAAeAA0ABAAAAAAAAAAfAAwABAAAAAAAAAAgAAwABAAAAAAAAAAhAAsABAAAAAAAAAAiAAoABAAAAAAAAAAjAAoABAAAAAAAAAAkAAkABAAAAAAAAAAmAAgABAAAAAAAAAAnAAcABAAAAAAAAAAYABAABAAAAAAAAAAaAA8ABAAAAAAAAAAdAA0ABAAAAAAAAAAWABAABAAAAAAAAAAZAA4ABAAAAAAAAAAbAA0ABAAAAAAAAAAcAAwABAAAAAAAAAAeAAsABAAAAAAAAAAgAAoABAAAAAAAAAAhAAkABAAAAAAAAAAjAAgABAAAAAAAAAAlAAcABAAAAAAAAAAfAAoABAAAAAAAAAAiAAgABAAAAAAAAAAkAAcABAAAAAAAAAAjAAcABAAAAAAAAAAnAAgABAAAAAAAAAAoAAcABAAAAAAAAAAoAAgABAAAAAAAAAApAAcABAAAAAAAAAApAAgABAAAAAAAAAAqAAcABAAAAAAAAAAqAAgABAAAAAAAAAArAAcABAAAAAAAAAArAAgABAAAAAAAAAAXABQABAAAAAAAAAAYABUABAAAAAAAAAAYABYABAAAAAAAAAAZABcABAAAAAAAAAAZABgABAAAAAAAAAAaABkABAAAAAAAAAAbABoABAAAAAAAAAAbABsABAAAAAAAAAAcABwABAAAAAAAAAAdAB0ABAAAAAAAAAAdAB4ABAAAAAAAAAAeAB8ABAAAAAAAAAAeACAABAAAAAAAAAAfACEABAAAAAAAAAAXABUABAAAAAAAAAAYABcABAAAAAAAAAAZABkABAAAAAAAAAAaABoABAAAAAAAAAAaABsABAAAAAAAAAAbABwABAAAAAAAAAAcAB0ABAAAAAAAAAAcAB4ABAAAAAAAAAAdAB8ABAAAAAAAAAAdACAABAAAAAAAAAAeACEABAAAAAAAAAAWABUABAAAAAAAAAAXABYABAAAAAAAAAAXABcABAAAAAAAAAAYABgABAAAAAAAAAAYABkABAAAAAAAAAAZABoABAAAAAAAAAAZABsABAAAAAAAAAAaABwABAAAAAAAAAAbAB0ABAAAAAAAAAAbAB4ABAAAAAAAAAAcAB8ABAAAAAAAAAAcACAABAAAAAAAAAAdACEABAAAAAAAAAAfACAABAAAAAAAAAAgACAABAAAAAAAAAAgACEABAAAAAAAAAAhACAABAAAAAAAAAAhACEABAAAAAAAAAAiACAABAAAAAAAAAAiACEABAAAAAAAAAAjACAABAAAAAAAAAAjACEABAAAAAAAAAAkACAABAAAAAAAAAAkACEABAAAAAAAAAAlACAABAAAAAAAAAAlACEABAAAAAAAAAAmACAABAAAAAAAAAAmACEABAAAAAAAAAAnACAABAAAAAAAAAAnACEABAAAAAAAAAAoACAABAAAAAAAAAAoACEABAAAAAAAAAApACAABAAAAAAAAAApACEABAAAAAAAAAAqACAABAAAAAAAAAAqACEABAAAAAAAAAArACAABAAAAAAAAAArACEABAAAAAAAAAA=")
+tile_set = SubResource("TileSet_c1sif")
 
 [node name="RedZone" type="Node2D" parent="." unique_id=686021094]
 
@@ -178,13 +225,24 @@ position = Vector2(243, 231)
 position = Vector2(243, 374)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=718373554]
-offset_left = 137.0
-offset_top = 97.0
-offset_right = 660.0
-offset_bottom = 550.0
+offset_left = 8.0
+offset_top = 93.0
+offset_right = 353.0
+offset_bottom = 546.0
 theme_override_fonts/normal_font = ExtResource("9_0i110")
 theme_override_font_sizes/normal_font_size = 28
 text = "LEVEL_INSTRUCTION_04"
+tab_size = 9
+horizontal_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=762086861]
+offset_left = 139.0
+offset_top = 481.0
+offset_right = 465.0
+offset_bottom = 934.0
+theme_override_fonts/normal_font = ExtResource("9_0i110")
+theme_override_font_sizes/normal_font_size = 28
+text = "LEVEL_INSTRUCTION_05"
 tab_size = 9
 horizontal_alignment = 1
 
@@ -204,3 +262,7 @@ one_shot = true
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=2018018186]
 one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2134304893]
+stream = ExtResource("11_2kaya")
+volume_db = -4.0
