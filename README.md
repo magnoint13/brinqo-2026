@@ -1,9 +1,9 @@
 # Descripción del juego
 
-El jugador es un orbital dentro de un ordenador cuántico.
+El jugador es un orbital que se comporta según la mecánica cuántica.
 
 Mientras no se observe el estado del jugador, este solo existe como una nube de
-probabilidad que se extiende por una región del sistema. Las acciones que puede
+probabilidad que se extiende por una región del espacio. Las acciones que puede
 realizar son operaciones cuánticas que modifican esa función de onda, y pueden
 interpretarse como diferentes puertas cuánticas: desplazamiento, escalado y
 rotación del estado.
@@ -63,7 +63,8 @@ no se trata de una simulación física:
 
 - Por limitaciones técnicas, los orbitales no son realmente ondas de
   probabilidad, por lo que no se crean patrones de interferencia (zonas donde la
-  probabilidad sea 0 porque se anulen entre ellas).
+  probabilidad sea 0 porque se anulen entre ellas, o más probable porque se
+  sumen).
 
 - El cálculo de las posiciones al colapsar se hace de forma independiente, el
   resultado de una no condiciona la posición de las otras. Esto se debe a
@@ -75,16 +76,17 @@ no se trata de una simulación física:
   según la dirección de movimiento. Si el jugador está quieto, esto no se
   aplica.
 
-- La decoherencia se simplifica mediante una representación con un temporizador
-  visual.
+- Hemos simplificado la decoherencia de modo que solo aplique cuando hay
+  entrelazamiento, cuando en realidad una partícula individual también sufre
+  coherencia. Esta se representa mediante un temporizador visual.
 
 El resto de mecánicas se ha intentado que sean lo más coherente posible. Muchas
-gracias a Tomás del grupo Bell del Discord de la Jam por asesorarnos.
-
+gracias a Tomás y a Javi del grupo Bell del Discord de la Jam por asesorarnos.
 
 # Fuentes
 
 - [Efecto de la función de onda](https://www.shadertoy.com/view/MlBGDw) (adaptado)
 - [Efecto blur](https://www.shadertoy.com/view/4tSyzy) (adaptado)
 - [Fuente de letra](https://fontmeme.com/fonts/monocraft-font/)
-- [Fuente de los vídeos de fondo y de la música](https://pixabay.com/es/)
+- [Fuente de los vídeos de fondo y de la música](https://pixabay.com/es/) (salvo
+  la música los niveles 6 y 10, que son creación propia).
