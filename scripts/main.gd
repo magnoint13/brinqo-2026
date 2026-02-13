@@ -264,7 +264,7 @@ func dissolve_particle(particle):
 	
 	var tween = create_tween()
 	tween.tween_method(particle.set_fade, particle.fade_alpha, 0.0, 0.3)
-	tween.parallel().tween_property(particle, "scale", Vector2(0.3, 0.3), 0.3)
+	tween.parallel().tween_property(particle.visual_container, "scale", Vector2(0.3, 0.3), 0.3)
 	
 	# Mark for cleanup after animation
 	tween.tween_callback(particle.queue_free)

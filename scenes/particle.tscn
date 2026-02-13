@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://particle001"]
 
-[ext_resource type="Script" uid="uid://datumcqkxvpnq" path="res://scripts/particle.gd" id="1_particle"]
+[ext_resource type="Script" uid="uid://bqfxbb6j4vdv6" path="res://scripts/particle.gd" id="1_particle"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jw3tu"]
 
@@ -44,19 +44,22 @@ script = ExtResource("1_particle")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2141312755]
 shape = SubResource("CircleShape2D_jw3tu")
+debug_color = Color(0, 0.6, 0.69803923, 0)
 
-[node name="GlowLight" type="PointLight2D" parent="." unique_id=1095724612]
+[node name="VisualContainer" type="Node2D" parent="." unique_id=1100000001]
+
+[node name="GlowLight" type="PointLight2D" parent="VisualContainer" unique_id=1095724612]
 energy = 0.24
 texture = SubResource("GradientTexture2D_glow")
 texture_scale = 0.5
 
-[node name="TrailParticles" type="GPUParticles2D" parent="." unique_id=914957407]
+[node name="TrailParticles" type="GPUParticles2D" parent="VisualContainer" unique_id=914957407]
 texture = SubResource("GradientTexture2D_trail")
 lifetime = 0.3
 process_material = SubResource("ParticleProcessMaterial_trail")
 
 [node name="CollapsedTimer" type="Timer" parent="." unique_id=755585025]
-wait_time = 1.5
+wait_time = 1.2
 one_shot = true
 
 [connection signal="timeout" from="CollapsedTimer" to="." method="_on_collapsed_timer_timeout"]

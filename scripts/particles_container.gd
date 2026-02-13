@@ -119,8 +119,12 @@ func break_entanglement():
 	var new_player_index = randi_range(0, particles.size() - 1)
 	
 	for i in range(particles.size()):
-		if i == new_player_index: continue
-		particles[i].is_entangled = false
+		if i == new_player_index:
+			# Ensure survivor is in wave state so they can be controlled immediately
+			particles[i].to_wave_animated()
+			particles[i].is_entangled = true
+		else:
+			particles[i].is_entangled = false
 
 
 func collapse_all():

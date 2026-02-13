@@ -1,8 +1,9 @@
 extends CharacterBody2D
 class_name Particle
 
-@onready var glow_light = $GlowLight
-@onready var trail_particles = $TrailParticles
+@onready var visual_container = $VisualContainer
+@onready var glow_light = $VisualContainer/GlowLight
+@onready var trail_particles = $VisualContainer/TrailParticles
 @onready var collision_shape = $CollisionShape2D
 @onready var collapsed_timer = $CollapsedTimer
 
@@ -21,6 +22,7 @@ const RIPPLE_SCENE = preload("res://scripts/RippleEffect.gd")
 @export var WAVE_DIRECTION_FACTOR: float = 25.0
 @export var WAVE_SIZE: float = 200
 var collapsed_state: bool = false
+var is_transitioning: bool = false
 var wave_rect: MeshInstance2D
 var rng: RandomNumberGenerator
 
@@ -29,6 +31,7 @@ func setup(is_new: bool = true, entangled: bool = true):
 	is_survived = not is_new
 	fade_alpha = 0.0 if is_new else 1.0
 	collapsed_state = false
+	is_transitioning = false
 	velocity = Vector2.ZERO
 	if trail_particles:
 		trail_particles.emitting = true
@@ -48,14 +51,30 @@ func _ready():
 	wave_rect.material = mat
 	wave_rect.material.set_shader_parameter("time_offset", rng.randf_range(0, 5))
 	wave_rect.material.set_shader_parameter("color_tint", Color(1.0, 1.0, 1.0))
-	add_child(wave_rect)
+	visual_container.add_child(wave_rect)
 	
 	move_and_slide()
 	setup()
 
 
 func _draw():
-	if collapsed_state:
+	if is_transitioning:
+		#### Transitioning - show both visuals ####
+		wave_rect.visible = true
+		glow_light.visible = true
+		trail_particles.visible = true
+		
+		var color = base_color
+		color.a = fade_alpha
+		
+		# Main body
+		draw_circle(Vector2.ZERO, RADIUS, color)
+		
+		# Inner highlight
+		var highlight_color = Color.WHITE
+		highlight_color.a = fade_alpha
+		draw_circle(Vector2.ZERO * 0.6, RADIUS * 0.6, highlight_color)
+	elif collapsed_state:
 		#### Draw as particle ####
 		wave_rect.visible = false
 		glow_light.visible = true
@@ -141,32 +160,48 @@ func generate_random_pos(direction: Vector2) -> Vector2:
 
 func to_wave_animated():
 	# Animate from particle to wave state
-	if collapsed_state:
-		collapsed_state = false
+	if collapsed_state and not is_transitioning:
 		collapsed_timer.stop()
-		scale = Vector2(0.2, 0.2)
-		var tween = get_tree().create_tween()
-		tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.2)
+		is_transitioning = true
 		queue_redraw()
+		
+		# Start with small scale and animate both wave and particle visuals
+		visual_container.scale = Vector2(0.2, 0.2)
+		wave_rect.scale = Vector2(0.2, 0.2)
+		
+		var tween = get_tree().create_tween()
+		tween.tween_property(visual_container, "scale", Vector2(1.0, 1.0), 0.2)
+		tween.parallel().tween_property(wave_rect, "scale", Vector2(1.0, 1.0), 0.2)
+		
+		tween.tween_callback(func():
+			is_transitioning = false
+			collapsed_state = false
+			queue_redraw()
+		)
 
 func to_particle_animated():
 	# Animate from wave to particle state
-	if not collapsed_state:
-		var tween = get_tree().create_tween()
+	if not collapsed_state and not is_transitioning:
+		# Set state immediately - position evaluated now, movement blocked
+		collapsed_state = true
+		is_transitioning = true
+		queue_redraw()
 		
 		set_fade(1.0)
-		scale = Vector2(1.0, 1.0)
+		visual_container.scale = Vector2(0.2, 0.2)
+		wave_rect.scale = Vector2(1.0, 1.0)
 		
-		# Scale pulse
-		var scale_tween = create_tween()
-		scale_tween.tween_property(self, "scale", Vector2(1.2, 1.2), 0.3)
-		scale_tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.3)
-		#tween.tween_property(self, "scale", Vector2(0.2, 0.2), 0.2)
+		# Animate wave shrinking while particle grows
+		var tween = get_tree().create_tween()
+		tween.tween_property(wave_rect, "scale", Vector2(0.2, 0.2), 0.1)
+		tween.parallel().tween_property(visual_container, "scale", Vector2(1.2, 1.2), 0.1)
+		
+		tween.tween_property(visual_container, "scale", Vector2(1.0, 1.0), 0.3)
+		
 		tween.tween_callback(func():
-			collapsed_state = true
-			scale = Vector2(1.0, 1.0)
-			collapsed_timer.start()
+			is_transitioning = false
 			queue_redraw()
+			collapsed_timer.start()
 		)
 		
 		# Spawn ripple effect at particle's position
