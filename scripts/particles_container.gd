@@ -266,11 +266,17 @@ func rotate_particles(delta: float, direction: int, rotation_speed: float):
 	var center = _find_particles_center(valid_particles)
 	
 	# Apply rotation
-	var rotation_angle = deg_to_rad(rotation_speed * delta * direction)
+	#var rotation_angle = deg_to_rad(rotation_speed * delta * direction)
 	
 	for p in valid_particles:
 		# Calculate offset from center
 		var offset = p.position - center
+		var radius = offset.length()
+		if radius < 1: # avoid problems when the particle is at the center
+			continue
+			
+		var angular_vel = rotation_speed / radius
+		var rotation_angle = angular_vel * delta * direction
 		
 		# Rotate the offsetz
 		var rotated_offset = offset.rotated(rotation_angle)

@@ -50,6 +50,7 @@ func _ready():
 	mat.shader = WAVE_SHADER
 	wave_rect.material = mat
 	wave_rect.material.set_shader_parameter("time_offset", rng.randf_range(0, 5))
+	wave_rect.material.set_shader_parameter("time_scale", rng.randf_range(0.25, 0.75))
 	wave_rect.material.set_shader_parameter("color_tint", Color(1.0, 1.0, 1.0))
 	visual_container.add_child(wave_rect)
 	

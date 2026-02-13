@@ -4,8 +4,8 @@ const BALL_RADIUS = 8.0
 const BALL_SPEED = 300.0
 const COLLAPSE_MIN_TIME = 7.0
 const COLLAPSE_MAX_TIME = 15.0
-const ROTATION_SPEED = 180.0
-const SCALE_SPEED = 300.0
+const ROTATION_SPEED = 250.0
+const SCALE_SPEED = 230.0
 const RESTART_DELAY = 2.0
 
 @onready var particles_node = $Particles

@@ -5,12 +5,12 @@ void vertex() {
 }
 
 uniform float time_offset : hint_range(0.0f, 10.0f, 0.1f) = 0.0f;
+uniform float time_scale : hint_range(0.01f, 3.0f, 0.1f) = 1.0f;
 uniform vec3 color_tint : source_color = vec3(1.0f);
 
 // Adapted from: https://www.shadertoy.com/view/MlBGDw
 
 #define SCALE 20.0
-#define TIME_SCALE 0.25
 
 #define Z_FROM -2.0
 #define Z_TO 2.0
@@ -30,14 +30,11 @@ void im_exp(float amp, float phase, out vec2 im) {
   im.y = sin(phase) * amp;
 }
 
-
 void wave_1s(vec3 pos, float t, out vec2 im) {
   float amp = R_A_PI_3 * exp(-pos.x / A0);
   float phase = E_1s * t;
-
   im_exp(amp, phase, im);
 }
-
 
 void wave_2p(vec3 pos, float t, out vec2 im) {
   float amp = 1.0 / (sqrt(2.0) * 4.0 * A0);
@@ -49,48 +46,27 @@ void wave_2p(vec3 pos, float t, out vec2 im) {
   im_exp(amp, phase, im);
 }
 
-
-void wave_3d(vec3 pos, float t, out vec2 im) {
-  float amp = 1.0 / (sqrt(6.0) * 81.0 * A0 * A0);
-  amp *= R_A_PI_3 * exp(-pos.x / (3.0 * A0));
-  amp *= pos.x * pos.x;
-  amp *= 3.0 * cos(pos.y) * cos(pos.y) - 1.0;
-
-  float phase = E_3d * t;
-
-  im_exp(amp, phase, im);
-}
-
-
 void draw(vec3 pos, float t, float time, out vec2 i) {
   vec2 w1;
   wave_1s(pos, t, w1);
 
   vec2 w2;
   wave_2p(pos, t, w2);
-
-  //vec2 w3;
-  //wave_3d(pos, t, w3);
-
   float f = time / 1.5;
-  //float trans = max(cos(f), 0.0);
-
-  float c1 = /*trans **/ cos(f);
+  float c1 = cos(f);
   float c2 = sin(f);
-  //float c3 = (1.0 - trans) * cos(f);
 
   w1 *= c1;
   w2 *= c2;
-  //w3 *= c3;
 
-  i = w1 + w2;// + w3;
+  i = w1 + w2;
   i.x *= i.x;
   i.y *= i.y;
 }
 
 void fragment() {
   vec2 pos = UV.xy - 0.5f;
-  float time = (TIME + time_offset) * TIME_SCALE;
+  float time = (TIME + time_offset) * time_scale;
 
   float yz_ang = PI/2.0 + time * 0.6;
   float xz_ang = PI/2.0 + time * 0.33;
@@ -133,13 +109,4 @@ void fragment() {
   float alpha = max(final_rgb.r, max(final_rgb.g, final_rgb.b));
   alpha = clamp(alpha * 2.0, 0.0, 1.0);
   COLOR = vec4(final_rgb, alpha);
-  //COLOR = vec4(final_rgb * 2.0, 1.0);
 }
-
-/*
-void fragment() {
-  vec2 pos = UV.xy - vec2(0.5f);
-  float value = exp(- (pos.x * pos.x + pos.y * pos.y) / (2.0f * 0.25f * 0.25f));
-  COLOR = value * value * vec4(1.0f, 1.0f, 0.0f, 1.0f);
-}
-*/
