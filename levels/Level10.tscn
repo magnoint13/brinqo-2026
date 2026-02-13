@@ -248,6 +248,16 @@ anchor_mode = 0
 
 [node name="HUD" parent="." unique_id=258169263 instance=ExtResource("7_jkgpe")]
 
+[node name="RotateContainer" parent="HUD/UI" parent_id_path=PackedInt32Array(258169263, 46413648) index="5" unique_id=1256765927]
+visible = false
+offset_left = 306.0
+offset_right = 422.0
+
+[node name="CollapseContainer" parent="HUD/UI" parent_id_path=PackedInt32Array(258169263, 46413648) index="6" unique_id=962661378]
+visible = false
+offset_left = 306.0
+offset_right = 552.0
+
 [node name="CollapseTimer" type="Timer" parent="." unique_id=373766769]
 one_shot = true
 
@@ -256,3 +266,5 @@ one_shot = true
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=820990794]
 one_shot = true
+
+[editable path="HUD"]

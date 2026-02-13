@@ -166,13 +166,24 @@ tile_set = SubResource("TileSet_qxnqn")
 position = Vector2(100, 300)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=563170275]
-offset_left = 6.0
-offset_top = 90.0
-offset_right = 345.0
-offset_bottom = 179.0
+offset_left = 485.0
+offset_top = 93.0
+offset_right = 788.0
+offset_bottom = 182.0
 theme_override_fonts/normal_font = ExtResource("8_ke2w7")
 theme_override_font_sizes/normal_font_size = 32
 text = "LEVEL_INSTRUCTION_01"
+tab_size = 9
+horizontal_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="." unique_id=952549801]
+offset_left = 17.0
+offset_top = 115.0
+offset_right = 320.0
+offset_bottom = 204.0
+theme_override_fonts/normal_font = ExtResource("8_ke2w7")
+theme_override_font_sizes/normal_font_size = 18
+text = "MOVEMENT_TIP"
 tab_size = 9
 horizontal_alignment = 1
 

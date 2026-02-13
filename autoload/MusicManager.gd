@@ -24,6 +24,7 @@ var paused_position: float = 0.0
 
 func _ready() -> void:
 	music_player = AudioStreamPlayer.new()
+	music_player.autoplay = true
 	add_child(music_player)
 	music_player.bus = "Music"           # ← optional but recommended
 	

@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://cpa4euhh5ih3g" path="res://resources/green_zone_tile.png" id="7_abtce"]
 [ext_resource type="PackedScene" uid="uid://c8ngbh0ie1iyy" path="res://entities/SpawnPoint.tscn" id="7_spawnpoint"]
 [ext_resource type="FontFile" uid="uid://x3fb15mhp08b" path="res://resources/minecraft_font.ttf" id="9_g5dnp"]
-[ext_resource type="AudioStream" uid="uid://xxbeu7l7i0du" path="res://resources/music/02.mp3" id="10_n3538"]
 
 [sub_resource type="VideoStreamTheora" id="VideoStreamTheora_g5dnp"]
 file = "res://resources/backgrounds/02.ogv"
@@ -351,8 +350,3 @@ one_shot = true
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=276751292]
 one_shot = true
-
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1441172079]
-stream = ExtResource("10_n3538")
-volume_db = -4.0
-autoplay = true

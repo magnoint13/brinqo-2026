@@ -86,7 +86,9 @@ gracias a Tomás y a Javi del grupo Bell del Discord de la Jam por asesorarnos.
 # Fuentes
 
 - [Efecto de la función de onda](https://www.shadertoy.com/view/MlBGDw) (adaptado)
-- [Efecto blur](https://www.shadertoy.com/view/4tSyzy) (adaptado)
+- [Efecto blur](https://godotshaders.com/shader/liquid-glass-ui-customizable/) (adaptado)
 - [Fuente de letra](https://fontmeme.com/fonts/monocraft-font/)
 - [Fuente de los vídeos de fondo y de la música](https://pixabay.com/es/) (salvo
   la música los niveles 6 y 10, que son creación propia).
+
+
