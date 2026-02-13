@@ -23,9 +23,7 @@ func _ready():
 	for spawnPoint in spawnPointContainer:
 		if spawnPoint.enabled:
 			spawn_positions.append(spawnPoint.position)
-			print(spawnPoint.entangled)
 			spawn_is_entangled.append(spawnPoint.entangled)
-	print(spawn_is_entangled)
 	
 	if spawn_positions.is_empty():
 		print("ERROR: Missing spawnpoints")
@@ -128,82 +126,11 @@ func collapse_all():
 	# ensure all are entangled and in wave form
 	var valid_particles = _valid_particles()
 	
-	var ref_index = randi_range(0, valid_particles.size() - 1)
-	var ref = valid_particles[ref_index]
-	var new_pos = ref.generate_random_pos(last_movement_direction)
-	var move_vector = ref.global_position - new_pos
-	ref.global_position = new_pos
-	ref.to_particle_animated()
-	
-	for i in range(valid_particles.size()):
-		var p = valid_particles[i]
-		if i == ref_index: continue
-		if not p.is_entangled: continue
-		p.global_position += move_vector
+	for p in valid_particles:
+		p.global_position = p.generate_random_pos(last_movement_direction)
 		p.to_particle_animated()
 	
 	collapseAudioStream.play()
-	
-	# Resolve any particles that got stuck inside walls after collapse
-	for p in valid_particles:
-		_resolve_wall_collision(p)
-
-
-#### COLLISION RESOLUTION ########################################################
-
-# Push particle out of walls if stuck after collapse
-# Uses raycasting to find the nearest valid position
-func _resolve_wall_collision(particle: Particle) -> void:
-	var space_state = get_world_2d().direct_space_state
-	var max_attempts = 10
-	var push_step = 8.0
-	
-	for attempt in range(max_attempts):
-		# Check if particle is currently colliding
-		var query = PhysicsShapeQueryParameters2D.new()
-		query.shape = particle.collision_shape.shape
-		query.transform = Transform2D(0, particle.global_position)
-		query.collision_mask = particle.collision_mask
-		
-		# If no collision, we're done
-		if space_state.intersect_shape(query).is_empty():
-			return
-		
-		# Particle is stuck - find escape direction using raycasts
-		var best_direction = Vector2.ZERO
-		var best_distance = 0.0
-		
-		# Check 8 directions to find the clearest path out
-		for angle in range(0, 360, 45):
-			var direction = Vector2.RIGHT.rotated(deg_to_rad(angle))
-			var ray_end = particle.global_position + direction * 100.0
-			
-			var ray_query = PhysicsRayQueryParameters2D.new()
-			ray_query.from = particle.global_position
-			ray_query.to = ray_end
-			ray_query.collision_mask = particle.collision_mask
-			
-			var result = space_state.intersect_ray(ray_query)
-			if result.is_empty():
-				# No wall in this direction - it's a clear escape route
-				best_direction = direction
-				best_distance = 100.0
-				break
-			else:
-				# Wall found, calculate distance to it
-				var distance = particle.global_position.distance_to(result.position)
-				# We want to move AWAY from walls, so larger distance is better
-				if distance > best_distance:
-					best_distance = distance
-					best_direction = -direction  # Opposite direction (away from wall)
-		
-		# Push particle in the best direction found
-		if best_direction != Vector2.ZERO:
-			particle.global_position += best_direction * push_step
-		else:
-			# Fallback: push upward if no clear direction found
-			particle.global_position.y -= push_step
-
 
 #### MOVEMENT LOGIC ############################################################
 
@@ -334,7 +261,7 @@ func scale_particles(delta: float, scale_dir: int, scale_speed: float):
 ## Walls are positioned slightly outside (10px) so particles collide exactly at viewport edge
 func _add_viewport_boundary_walls():
 	var viewport_size = Vector2(800, 600)
-	var wall_thickness = 20.0  # Thick enough to prevent tunneling
+	var wall_thickness = 200.0  # Thick enough to prevent tunneling
 	
 	# Left wall - positioned so inner edge is at x=0
 	_create_invisible_wall("LeftWall", Vector2(-wall_thickness / 2, viewport_size.y / 2), Vector2(wall_thickness, viewport_size.y + wall_thickness * 2))
@@ -349,7 +276,7 @@ func _add_viewport_boundary_walls():
 	_create_invisible_wall("BottomWall", Vector2(viewport_size.x / 2, viewport_size.y + wall_thickness / 2), Vector2(viewport_size.x + wall_thickness * 2, wall_thickness))
 
 ## Creates an invisible StaticBody2D wall with collision
-func _create_invisible_wall(wall_name: String, position: Vector2, size: Vector2):
+func _create_invisible_wall(wall_name: String, place_position: Vector2, size: Vector2):
 	var wall = StaticBody2D.new()
 	wall.name = wall_name
 	wall.collision_layer = 1  # Particles collide with layer 1
@@ -361,5 +288,5 @@ func _create_invisible_wall(wall_name: String, position: Vector2, size: Vector2)
 	collision_shape.shape = rectangle_shape
 	
 	wall.add_child(collision_shape)
-	wall.position = position
+	wall.position = place_position
 	add_child(wall)
