@@ -33,6 +33,7 @@ LEVEL_INSTRUCTION_02,Don't collapse on the red zone!,¡No colapses en la zona ro
 LEVEL_INSTRUCTION_03,Repeatedly collapse against walls to slip through,Colapsa repetidamente contra las paredes para pasar,Colapsa repetidamente contra as paredes para pasar
 LEVEL_INSTRUCTION_04,Collapse one particle in each zone,Colapsa una partícula en cada zona,Colapsa unha partícula en cada zona
 LEVEL_INSTRUCTION_05,Hold R and use WASD to position and rotate,Mantén R y usa WASD para posicionar y rotar,Mantén R e usa WASD para posicionar e rotar
+LEVEL_INSTRUCTION_06,Touch unentangled particles to restore entanglement,Cuando se rompe el entrelazamiento, toca partículas no entrelazadas para re-entrelazar,Cando se rompe o entrelazamento, toca partículas non entrelazadas para re-entrelazar
 TUNNEL_EFFECT,Tunnel Effect!,Efecto túnel!,Efecto túnel!
 ENTANGLE_BREAK,Entanglement broke!,¡Entrelazamiento roto!,¡Entrelazamento roto!
 RE_ENTANGLEMENT,RE-ENTANGLEMENT!,¡ENTRELAZAMIENTO!,¡ENTRELAZAMENTO!
